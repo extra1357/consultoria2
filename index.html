@@ -554,7 +554,7 @@ document.getElementById('contatoForm').addEventListener('submit', async function
   };
 
   try {
-    const res = await fetch('/api/contato.php', {
+    const res = await fetch('/api/contato', {
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify(dados)
