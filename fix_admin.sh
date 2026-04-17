@@ -1,3 +1,7 @@
+#!/bin/bash
+cd ~/consultoria2
+
+cat > admin/index.html << 'EOF'
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -323,3 +327,6 @@ function toast(msg) {
 </script>
 </body>
 </html>
+EOF
+
+echo "✅ admin/index.html atualizado com sucesso!"
