@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cadastro de Prestador | 123 Consultoria</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#0A1628;--navy2:#0F1E36;--navy3:#152540;
+  --blue:#1A3A6B;--accent:#2E7CF6;--gold:#D4A843;
+  --white:#FFFFFF;--muted:#8A9AB5;--faint:#3A4F70;
+  --green:#22c55e;--red:#ef4444;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--navy);color:var(--white);min-height:100vh}
+
+/* BG */
+.bg{position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse 80% 60% at 10% 20%,rgba(26,58,107,0.5) 0%,transparent 60%),radial-gradient(ellipse 50% 40% at 90% 80%,rgba(46,124,246,0.07) 0%,transparent 55%),var(--navy)}
+.grid-overlay{position:fixed;inset:0;z-index:1;pointer-events:none;background-image:linear-gradient(rgba(46,124,246,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(46,124,246,0.03) 1px,transparent 1px);background-size:60px 60px}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;padding:18px 48px;display:flex;justify-content:space-between;align-items:center;background:rgba(10,22,40,0.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(46,124,246,0.1)}
+.nav-brand{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:700;color:var(--white);text-decoration:none}
+.nav-brand span{color:var(--accent)}
+.nav-tag{font-size:.8rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+
+/* CONTAINER */
+.container{position:relative;z-index:2;max-width:860px;margin:0 auto;padding:60px 24px 100px}
+
+/* PROGRESS */
+.progress-bar{display:flex;gap:0;margin-bottom:48px;position:relative}
+.progress-bar::before{content:'';position:absolute;top:20px;left:0;right:0;height:2px;background:rgba(46,124,246,0.15);z-index:0}
+.step{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;position:relative;z-index:1;cursor:pointer}
+.step-dot{width:40px;height:40px;border-radius:50%;background:var(--navy3);border:2px solid rgba(46,124,246,0.2);display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:600;color:var(--muted);transition:.3s}
+.step.active .step-dot{background:var(--accent);border-color:var(--accent);color:#fff}
+.step.done .step-dot{background:var(--green);border-color:var(--green);color:#fff}
+.step-label{font-size:.72rem;color:var(--muted);text-align:center;letter-spacing:.04em}
+.step.active .step-label{color:var(--white)}
+
+/* CARD */
+.card{background:rgba(15,30,54,0.8);border:1px solid rgba(46,124,246,0.12);border-radius:20px;padding:48px;backdrop-filter:blur(8px)}
+.card-title{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:600;margin-bottom:6px}
+.card-title em{color:var(--accent);font-style:italic}
+.card-sub{color:var(--muted);font-size:.9rem;margin-bottom:36px;line-height:1.6}
+
+/* FORM */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.form-full{grid-column:1/-1}
+.form-group{display:flex;flex-direction:column;gap:8px}
+.form-group label{font-size:.82rem;font-weight:500;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.form-group input,.form-group select,.form-group textarea{background:rgba(10,22,40,0.8);border:1px solid rgba(46,124,246,0.2);border-radius:10px;padding:14px 16px;color:var(--white);font-family:'Outfit',sans-serif;font-size:.95rem;transition:.2s;outline:none}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--accent);background:rgba(46,124,246,0.05)}
+.form-group select option{background:var(--navy2);color:var(--white)}
+.form-group textarea{resize:vertical;min-height:110px;line-height:1.6}
+.form-group input[type="file"]{padding:10px 16px;cursor:pointer}
+.form-group input::placeholder,.form-group textarea::placeholder{color:var(--faint)}
+.field-hint{font-size:.78rem;color:var(--faint);margin-top:2px}
+
+/* ESPECIALIDADES CHIPS */
+.chips-grid{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
+.chip{padding:8px 16px;border-radius:20px;border:1px solid rgba(46,124,246,0.25);background:rgba(46,124,246,0.05);color:var(--muted);font-size:.83rem;cursor:pointer;transition:.2s;user-select:none}
+.chip:hover{border-color:var(--accent);color:var(--white)}
+.chip.selected{background:rgba(46,124,246,0.2);border-color:var(--accent);color:var(--white);font-weight:500}
+
+/* SEÇÃO CONTRATO */
+.contract-box{background:rgba(10,22,40,0.9);border:1px solid rgba(212,168,67,0.2);border-radius:14px;padding:32px;max-height:420px;overflow-y:auto;font-size:.85rem;line-height:1.8;color:#c8d4e8;margin-bottom:24px}
+.contract-box::-webkit-scrollbar{width:4px}
+.contract-box::-webkit-scrollbar-track{background:transparent}
+.contract-box::-webkit-scrollbar-thumb{background:var(--faint);border-radius:2px}
+.contract-title{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;color:var(--gold);margin-bottom:12px;text-align:center;letter-spacing:.05em}
+.contract-box h4{color:var(--white);font-size:.88rem;margin:16px 0 6px;font-weight:600}
+.contract-box p{margin-bottom:10px}
+
+/* CHECKBOX ASSINAR */
+.sign-row{display:flex;align-items:flex-start;gap:14px;padding:18px 20px;background:rgba(212,168,67,0.05);border:1px solid rgba(212,168,67,0.15);border-radius:12px;margin-bottom:16px}
+.sign-row input[type="checkbox"]{width:20px;height:20px;accent-color:var(--gold);flex-shrink:0;margin-top:2px;cursor:pointer}
+.sign-row label{font-size:.88rem;color:var(--muted);line-height:1.6;cursor:pointer}
+.sign-row label strong{color:var(--white)}
+
+/* ASSINATURA */
+.sig-area{border:1px dashed rgba(46,124,246,0.3);border-radius:12px;padding:16px;margin-bottom:20px}
+.sig-area label{font-size:.8rem;color:var(--muted);display:block;margin-bottom:10px;letter-spacing:.04em;text-transform:uppercase}
+#sigCanvas{width:100%;height:120px;background:rgba(10,22,40,0.6);border-radius:8px;cursor:crosshair;display:block}
+.sig-actions{display:flex;gap:10px;margin-top:8px}
+.btn-clear{padding:6px 14px;border-radius:6px;border:1px solid rgba(46,124,246,0.2);background:transparent;color:var(--muted);font-size:.8rem;cursor:pointer}
+
+/* BOTÕES */
+.btn-row{display:flex;gap:16px;margin-top:36px;justify-content:flex-end}
+.btn-primary{padding:14px 32px;border-radius:10px;background:var(--accent);color:#fff;font-family:'Outfit',sans-serif;font-size:.95rem;font-weight:600;border:none;cursor:pointer;transition:.2s;letter-spacing:.02em}
+.btn-primary:hover{background:#1a5fd4;transform:translateY(-1px)}
+.btn-secondary{padding:14px 28px;border-radius:10px;background:transparent;color:var(--muted);font-family:'Outfit',sans-serif;font-size:.95rem;font-weight:500;border:1px solid rgba(46,124,246,0.2);cursor:pointer;transition:.2s}
+.btn-secondary:hover{border-color:var(--accent);color:var(--white)}
+.btn-gold{padding:14px 28px;border-radius:10px;background:rgba(212,168,67,0.15);color:var(--gold);font-family:'Outfit',sans-serif;font-size:.88rem;font-weight:500;border:1px solid rgba(212,168,67,0.3);cursor:pointer;transition:.2s}
+.btn-gold:hover{background:rgba(212,168,67,0.25)}
+
+/* STEP PANELS */
+.step-panel{display:none}
+.step-panel.active{display:block}
+
+/* SUCCESS */
+.success-box{text-align:center;padding:40px 20px}
+.success-icon{font-size:4rem;margin-bottom:20px}
+.success-box h2{font-family:'Cormorant Garamond',serif;font-size:2.2rem;margin-bottom:12px}
+.success-box p{color:var(--muted);line-height:1.7;max-width:480px;margin:0 auto 28px}
+.cred-box{background:rgba(46,124,246,0.08);border:1px solid rgba(46,124,246,0.2);border-radius:12px;padding:24px;margin:24px auto;max-width:400px;text-align:left}
+.cred-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(46,124,246,0.08);font-size:.9rem}
+.cred-row:last-child{border-bottom:none}
+.cred-row span:first-child{color:var(--muted)}
+.cred-row span:last-child{color:var(--white);font-weight:600;font-family:monospace}
+
+/* ALERTS */
+.alert{padding:12px 16px;border-radius:8px;font-size:.85rem;margin-bottom:16px}
+.alert-warn{background:rgba(212,168,67,0.1);border:1px solid rgba(212,168,67,0.2);color:#e8c97a}
+
+@media(max-width:640px){
+  nav{padding:16px 20px}
+  .container{padding:40px 16px 80px}
+  .card{padding:28px 20px}
+  .form-grid{grid-template-columns:1fr}
+  .btn-row{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<div class="bg"></div>
+<div class="grid-overlay"></div>
+
+<nav>
+  <a href="/" class="nav-brand"><span>123</span> Consultoria</a>
+  <span class="nav-tag">Cadastro de Especialista</span>
+</nav>
+
+<div class="container">
+
+  <!-- PROGRESS -->
+  <div class="progress-bar" id="progressBar">
+    <div class="step active" onclick="goStep(1)">
+      <div class="step-dot">01</div>
+      <div class="step-label">Dados Pessoais</div>
+    </div>
+    <div class="step" onclick="goStep(2)">
+      <div class="step-dot">02</div>
+      <div class="step-label">Formação</div>
+    </div>
+    <div class="step" onclick="goStep(3)">
+      <div class="step-dot">03</div>
+      <div class="step-label">Especialidades</div>
+    </div>
+    <div class="step" onclick="goStep(4)">
+      <div class="step-dot">04</div>
+      <div class="step-label">Contrato</div>
+    </div>
+    <div class="step" onclick="goStep(5)">
+      <div class="step-dot">05</div>
+      <div class="step-label">Confirmação</div>
+    </div>
+  </div>
+
+  <!-- STEP 1: DADOS PESSOAIS -->
+  <div class="step-panel active" id="panel1">
+    <div class="card">
+      <div class="card-title">Dados <em>Pessoais</em></div>
+      <div class="card-sub">Informe seus dados para criar seu perfil de especialista na plataforma.</div>
+      <div class="form-grid">
+        <div class="form-group form-full">
+          <label>Nome completo *</label>
+          <input type="text" id="nome" placeholder="Seu nome completo">
+        </div>
+        <div class="form-group">
+          <label>CPF *</label>
+          <input type="text" id="cpf" placeholder="000.000.000-00" maxlength="14">
+        </div>
+        <div class="form-group">
+          <label>Data de nascimento *</label>
+          <input type="date" id="nascimento">
+        </div>
+        <div class="form-group">
+          <label>E-mail profissional *</label>
+          <input type="email" id="email" placeholder="seu@email.com">
+        </div>
+        <div class="form-group">
+          <label>WhatsApp *</label>
+          <input type="text" id="whatsapp" placeholder="(11) 99999-9999">
+        </div>
+        <div class="form-group">
+          <label>LinkedIn</label>
+          <input type="url" id="linkedin" placeholder="https://linkedin.com/in/seu-perfil">
+        </div>
+        <div class="form-group form-full">
+          <label>Endereço completo *</label>
+          <input type="text" id="endereco" placeholder="Rua, número, bairro, cidade - UF">
+        </div>
+        <div class="form-group">
+          <label>CNPJ (se possuir)</label>
+          <input type="text" id="cnpj" placeholder="00.000.000/0000-00">
+          <span class="field-hint">Necessário para emissão de NF de serviços</span>
+        </div>
+        <div class="form-group">
+          <label>Regime tributário</label>
+          <select id="regime">
+            <option value="">Selecione</option>
+            <option>MEI</option>
+            <option>Simples Nacional</option>
+            <option>Lucro Presumido</option>
+            <option>Pessoa Física (RPA)</option>
+          </select>
+        </div>
+        <div class="form-group form-full">
+          <label>Senha de acesso à plataforma *</label>
+          <input type="password" id="senha" placeholder="Mínimo 8 caracteres">
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn-primary" onclick="nextStep(1)">Próximo →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 2: FORMAÇÃO -->
+  <div class="step-panel" id="panel2">
+    <div class="card">
+      <div class="card-title">Formação <em>Acadêmica</em></div>
+      <div class="card-sub">Informe sua formação principal e experiências profissionais relevantes.</div>
+      <div class="form-grid">
+        <div class="form-group form-full">
+          <label>Curso de graduação *</label>
+          <input type="text" id="curso" placeholder="Ex: Administração de Empresas">
+        </div>
+        <div class="form-group">
+          <label>Instituição de ensino *</label>
+          <input type="text" id="faculdade" placeholder="Nome da faculdade / universidade">
+        </div>
+        <div class="form-group">
+          <label>Ano de conclusão *</label>
+          <input type="number" id="anoFormacao" placeholder="2018" min="1970" max="2030">
+        </div>
+        <div class="form-group form-full">
+          <label>Pós-graduação / MBA / Mestrado / Doutorado</label>
+          <textarea id="posGrad" placeholder="Ex: MBA em Gestão Financeira — FGV (2021)&#10;Mestrado em Direito Empresarial — USP (2023)"></textarea>
+        </div>
+        <div class="form-group form-full">
+          <label>Experiências profissionais anteriores *</label>
+          <textarea id="experiencias" placeholder="Descreva suas principais experiências: empresas, cargos, períodos e entregas relevantes." style="min-height:140px"></textarea>
+        </div>
+        <div class="form-group form-full">
+          <label>Certificações e cursos complementares</label>
+          <textarea id="certs" placeholder="Ex: CPA-20, PMP, Scrum Master, CRC..."></textarea>
+        </div>
+        <div class="form-group form-full">
+          <label>Diploma ou certificado de conclusão de curso *</label>
+          <input type="file" id="diploma" accept=".pdf,.jpg,.jpeg,.png">
+          <span class="field-hint">Formatos aceitos: PDF, JPG, PNG — máx. 10MB</span>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn-secondary" onclick="goStep(1)">← Voltar</button>
+        <button class="btn-primary" onclick="nextStep(2)">Próximo →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 3: ESPECIALIDADES -->
+  <div class="step-panel" id="panel3">
+    <div class="card">
+      <div class="card-title">Suas <em>Especialidades</em></div>
+      <div class="card-sub">Selecione todas as áreas em que você atua com experiência comprovada. Você será acionado conforme as demandas dessas verticais.</div>
+      <div class="form-group form-full" style="margin-bottom:28px">
+        <label>Verticais de atuação * (selecione uma ou mais)</label>
+        <div class="chips-grid" id="chipsGrid">
+          <div class="chip" data-v="Consultoria Empresarial">🏗️ Consultoria Empresarial</div>
+          <div class="chip" data-v="Planejamento Financeiro">📊 Planejamento Financeiro</div>
+          <div class="chip" data-v="RH & Pessoas">👥 RH & Pessoas</div>
+          <div class="chip" data-v="Compliance & Governança">⚖️ Compliance & Governança</div>
+          <div class="chip" data-v="Marketing Digital">📡 Marketing Digital</div>
+          <div class="chip" data-v="Fusões & Aquisições">🤝 Fusões & Aquisições</div>
+          <div class="chip" data-v="Gestão Estratégica">🚀 Gestão Estratégica</div>
+          <div class="chip" data-v="Planejamento Logístico">🚚 Planejamento Logístico</div>
+          <div class="chip" data-v="Implementação Kaizen">⚙️ Implementação Kaizen</div>
+        </div>
+      </div>
+      <div class="form-grid">
+        <div class="form-group form-full">
+          <label>Apresentação profissional *</label>
+          <textarea id="bio" placeholder="Escreva um resumo profissional de 3 a 5 linhas que aparecerá para os clientes da plataforma." style="min-height:120px"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Pretensão de honorários (R$/hora)</label>
+          <input type="number" id="honorarios" placeholder="Ex: 350">
+          <span class="field-hint">Referência para proposta. Comissão de 15% da plataforma já considerada.</span>
+        </div>
+        <div class="form-group">
+          <label>Disponibilidade</label>
+          <select id="disponibilidade">
+            <option>Tempo parcial (até 20h/semana)</option>
+            <option>Tempo integral</option>
+            <option>Por projeto</option>
+            <option>Fins de semana</option>
+          </select>
+        </div>
+        <div class="form-group form-full">
+          <label>Foto profissional</label>
+          <input type="file" id="foto" accept=".jpg,.jpeg,.png">
+          <span class="field-hint">Foto com fundo neutro, tamanho mínimo 400x400px</span>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn-secondary" onclick="goStep(2)">← Voltar</button>
+        <button class="btn-primary" onclick="nextStep(3)">Próximo →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 4: CONTRATOS -->
+  <div class="step-panel" id="panel4">
+    <div class="card">
+      <div class="card-title">Contratos e <em>Termos</em></div>
+      <div class="card-sub">Leia com atenção os contratos abaixo, assine digitalmente e faça o download do PDF para seus arquivos.</div>
+
+      <div class="alert alert-warn">⚠️ Role até o final de cada contrato antes de assinar. Os contratos têm validade jurídica.</div>
+
+      <!-- CONTRATO 1: PRESTAÇÃO DE SERVIÇOS -->
+      <div class="contract-box" id="contrato1">
+        <div class="contract-title">CONTRATO DE PRESTAÇÃO DE SERVIÇOS — ESPECIALISTA PARCEIRO<br>123 CONSULTORIA EMPRESARIAL LTDA.</div>
+
+        <p>Pelo presente instrumento particular, as partes abaixo qualificadas celebram o presente Contrato de Prestação de Serviços como Especialista Parceiro ("Contrato"), que se regerá pelas cláusulas e condições a seguir:</p>
+
+        <h4>CLÁUSULA 1ª — DAS PARTES</h4>
+        <p><strong>CONTRATANTE:</strong> 123 CONSULTORIA EMPRESARIAL, plataforma de intermediação de serviços profissionais, doravante denominada simplesmente "PLATAFORMA".</p>
+        <p><strong>CONTRATADO:</strong> O profissional identificado no formulário de cadastro, doravante denominado "ESPECIALISTA".</p>
+
+        <h4>CLÁUSULA 2ª — DO OBJETO</h4>
+        <p>O presente contrato tem por objeto a prestação de serviços técnicos e consultivos pelo ESPECIALISTA às empresas clientes indicadas pela PLATAFORMA, nas verticals de especialidade cadastradas, mediante intermediação da PLATAFORMA.</p>
+
+        <h4>CLÁUSULA 3ª — DA COMISSÃO E REMUNERAÇÃO</h4>
+        <p>3.1. Sobre o valor total de cada projeto executado, a PLATAFORMA reterá a título de comissão de intermediação o percentual de <strong>15% (quinze por cento)</strong> do valor total contratado com o cliente.</p>
+        <p>3.2. O ESPECIALISTA receberá o equivalente a 85% (oitenta e cinco por cento) do valor acordado com o cliente, após a confirmação da entrega.</p>
+        <p>3.3. O pagamento ao ESPECIALISTA será realizado em até 5 (cinco) dias úteis após o recebimento integral do cliente pela PLATAFORMA.</p>
+        <p>3.4. O ESPECIALISTA é responsável pela emissão de <strong>Nota Fiscal de Serviços (NFS-e) diretamente à empresa cliente</strong> que executou o trabalho, no prazo máximo de 48 horas após o recebimento.</p>
+
+        <h4>CLÁUSULA 4ª — DOS PRAZOS E ENTREGAS</h4>
+        <p>4.1. O ESPECIALISTA compromete-se a entregar os projetos aceitos dentro dos prazos estipulados em cada proposta firmada com o cliente.</p>
+        <p>4.2. Caso o ESPECIALISTA assuma uma stack (conjunto de demandas) e precise se desligar da PLATAFORMA, deverá antes concluir ou realizar a devida transição das entregas em andamento dentro do prazo originalmente estipulado com o cliente, não podendo abandonar projetos em curso.</p>
+        <p>4.3. O não cumprimento de prazo sem justificativa prévia e aceita pela PLATAFORMA sujeita o ESPECIALISTA a penalidade de 10% do valor do projeto, a ser descontado de sua remuneração.</p>
+
+        <h4>CLÁUSULA 5ª — DO PRAZO DO CONTRATO</h4>
+        <p>5.1. O presente contrato é firmado por <strong>prazo indeterminado</strong>, podendo ser rescindido por qualquer das partes mediante comunicação prévia por escrito com antecedência mínima de <strong>30 (trinta) dias</strong>.</p>
+        <p>5.2. Durante o aviso prévio de 30 dias, o ESPECIALISTA deverá manter o atendimento de todas as demandas em andamento e não poderá aceitar novos projetos pela PLATAFORMA.</p>
+        <p>5.3. O descumprimento do aviso prévio ou o abandono de projetos em curso dará à PLATAFORMA o direito de reter valores pendentes e acionar o ESPECIALISTA pelos danos causados.</p>
+
+        <h4>CLÁUSULA 6ª — DA INDEPENDÊNCIA</h4>
+        <p>6.1. O ESPECIALISTA atuará como prestador de serviços autônomo, sem vínculo empregatício, societário ou de exclusividade com a PLATAFORMA.</p>
+        <p>6.2. O ESPECIALISTA é responsável pelo recolhimento de seus próprios tributos, contribuições previdenciárias e obrigações fiscais decorrentes de sua atividade.</p>
+
+        <h4>CLÁUSULA 7ª — DO FORO</h4>
+        <p>Fica eleito o foro da <strong>Comarca de Salto, Estado de São Paulo</strong>, para dirimir quaisquer dúvidas ou litígios decorrentes do presente contrato, com renúncia expressa a qualquer outro foro, por mais privilegiado que seja.</p>
+
+        <p style="margin-top:20px;font-size:.82rem;color:var(--faint)">Salto/SP, <span class="data-hoje"></span>.</p>
+      </div>
+
+      <div class="sign-row">
+        <input type="checkbox" id="assinar1">
+        <label for="assinar1">Li e concordo integralmente com o <strong>Contrato de Prestação de Serviços</strong> acima, tendo compreendido todos os seus termos, especialmente os relativos à comissão de 15%, prazo indeterminado, aviso prévio de 30 dias e foro da Comarca de Salto/SP.</label>
+      </div>
+
+      <!-- CONTRATO 2: CONFIDENCIALIDADE E NÃO CONCORRÊNCIA -->
+      <div class="contract-box" id="contrato2" style="margin-top:28px">
+        <div class="contract-title">ACORDO DE CONFIDENCIALIDADE, SIGILO E NÃO CONCORRÊNCIA (NDA)<br>123 CONSULTORIA EMPRESARIAL</div>
+
+        <h4>CLÁUSULA 1ª — DO OBJETO</h4>
+        <p>O presente Acordo de Confidencialidade tem por objeto proteger as informações estratégicas, comerciais, financeiras e operacionais das empresas clientes da PLATAFORMA, bem como os dados de contato, necessidades e vulnerabilidades identificadas durante a prestação dos serviços.</p>
+
+        <h4>CLÁUSULA 2ª — DAS OBRIGAÇÕES DE SIGILO</h4>
+        <p>2.1. O ESPECIALISTA compromete-se a manter em absoluto sigilo todas as informações obtidas no exercício de suas atividades, incluindo mas não se limitando a: dados financeiros, estratégias de negócio, listas de clientes, fornecedores, processos internos, tecnologias e qualquer informação sensível das empresas clientes.</p>
+        <p>2.2. O ESPECIALISTA não poderá divulgar, publicar, comentar em redes sociais, palestras, entrevistas ou qualquer outro meio, dados ou informações que identifiquem direta ou indiretamente as empresas clientes atendidas.</p>
+        <p>2.3. O sigilo se aplica durante toda a vigência deste contrato e por prazo mínimo de <strong>5 (cinco) anos após seu término</strong>.</p>
+
+        <h4>CLÁUSULA 3ª — DA PROIBIÇÃO DE NEGOCIAÇÃO DIRETA</h4>
+        <p>3.1. É expressamente <strong>vedado</strong> ao ESPECIALISTA contatar diretamente, oferecer serviços, firmar contratos ou receber pagamentos de qualquer empresa cliente que tenha sido apresentada pela PLATAFORMA, sem a intermediação e consentimento formal da 123 Consultoria.</p>
+        <p>3.2. Esta vedação aplica-se durante toda a vigência do contrato e por <strong>24 (vinte e quatro) meses após o desligamento</strong> da plataforma.</p>
+        <p>3.3. O descumprimento desta cláusula sujeitará o ESPECIALISTA ao pagamento de multa equivalente a <strong>3x (três vezes) o valor do projeto desviado</strong>, além de perdas e danos.</p>
+
+        <h4>CLÁUSULA 4ª — DA PROTEÇÃO DE DADOS (LGPD)</h4>
+        <p>4.1. O ESPECIALISTA declara ciência e conformidade com a Lei Geral de Proteção de Dados (Lei nº 13.709/2018) e compromete-se a tratar os dados pessoais e empresariais acessados exclusivamente para a finalidade do projeto contratado.</p>
+        <p>4.2. É proibido ao ESPECIALISTA exportar, copiar, armazenar ou compartilhar dados de clientes em sistemas externos à plataforma sem autorização expressa.</p>
+
+        <h4>CLÁUSULA 5ª — DAS PENALIDADES</h4>
+        <p>O descumprimento de qualquer cláusula deste acordo sujeitará o ESPECIALISTA a: (a) rescisão imediata do contrato sem direito a aviso prévio; (b) pagamento de multa mínima de R$ 50.000,00 (cinquenta mil reais); (c) reparação integral dos danos causados à PLATAFORMA e às empresas clientes afetadas; (d) responsabilização civil e criminal nos termos da legislação vigente.</p>
+
+        <h4>CLÁUSULA 6ª — DO FORO</h4>
+        <p>Fica eleito o foro da <strong>Comarca de Salto, Estado de São Paulo</strong>, para dirimir quaisquer dúvidas ou litígios decorrentes do presente acordo, com renúncia expressa a qualquer outro foro, por mais privilegiado que seja.</p>
+
+        <p style="margin-top:20px;font-size:.82rem;color:var(--faint)">Salto/SP, <span class="data-hoje"></span>.</p>
+      </div>
+
+      <div class="sign-row">
+        <input type="checkbox" id="assinar2">
+        <label for="assinar2">Li e concordo integralmente com o <strong>Acordo de Confidencialidade e Não Concorrência</strong> acima, ciente das penalidades aplicáveis em caso de descumprimento.</label>
+      </div>
+
+      <!-- ASSINATURA DIGITAL -->
+      <div class="sig-area" style="margin-top:28px">
+        <label>Assinatura digital (desenhe no campo abaixo) *</label>
+        <canvas id="sigCanvas" width="800" height="120"></canvas>
+        <div class="sig-actions">
+          <button class="btn-clear" onclick="clearSig()">🗑 Limpar assinatura</button>
+          <button class="btn-gold" onclick="downloadContratos()">📄 Baixar contratos em PDF</button>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-secondary" onclick="goStep(3)">← Voltar</button>
+        <button class="btn-primary" onclick="nextStep(4)">Finalizar cadastro →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 5: CONFIRMAÇÃO -->
+  <div class="step-panel" id="panel5">
+    <div class="card">
+      <div class="success-box">
+        <div class="success-icon">✅</div>
+        <h2>Cadastro <em style="color:var(--accent)">enviado</em> com sucesso!</h2>
+        <p>Seu perfil foi enviado para análise. Em até 48 horas úteis você receberá um e-mail com suas credenciais de acesso à área do especialista.</p>
+        <div class="cred-box" id="credBox">
+          <div class="cred-row"><span>E-mail</span><span id="credEmail">—</span></div>
+          <div class="cred-row"><span>Status</span><span style="color:var(--gold)">Em análise</span></div>
+          <div class="cred-row"><span>Protocolo</span><span id="credProtocolo">—</span></div>
+        </div>
+        <button class="btn-gold" onclick="downloadContratos()" style="margin-top:8px">📄 Baixar meus contratos assinados</button>
+        <br><br>
+        <a href="/" style="color:var(--muted);font-size:.88rem">← Voltar ao site</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ─── DATA ───────────────────────────────────────────────────────────────────
+const hoje = new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'})
+document.querySelectorAll('.data-hoje').forEach(el => el.textContent = hoje)
+
+// ─── CHIPS ──────────────────────────────────────────────────────────────────
+document.querySelectorAll('.chip').forEach(c => {
+  c.addEventListener('click', () => c.classList.toggle('selected'))
+})
+
+// ─── CPF MASK ────────────────────────────────────────────────────────────────
+document.getElementById('cpf').addEventListener('input', function(){
+  let v = this.value.replace(/\D/g,'')
+  v = v.replace(/(\d{3})(\d)/,'$1.$2')
+  v = v.replace(/(\d{3})(\d)/,'$1.$2')
+  v = v.replace(/(\d{3})(\d{1,2})$/,'$1-$2')
+  this.value = v
+})
+
+// ─── CANVAS SIGNATURE ────────────────────────────────────────────────────────
+const canvas = document.getElementById('sigCanvas')
+const ctx = canvas.getContext('2d')
+let drawing = false, hasSig = false
+
+canvas.addEventListener('mousedown', e => { drawing = true; ctx.beginPath(); ctx.moveTo(...pos(e)) })
+canvas.addEventListener('mousemove', e => {
+  if (!drawing) return
+  hasSig = true
+  ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.strokeStyle = '#4FC3F7'
+  ctx.lineTo(...pos(e)); ctx.stroke(); ctx.beginPath(); ctx.moveTo(...pos(e))
+})
+canvas.addEventListener('mouseup', () => drawing = false)
+canvas.addEventListener('mouseleave', () => drawing = false)
+
+canvas.addEventListener('touchstart', e => { e.preventDefault(); drawing = true; const t = e.touches[0]; ctx.beginPath(); ctx.moveTo(...posT(t)) })
+canvas.addEventListener('touchmove', e => {
+  e.preventDefault(); if (!drawing) return
+  hasSig = true; const t = e.touches[0]
+  ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.strokeStyle = '#4FC3F7'
+  ctx.lineTo(...posT(t)); ctx.stroke(); ctx.beginPath(); ctx.moveTo(...posT(t))
+})
+canvas.addEventListener('touchend', () => drawing = false)
+
+function pos(e){ const r = canvas.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top] }
+function posT(t){ const r = canvas.getBoundingClientRect(); return [t.clientX - r.left, t.clientY - r.top] }
+function clearSig(){ ctx.clearRect(0,0,canvas.width,canvas.height); hasSig = false }
+
+// ─── NAVIGATION ──────────────────────────────────────────────────────────────
+let currentStep = 1
+
+function goStep(n){
+  if(n > currentStep) return // só avança via validação
+  document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'))
+  document.getElementById('panel'+n).classList.add('active')
+  const steps = document.querySelectorAll('.step')
+  steps.forEach((s,i) => {
+    s.classList.remove('active','done')
+    if(i+1 < n) s.classList.add('done')
+    if(i+1 === n) s.classList.add('active')
+  })
+  currentStep = n
+  window.scrollTo({top:0,behavior:'smooth'})
+}
+
+function nextStep(from){
+  if(!validate(from)) return
+  const next = from + 1
+  document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'))
+  document.getElementById('panel'+next).classList.add('active')
+  const steps = document.querySelectorAll('.step')
+  steps.forEach((s,i) => {
+    s.classList.remove('active','done')
+    if(i+1 < next) s.classList.add('done')
+    if(i+1 === next) s.classList.add('active')
+  })
+  currentStep = next
+  window.scrollTo({top:0,behavior:'smooth'})
+  if(next === 5) finalizarCadastro()
+}
+
+// ─── VALIDAÇÃO ───────────────────────────────────────────────────────────────
+function validate(step){
+  const erros = []
+  if(step===1){
+    if(!v('nome')) erros.push('Nome completo')
+    if(!v('cpf')) erros.push('CPF')
+    if(!v('email')) erros.push('E-mail')
+    if(!v('whatsapp')) erros.push('WhatsApp')
+    if(!v('endereco')) erros.push('Endereço')
+    if(!v('senha') || document.getElementById('senha').value.length < 8) erros.push('Senha (mínimo 8 caracteres)')
+  }
+  if(step===2){
+    if(!v('curso')) erros.push('Curso de graduação')
+    if(!v('faculdade')) erros.push('Instituição de ensino')
+    if(!v('anoFormacao')) erros.push('Ano de conclusão')
+    if(!v('experiencias')) erros.push('Experiências profissionais')
+    if(!document.getElementById('diploma').files.length) erros.push('Diploma (arquivo)')
+  }
+  if(step===3){
+    const selecionadas = document.querySelectorAll('.chip.selected')
+    if(!selecionadas.length) erros.push('Selecione ao menos uma especialidade')
+    if(!v('bio')) erros.push('Apresentação profissional')
+  }
+  if(step===4){
+    if(!document.getElementById('assinar1').checked) erros.push('Assinatura do Contrato de Prestação de Serviços')
+    if(!document.getElementById('assinar2').checked) erros.push('Assinatura do Acordo de Confidencialidade')
+    if(!hasSig) erros.push('Assinatura digital (desenhe no campo)')
+  }
+  if(erros.length){
+    alert('Por favor, preencha:\n\n• ' + erros.join('\n• '))
+    return false
+  }
+  return true
+}
+
+function v(id){ return document.getElementById(id)?.value?.trim() }
+
+// ─── FINALIZAR ───────────────────────────────────────────────────────────────
+function finalizarCadastro(){
+  const protocolo = 'PREST-' + Date.now().toString(36).toUpperCase()
+  document.getElementById('credEmail').textContent = v('email') || '—'
+  document.getElementById('credProtocolo').textContent = protocolo
+
+  // Salvar no backend via API
+  const payload = {
+    nome: v('nome'), cpf: v('cpf'), email: v('email'),
+    whatsapp: v('whatsapp'), endereco: v('endereco'),
+    cnpj: v('cnpj'), regime: v('regime'),
+    curso: v('curso'), faculdade: v('faculdade'),
+    anoFormacao: v('anoFormacao'), posGrad: v('posGrad'),
+    experiencias: v('experiencias'), certs: v('certs'),
+    especialidades: [...document.querySelectorAll('.chip.selected')].map(c=>c.dataset.v),
+    bio: v('bio'), honorarios: v('honorarios'),
+    disponibilidade: v('disponibilidade'),
+    linkedin: v('linkedin'), protocolo,
+    dataContrato: hoje,
+    assinou_prestacao: true, assinou_nda: true,
+    status: 'em_analise'
+  }
+
+  fetch('/api/cadastro-prestador', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify(payload)
+  }).catch(()=>{}) // silencioso se API não disponível ainda
+}
+
+// ─── GERAR PDF ───────────────────────────────────────────────────────────────
+function downloadContratos(){
+  const { jsPDF } = window.jspdf
+  const doc = new jsPDF({ unit:'mm', format:'a4' })
+  const nome = v('nome') || 'Especialista'
+  const cpf = v('cpf') || '—'
+  const protocolo = 'PREST-' + Date.now().toString(36).toUpperCase()
+
+  const addPage = (titulo, linhas) => {
+    doc.addPage()
+    doc.setFillColor(10, 22, 40)
+    doc.rect(0, 0, 210, 297, 'F')
+    doc.setTextColor(212, 168, 67)
+    doc.setFontSize(13)
+    doc.setFont('helvetica','bold')
+    doc.text(titulo, 105, 25, {align:'center'})
+    doc.setTextColor(200, 212, 232)
+    doc.setFontSize(9)
+    doc.setFont('helvetica','normal')
+    let y = 40
+    linhas.forEach(l => {
+      if(l.startsWith('##')){
+        doc.setTextColor(100,180,255); doc.setFont('helvetica','bold'); doc.setFontSize(10)
+        doc.text(l.replace('##','').trim(), 20, y)
+        doc.setTextColor(200,212,232); doc.setFont('helvetica','normal'); doc.setFontSize(9)
+        y += 7
+      } else {
+        const split = doc.splitTextToSize(l, 170)
+        split.forEach(sl => {
+          if(y > 275){ doc.addPage(); doc.setFillColor(10,22,40); doc.rect(0,0,210,297,'F'); y = 20 }
+          doc.text(sl, 20, y); y += 5.5
+        })
+        y += 1
+      }
+    })
+    return doc
+  }
+
+  // Página 1 — Capa
+  doc.setFillColor(10, 22, 40)
+  doc.rect(0, 0, 210, 297, 'F')
+  doc.setDrawColor(46, 124, 246)
+  doc.setLineWidth(0.5)
+  doc.rect(15, 15, 180, 267)
+  doc.setTextColor(46, 124, 246)
+  doc.setFontSize(28)
+  doc.setFont('helvetica','bold')
+  doc.text('123', 105, 90, {align:'center'})
+  doc.setTextColor(255,255,255)
+  doc.setFontSize(14)
+  doc.text('CONSULTORIA', 105, 100, {align:'center'})
+  doc.setTextColor(200,212,232)
+  doc.setFontSize(11)
+  doc.text('CONTRATOS DE ESPECIALISTA PARCEIRO', 105, 115, {align:'center'})
+  doc.setFontSize(9)
+  doc.setTextColor(138,154,181)
+  doc.text(`Especialista: ${nome}`, 105, 140, {align:'center'})
+  doc.text(`CPF: ${cpf}`, 105, 148, {align:'center'})
+  doc.text(`Data: ${hoje}`, 105, 156, {align:'center'})
+  doc.text(`Protocolo: ${protocolo}`, 105, 164, {align:'center'})
+  doc.setTextColor(46,124,246)
+  doc.text('Foro: Comarca de Salto/SP', 105, 180, {align:'center'})
+
+  addPage('CONTRATO DE PRESTAÇÃO DE SERVIÇOS — ESPECIALISTA PARCEIRO', [
+    `Especialista: ${nome} | CPF: ${cpf} | Data: ${hoje}`,
+    '',
+    '## CLÁUSULA 1ª — DAS PARTES',
+    'CONTRATANTE: 123 CONSULTORIA EMPRESARIAL, plataforma de intermediação de serviços.',
+    `CONTRATADO: ${nome}, CPF ${cpf}, doravante ESPECIALISTA.`,
+    '',
+    '## CLÁUSULA 2ª — DO OBJETO',
+    'Prestação de serviços técnicos e consultivos pelo ESPECIALISTA às empresas clientes indicadas pela PLATAFORMA, nas verticals de especialidade cadastradas.',
+    '',
+    '## CLÁUSULA 3ª — DA COMISSÃO E REMUNERAÇÃO',
+    'A PLATAFORMA reterá 15% (quinze por cento) do valor total de cada projeto como comissão de intermediação.',
+    'O ESPECIALISTA receberá 85% do valor acordado, após confirmação da entrega.',
+    'Pagamento em até 5 dias úteis após recebimento do cliente.',
+    'O ESPECIALISTA emitirá NFS-e diretamente à empresa cliente em até 48h após o recebimento.',
+    '',
+    '## CLÁUSULA 4ª — DOS PRAZOS E ENTREGAS',
+    'O ESPECIALISTA compromete-se a entregar projetos aceitos dentro dos prazos estipulados.',
+    'Ao se desligar, deve concluir ou realizar transição de stacks em andamento antes da saída.',
+    'Descumprimento de prazo sem justificativa: penalidade de 10% do valor do projeto.',
+    '',
+    '## CLÁUSULA 5ª — DO PRAZO DO CONTRATO',
+    'Contrato por prazo INDETERMINADO. Rescisão com aviso prévio mínimo de 30 (trinta) dias.',
+    'Durante o aviso prévio: manter atendimentos em andamento, não aceitar novos projetos.',
+    'Abandono sem aviso: retenção de valores pendentes e responsabilização por danos.',
+    '',
+    '## CLÁUSULA 6ª — DA INDEPENDÊNCIA',
+    'O ESPECIALISTA atua como prestador autônomo, sem vínculo empregatício.',
+    'Responsável pelo recolhimento de seus próprios tributos e contribuições.',
+    '',
+    '## CLÁUSULA 7ª — DO FORO',
+    'Foro eleito: Comarca de Salto, Estado de São Paulo.',
+    'Renúncia expressa a qualquer outro foro, por mais privilegiado que seja.',
+    '',
+    `Salto/SP, ${hoje}.`,
+    '',
+    '_______________________________________________',
+    `${nome} — ESPECIALISTA`,
+    '',
+    '_______________________________________________',
+    '123 CONSULTORIA EMPRESARIAL — PLATAFORMA',
+  ])
+
+  addPage('ACORDO DE CONFIDENCIALIDADE, SIGILO E NÃO CONCORRÊNCIA (NDA)', [
+    `Especialista: ${nome} | CPF: ${cpf} | Data: ${hoje}`,
+    '',
+    '## CLÁUSULA 1ª — DO OBJETO',
+    'Proteger informações estratégicas, comerciais, financeiras e operacionais das empresas clientes.',
+    '',
+    '## CLÁUSULA 2ª — DAS OBRIGAÇÕES DE SIGILO',
+    'Manter em absoluto sigilo todas as informações obtidas: dados financeiros, estratégias, listas de clientes, processos internos e qualquer informação sensível.',
+    'Proibido divulgar, publicar ou comentar dados que identifiquem as empresas clientes.',
+    'Sigilo durante toda a vigência e por 5 (cinco) anos após o término.',
+    '',
+    '## CLÁUSULA 3ª — PROIBIÇÃO DE NEGOCIAÇÃO DIRETA',
+    'Vedado contatar, oferecer serviços ou receber pagamentos de clientes da PLATAFORMA sem intermediação.',
+    'Vigência: durante o contrato e por 24 (vinte e quatro) meses após o desligamento.',
+    'Descumprimento: multa de 3x o valor do projeto desviado + perdas e danos.',
+    '',
+    '## CLÁUSULA 4ª — PROTEÇÃO DE DADOS (LGPD)',
+    'Conformidade com Lei nº 13.709/2018 (LGPD).',
+    'Proibido exportar, copiar ou compartilhar dados de clientes sem autorização expressa.',
+    '',
+    '## CLÁUSULA 5ª — DAS PENALIDADES',
+    'Descumprimento: (a) rescisão imediata; (b) multa mínima de R$ 50.000,00;',
+    '(c) reparação integral dos danos; (d) responsabilização civil e criminal.',
+    '',
+    '## CLÁUSULA 6ª — DO FORO',
+    'Foro eleito: Comarca de Salto, Estado de São Paulo.',
+    'Renúncia expressa a qualquer outro foro, por mais privilegiado que seja.',
+    '',
+    `Salto/SP, ${hoje}.`,
+    '',
+    '_______________________________________________',
+    `${nome} — ESPECIALISTA`,
+    '',
+    '_______________________________________________',
+    '123 CONSULTORIA EMPRESARIAL — PLATAFORMA',
+  ])
+
+  // Adiciona imagem da assinatura
+  try {
+    const sigData = canvas.toDataURL('image/png')
+    const lastPage = doc.getNumberOfPages()
+    doc.setPage(lastPage)
+    doc.addImage(sigData, 'PNG', 20, 230, 80, 25)
+    doc.setTextColor(138,154,181)
+    doc.setFontSize(8)
+    doc.text('Assinatura digital do especialista', 20, 260)
+  } catch(e){}
+
+  doc.save(`contratos-123consultoria-${nome.replace(/\s+/g,'-').toLowerCase()}.pdf`)
+}
+</script>
+</body>
+</html>

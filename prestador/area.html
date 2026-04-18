@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Área do Especialista | 123 Consultoria</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--navy:#0A1628;--navy2:#0F1E36;--navy3:#152540;--accent:#2E7CF6;--gold:#D4A843;--white:#FFFFFF;--muted:#8A9AB5;--faint:#3A4F70;--green:#22c55e;--red:#ef4444;--yellow:#f59e0b}
+body{font-family:'Outfit',sans-serif;background:var(--navy);color:var(--white);min-height:100vh;display:flex}
+
+/* LOGIN */
+#loginScreen{position:fixed;inset:0;background:var(--navy);z-index:999;display:flex;align-items:center;justify-content:center}
+.login-box{background:rgba(15,30,54,0.95);border:1px solid rgba(46,124,246,0.15);border-radius:20px;padding:48px;width:100%;max-width:400px;text-align:center}
+.login-logo{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700;margin-bottom:4px}<br>
+.login-logo span{color:var(--accent)}
+.login-sub{color:var(--muted);font-size:.85rem;margin-bottom:32px}
+.login-input{width:100%;background:rgba(10,22,40,0.8);border:1px solid rgba(46,124,246,0.2);border-radius:10px;padding:14px 16px;color:var(--white);font-family:'Outfit',sans-serif;font-size:.95rem;margin-bottom:14px;outline:none}
+.login-input:focus{border-color:var(--accent)}
+.login-btn{width:100%;padding:14px;border-radius:10px;background:var(--accent);color:#fff;font-family:'Outfit',sans-serif;font-size:.95rem;font-weight:600;border:none;cursor:pointer}
+.login-err{color:var(--red);font-size:.82rem;margin-top:10px;display:none}
+
+/* SIDEBAR */
+.sidebar{width:240px;min-height:100vh;background:rgba(10,22,40,0.98);border-right:1px solid rgba(46,124,246,0.1);display:flex;flex-direction:column;padding:24px 0;flex-shrink:0}
+.sidebar-brand{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;padding:0 24px 24px;border-bottom:1px solid rgba(46,124,246,0.08)}
+.sidebar-brand span{color:var(--accent)}
+.sidebar-user{padding:20px 24px;border-bottom:1px solid rgba(46,124,246,0.08)}
+.sidebar-user-name{font-weight:600;font-size:.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sidebar-user-tag{font-size:.75rem;color:var(--muted);margin-top:2px}
+.sidebar-status{display:inline-flex;align-items:center;gap:6px;margin-top:8px;font-size:.75rem;padding:4px 10px;border-radius:20px;background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.2);color:var(--yellow)}
+.sidebar-status.ativo{background:rgba(34,197,94,0.1);border-color:rgba(34,197,94,0.2);color:var(--green)}
+.sidebar-nav{padding:16px 0;flex:1}
+.nav-item{display:flex;align-items:center;gap:12px;padding:12px 24px;color:var(--muted);text-decoration:none;font-size:.88rem;transition:.2s;cursor:pointer;border:none;background:none;width:100%;text-align:left}
+.nav-item:hover,.nav-item.active{color:var(--white);background:rgba(46,124,246,0.08)}
+.nav-item.active{border-left:3px solid var(--accent)}
+.nav-item-ico{font-size:1rem;width:20px;text-align:center}
+.sidebar-logout{padding:16px 24px;border-top:1px solid rgba(46,124,246,0.08)}
+.logout-btn{color:var(--muted);font-size:.82rem;cursor:pointer;background:none;border:none;font-family:'Outfit',sans-serif}
+.logout-btn:hover{color:var(--red)}
+
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{padding:20px 40px;border-bottom:1px solid rgba(46,124,246,0.08);display:flex;justify-content:space-between;align-items:center;background:rgba(10,22,40,0.5)}
+.topbar-title{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:600}
+.topbar-title em{color:var(--accent);font-style:italic}
+.content{flex:1;overflow-y:auto;padding:40px}
+
+/* CARDS DE MÉTRICA */
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:20px;margin-bottom:40px}
+.metric-card{background:rgba(15,30,54,0.8);border:1px solid rgba(46,124,246,0.12);border-radius:14px;padding:24px}
+.metric-label{font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.metric-val{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:700;line-height:1}
+.metric-sub{font-size:.78rem;color:var(--faint);margin-top:6px}
+
+/* TABELAS */
+.section-title{font-family:'Cormorant Garamond',serif;font-size:1.3rem;margin-bottom:16px}
+.table-wrap{background:rgba(15,30,54,0.8);border:1px solid rgba(46,124,246,0.1);border-radius:14px;overflow:hidden;margin-bottom:32px}
+table{width:100%;border-collapse:collapse}
+thead tr{background:rgba(46,124,246,0.08)}
+th{padding:14px 20px;text-align:left;font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:500}
+td{padding:14px 20px;font-size:.88rem;border-top:1px solid rgba(46,124,246,0.06);color:var(--white)}
+tr:hover td{background:rgba(46,124,246,0.04)}
+.badge{display:inline-flex;padding:4px 10px;border-radius:20px;font-size:.75rem;font-weight:500}
+.badge-green{background:rgba(34,197,94,0.1);color:var(--green);border:1px solid rgba(34,197,94,0.2)}
+.badge-yellow{background:rgba(245,158,11,0.1);color:var(--yellow);border:1px solid rgba(245,158,11,0.2)}
+.badge-blue{background:rgba(46,124,246,0.1);color:#7ab8ff;border:1px solid rgba(46,124,246,0.2)}
+.badge-red{background:rgba(239,68,68,0.1);color:var(--red);border:1px solid rgba(239,68,68,0.2)}
+
+/* PAINÉIS */
+.panel{display:none}
+.panel.active{display:block}
+
+/* PERFIL */
+.profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.profile-field{background:rgba(10,22,40,0.6);border:1px solid rgba(46,124,246,0.1);border-radius:10px;padding:16px}
+.profile-field label{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:6px}
+.profile-field span{font-size:.9rem;color:var(--white)}
+.chips-display{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.chip-tag{padding:5px 12px;border-radius:16px;background:rgba(46,124,246,0.1);border:1px solid rgba(46,124,246,0.2);font-size:.78rem;color:#7ab8ff}
+
+/* EMPTY STATE */
+.empty{text-align:center;padding:60px 20px;color:var(--muted)}
+.empty-ico{font-size:2.5rem;margin-bottom:12px}
+
+@media(max-width:768px){
+  .sidebar{display:none}
+  .metrics{grid-template-columns:1fr 1fr}
+  .content{padding:20px}
+  .topbar{padding:16px 20px}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo"><span>123</span> Consultoria</div>
+    <div class="login-sub">Área do Especialista</div>
+    <input class="login-input" type="email" id="loginEmail" placeholder="Seu e-mail cadastrado">
+    <input class="login-input" type="password" id="loginSenha" placeholder="Senha">
+    <button class="login-btn" onclick="fazerLogin()">Entrar</button>
+    <div class="login-err" id="loginErr">E-mail ou senha incorretos.</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div class="sidebar">
+  <div class="sidebar-brand"><span>123</span> Consultoria</div>
+  <div class="sidebar-user">
+    <div class="sidebar-user-name" id="sbNome">—</div>
+    <div class="sidebar-user-tag">Especialista Parceiro</div>
+    <div class="sidebar-status" id="sbStatus">⏳ Em análise</div>
+  </div>
+  <nav class="sidebar-nav">
+    <button class="nav-item active" onclick="showPanel('dashboard',this)"><span class="nav-item-ico">📊</span> Dashboard</button>
+    <button class="nav-item" onclick="showPanel('projetos',this)"><span class="nav-item-ico">📁</span> Meus Projetos</button>
+    <button class="nav-item" onclick="showPanel('financeiro',this)"><span class="nav-item-ico">💰</span> Financeiro</button>
+    <button class="nav-item" onclick="showPanel('perfil',this)"><span class="nav-item-ico">👤</span> Meu Perfil</button>
+    <button class="nav-item" onclick="showPanel('contratos',this)"><span class="nav-item-ico">📄</span> Meus Contratos</button>
+  </nav>
+  <div class="sidebar-logout">
+    <button class="logout-btn" onclick="logout()">← Sair da conta</button>
+  </div>
+</div>
+
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title" id="topTitle">Meu <em>Dashboard</em></div>
+    <div style="font-size:.82rem;color:var(--muted)" id="topDate"></div>
+  </div>
+  <div class="content">
+
+    <!-- DASHBOARD -->
+    <div class="panel active" id="panelDashboard">
+      <div class="metrics">
+        <div class="metric-card">
+          <div class="metric-label">Projetos ativos</div>
+          <div class="metric-val" id="mAtivos">0</div>
+          <div class="metric-sub">em execução</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Projetos concluídos</div>
+          <div class="metric-val" id="mConcluidos">0</div>
+          <div class="metric-sub">histórico total</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">A receber</div>
+          <div class="metric-val" id="mReceber">R$0</div>
+          <div class="metric-sub">aguardando liberação</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Recebido total</div>
+          <div class="metric-val" id="mTotal">R$0</div>
+          <div class="metric-sub">desde o cadastro</div>
+        </div>
+      </div>
+
+      <div class="section-title">Projetos recentes</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Projeto</th><th>Empresa</th><th>Prazo</th><th>Valor (85%)</th><th>Status</th></tr></thead>
+          <tbody id="tbProjetos">
+            <tr><td colspan="5"><div class="empty"><div class="empty-ico">📁</div>Nenhum projeto atribuído ainda.<br><span style="font-size:.8rem">Assim que sua conta for aprovada, os projetos aparecerão aqui.</span></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- PROJETOS -->
+    <div class="panel" id="panelProjetos">
+      <div class="section-title">Todos os Projetos</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Código</th><th>Projeto</th><th>Empresa cliente</th><th>Vertical</th><th>Prazo</th><th>Valor</th><th>Status</th><th>NF</th></tr></thead>
+          <tbody>
+            <tr><td colspan="8"><div class="empty"><div class="empty-ico">📁</div>Nenhum projeto ainda.</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- FINANCEIRO -->
+    <div class="panel" id="panelFinanceiro">
+      <div class="metrics">
+        <div class="metric-card"><div class="metric-label">Comissão plataforma</div><div class="metric-val" style="color:var(--muted)">15%</div><div class="metric-sub">sobre valor bruto</div></div>
+        <div class="metric-card"><div class="metric-label">Seu percentual</div><div class="metric-val" style="color:var(--green)">85%</div><div class="metric-sub">por projeto</div></div>
+        <div class="metric-card"><div class="metric-label">Prazo de repasse</div><div class="metric-val" style="font-size:1.4rem">5 dias</div><div class="metric-sub">úteis após recebimento</div></div>
+      </div>
+      <div class="section-title">Histórico financeiro</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Data</th><th>Projeto</th><th>Valor bruto</th><th>Comissão (15%)</th><th>Repasse (85%)</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td colspan="6"><div class="empty"><div class="empty-ico">💰</div>Nenhuma movimentação ainda.</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="background:rgba(212,168,67,0.06);border:1px solid rgba(212,168,67,0.15);border-radius:12px;padding:20px;font-size:.85rem;color:var(--muted);line-height:1.7">
+        ⚠️ <strong style="color:var(--gold)">Lembrete fiscal:</strong> você deve emitir a Nota Fiscal de Serviço (NFS-e) diretamente à empresa cliente em até 48 horas após o recebimento do projeto. O CNPJ e dados para emissão estarão disponíveis em cada projeto.
+      </div>
+    </div>
+
+    <!-- PERFIL -->
+    <div class="panel" id="panelPerfil">
+      <div class="section-title">Meu Perfil</div>
+      <div class="profile-grid" id="perfilGrid">
+        <div class="profile-field"><label>Nome completo</label><span id="pfNome">—</span></div>
+        <div class="profile-field"><label>CPF</label><span id="pfCpf">—</span></div>
+        <div class="profile-field"><label>E-mail</label><span id="pfEmail">—</span></div>
+        <div class="profile-field"><label>WhatsApp</label><span id="pfWhatsapp">—</span></div>
+        <div class="profile-field"><label>CNPJ</label><span id="pfCnpj">—</span></div>
+        <div class="profile-field"><label>Regime tributário</label><span id="pfRegime">—</span></div>
+        <div class="profile-field"><label>Formação</label><span id="pfFormacao">—</span></div>
+        <div class="profile-field"><label>Instituição</label><span id="pfFaculdade">—</span></div>
+        <div class="profile-field" style="grid-column:1/-1"><label>Especialidades</label><div class="chips-display" id="pfEspecialidades"></div></div>
+        <div class="profile-field" style="grid-column:1/-1"><label>Bio profissional</label><span id="pfBio">—</span></div>
+        <div class="profile-field"><label>Honorários (R$/h)</label><span id="pfHonorarios">—</span></div>
+        <div class="profile-field"><label>Disponibilidade</label><span id="pfDisponibilidade">—</span></div>
+        <div class="profile-field"><label>Status na plataforma</label><span id="pfStatus" style="color:var(--yellow)">Em análise</span></div>
+        <div class="profile-field"><label>Protocolo de cadastro</label><span id="pfProtocolo">—</span></div>
+      </div>
+    </div>
+
+    <!-- CONTRATOS -->
+    <div class="panel" id="panelContratos">
+      <div class="section-title">Meus Contratos</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Contrato</th><th>Data de assinatura</th><th>Status</th><th>Download</th></tr></thead>
+          <tbody id="tbContratos">
+            <tr><td colspan="4"><div class="empty"><div class="empty-ico">📄</div>Contratos aparecerão aqui após aprovação do cadastro.</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="font-size:.82rem;color:var(--faint);line-height:1.7;padding:16px">
+        Todos os contratos possuem foro eleito na Comarca de Salto/SP e foram assinados digitalmente no momento do cadastro.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ─── DATA ─────────────────────────────────────────────────────────────────
+document.getElementById('topDate').textContent = new Date().toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long',year:'numeric'})
+
+// ─── LOGIN ────────────────────────────────────────────────────────────────
+function fazerLogin(){
+  const email = document.getElementById('loginEmail').value.trim()
+  const senha = document.getElementById('loginSenha').value
+
+  // Busca dados salvos pelo formulário de cadastro
+  const dados = JSON.parse(localStorage.getItem('prestador_' + email) || 'null')
+
+  if(dados && dados.senha === senha){
+    sessionStorage.setItem('prestador_logado', JSON.stringify(dados))
+    document.getElementById('loginScreen').style.display = 'none'
+    carregarDados(dados)
+  } else {
+    // Tenta API
+    fetch('/api/login-prestador', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({email, senha})
+    }).then(r=>r.json()).then(d=>{
+      if(d.ok){
+        sessionStorage.setItem('prestador_logado', JSON.stringify(d.dados))
+        document.getElementById('loginScreen').style.display = 'none'
+        carregarDados(d.dados)
+      } else {
+        document.getElementById('loginErr').style.display = 'block'
+      }
+    }).catch(()=>{
+      document.getElementById('loginErr').style.display = 'block'
+    })
+  }
+}
+
+function carregarDados(d){
+  document.getElementById('sbNome').textContent = d.nome || '—'
+  const status = d.status || 'em_analise'
+  const sb = document.getElementById('sbStatus')
+  if(status === 'ativo'){ sb.textContent = '✅ Ativo'; sb.classList.add('ativo') }
+  else { sb.textContent = '⏳ Em análise' }
+
+  // Perfil
+  document.getElementById('pfNome').textContent = d.nome||'—'
+  document.getElementById('pfCpf').textContent = d.cpf||'—'
+  document.getElementById('pfEmail').textContent = d.email||'—'
+  document.getElementById('pfWhatsapp').textContent = d.whatsapp||'—'
+  document.getElementById('pfCnpj').textContent = d.cnpj||'Não informado'
+  document.getElementById('pfRegime').textContent = d.regime||'—'
+  document.getElementById('pfFormacao').textContent = d.curso||'—'
+  document.getElementById('pfFaculdade').textContent = d.faculdade||'—'
+  document.getElementById('pfBio').textContent = d.bio||'—'
+  document.getElementById('pfHonorarios').textContent = d.honorarios ? 'R$ '+d.honorarios+'/h' : '—'
+  document.getElementById('pfDisponibilidade').textContent = d.disponibilidade||'—'
+  document.getElementById('pfProtocolo').textContent = d.protocolo||'—'
+  if(status==='ativo') document.getElementById('pfStatus').textContent = 'Ativo ✅'
+
+  const chips = document.getElementById('pfEspecialidades')
+  chips.innerHTML = ''
+  ;(d.especialidades||[]).forEach(e=>{
+    const t = document.createElement('span')
+    t.className = 'chip-tag'; t.textContent = e; chips.appendChild(t)
+  })
+}
+
+function logout(){
+  sessionStorage.removeItem('prestador_logado')
+  location.reload()
+}
+
+// ─── NAVEGAÇÃO ────────────────────────────────────────────────────────────
+const titles = {dashboard:'Meu <em>Dashboard</em>',projetos:'Meus <em>Projetos</em>',financeiro:'Meu <em>Financeiro</em>',perfil:'Meu <em>Perfil</em>',contratos:'Meus <em>Contratos</em>'}
+
+function showPanel(id, btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'))
+  document.getElementById('panel'+id.charAt(0).toUpperCase()+id.slice(1)).classList.add('active')
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'))
+  btn.classList.add('active')
+  document.getElementById('topTitle').innerHTML = titles[id]
+}
+
+// Auto-login se sessão ativa
+const sess = sessionStorage.getItem('prestador_logado')
+if(sess){
+  document.getElementById('loginScreen').style.display = 'none'
+  carregarDados(JSON.parse(sess))
+}
+
+document.addEventListener('keydown', e => { if(e.key==='Enter') fazerLogin() })
+</script>
+</body>
+</html>
