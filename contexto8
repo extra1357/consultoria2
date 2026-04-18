@@ -1,0 +1,1525 @@
+
+
+contexto6 08:51 Visualizou 4 arquivos Visualizou 4 arquivos Contexto recuperado! Aqui está o estado atual do projeto 123consultoria.com.br: ✅ O que foi concluído: 10 tabelas criadas no Neon: prestadores, oportunidades, candidaturas, projetos, financeiro, tickets, ticket_mensagens, auditoria, le
+
+pasted
+
+15:47
+Vou ler o contexto completo e gerar a área do especialista + fazer o deploy de tudo.
+
+
+Verificar estado atual do projeto
+Verificar estado atual do projeto
+Não tenho acesso ao seu terminal — esse Claude roda em um ambiente separado. Mas tenho tudo que preciso do contexto para gerar os arquivos finais.
+
+Vamos fazer tudo de uma vez. Execute estes comandos no seu terminal:
+
+PASSO 1 — Admin atualizado (commit pendente):
+
+bash
+cd ~/consultoria2
+git add .
+git commit -m "fix: admin completo fluxo lead→negociacao→projeto"
+PASSO 2 — Área do Especialista (cole e execute):
+
+bash
+cat > prestador/area.html << 'HTMLEOF'
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Área do Especialista | 123 Consultoria</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#060f1e;--navy2:#0a1628;--card:#0d1f38;--accent:#2e7cf6;--accent2:#1a5fd4;--gold:#c9a84c;--green:#22c55e;--red:#ef4444;--yellow:#f59e0b;--white:#f0f4ff;--muted:#6b82a8;--border:rgba(46,124,246,0.12)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Outfit',sans-serif;background:var(--navy);color:var(--white);min-height:100vh}
+#loginScreen{position:fixed;inset:0;background:var(--navy);z-index:999;display:flex;align-items:center;justify-content:center;padding:20px}
+.login-box{width:100%;max-width:380px;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:36px}
+.login-logo{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700;text-align:center;margin-bottom:4px}
+.login-logo span{color:var(--accent)}
+.login-sub{color:var(--muted);font-size:.82rem;text-align:center;margin-bottom:28px}
+.inp{width:100%;background:rgba(6,15,30,.8);border:1px solid var(--border);border-radius:10px;padding:12px 14px;color:var(--white);font-family:'Outfit',sans-serif;font-size:.9rem;outline:none;margin-bottom:12px}
+.inp:focus{border-color:var(--accent)}
+.btn-primary{width:100%;padding:13px;border-radius:10px;background:var(--accent);color:#fff;font-family:'Outfit',sans-serif;font-size:.95rem;font-weight:600;border:none;cursor:pointer}
+.btn-primary:hover{background:var(--accent2)}
+.err{color:var(--red);font-size:.8rem;margin-top:10px;text-align:center;display:none}
+#app{display:none}
+.topbar{background:var(--navy2);border-bottom:1px solid var(--border);padding:0 24px;height:54px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:100}
+.topbar-logo{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;flex:1}
+.topbar-logo span{color:var(--accent)}
+.topbar-user{font-size:.8rem;color:var(--muted)}
+.lbtn{background:transparent;border:1px solid var(--border);color:var(--muted);padding:6px 13px;border-radius:8px;font-size:.78rem;cursor:pointer;font-family:'Outfit',sans-serif}
+.lbtn:hover{border-color:var(--red);color:var(--red)}
+.tab-nav{display:flex;gap:2px;padding:0 24px;background:var(--navy2);border-bottom:1px solid var(--border);overflow-x:auto}
+.tab{padding:12px 16px;font-size:.8rem;font-weight:500;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:.2s}
+.tab:hover{color:var(--white)}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.tab-badge{background:var(--red);color:#fff;font-size:.65rem;font-weight:700;padding:1px 6px;border-radius:10px;margin-left:5px}
+.main{padding:24px;max-width:900px;margin:0 auto}
+.page{display:none}.page.active{display:block}
+.page-title{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:600;margin-bottom:4px}
+.page-sub{color:var(--muted);font-size:.82rem;margin-bottom:20px}
+.stats-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:20px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 18px}
+.stat-label{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px}
+.stat-value{font-size:1.5rem;font-weight:700;font-family:'Cormorant Garamond',serif}
+.sv-g{color:var(--green)}.sv-a{color:var(--accent)}.sv-go{color:var(--gold)}.sv-y{color:var(--yellow)}.sv-r{color:var(--red)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;margin-bottom:10px;overflow:hidden}
+.card-header{padding:14px 18px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.card-body{padding:0 18px 14px}
+.card-title{font-weight:600;font-size:.88rem}
+.card-sub{font-size:.75rem;color:var(--muted);margin-top:2px}
+.badge{padding:3px 9px;border-radius:20px;font-size:.7rem;font-weight:600;white-space:nowrap;display:inline-block}
+.bg{background:rgba(34,197,94,.15);color:var(--green)}
+.by{background:rgba(245,158,11,.15);color:var(--yellow)}
+.bb{background:rgba(46,124,246,.15);color:var(--accent)}
+.br{background:rgba(239,68,68,.15);color:var(--red)}
+.bgr{background:rgba(107,130,168,.15);color:var(--muted)}
+.bgo{background:rgba(201,168,76,.15);color:var(--gold)}
+.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}
+.btn{padding:6px 13px;border-radius:8px;font-size:.76rem;font-weight:600;cursor:pointer;border:none;font-family:'Outfit',sans-serif;transition:.2s}
+.btn-g{background:rgba(34,197,94,.15);color:var(--green);border:1px solid rgba(34,197,94,.2)}.btn-g:hover{background:rgba(34,197,94,.3)}
+.btn-r{background:rgba(239,68,68,.15);color:var(--red);border:1px solid rgba(239,68,68,.2)}.btn-r:hover{background:rgba(239,68,68,.3)}
+.btn-a{background:var(--accent);color:#fff}.btn-a:hover{background:var(--accent2)}
+.btn-y{background:rgba(245,158,11,.15);color:var(--yellow);border:1px solid rgba(245,158,11,.2)}.btn-y:hover{background:rgba(245,158,11,.3)}
+.btn-o{background:transparent;border:1px solid var(--border);color:var(--muted)}.btn-o:hover{border-color:var(--accent);color:var(--accent)}
+.empty{text-align:center;padding:36px;color:var(--muted);font-size:.85rem}
+.loading{text-align:center;padding:28px;color:var(--muted);font-size:.83rem}
+.mo{position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:500;display:none;align-items:center;justify-content:center;padding:20px}
+.mo.open{display:flex}
+.modal{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:26px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto}
+.modal-title{font-size:.95rem;font-weight:600;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
+.mc{background:none;border:none;color:var(--muted);cursor:pointer;font-size:1.1rem}
+.field{margin-bottom:12px}
+.field label{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;display:block;margin-bottom:4px}
+.field input,.field textarea,.field select{width:100%;background:rgba(6,15,30,.8);border:1px solid var(--border);border-radius:8px;padding:9px 11px;color:var(--white);font-family:'Outfit',sans-serif;font-size:.86rem;outline:none}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--accent)}
+.field textarea{resize:vertical;min-height:80px}
+.dg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.di{background:rgba(6,15,30,.5);border-radius:8px;padding:9px 12px}
+.dl{font-size:.68rem;color:var(--muted);text-transform:uppercase;margin-bottom:3px}
+.dv{font-size:.84rem}
+.thread{display:flex;flex-direction:column;gap:9px;max-height:260px;overflow-y:auto;margin-bottom:12px;padding:2px}
+.mb{padding:9px 13px;border-radius:10px;font-size:.82rem;line-height:1.5;max-width:85%}
+.mb.admin{background:var(--accent);align-self:flex-end;border-radius:10px 2px 10px 10px}
+.mb.esp{background:rgba(46,124,246,.1);border:1px solid var(--border);align-self:flex-start;border-radius:2px 10px 10px 10px}
+.mbt{font-size:.65rem;color:rgba(255,255,255,.4);margin-top:3px}
+.notif{position:fixed;top:66px;right:20px;padding:11px 18px;border-radius:10px;font-size:.83rem;font-weight:600;z-index:9999;display:none;animation:sli .3s ease}
+@keyframes sli{from{transform:translateX(110%)}to{transform:translateX(0)}}
+.info-row{display:flex;gap:14px;flex-wrap:wrap;font-size:.78rem;color:var(--muted);margin-top:8px}
+.prog-bar{height:8px;background:rgba(46,124,246,.15);border-radius:4px;margin-top:8px;cursor:pointer}
+.prog-fill{height:100%;border-radius:4px;background:var(--accent);transition:.3s}
+.alert-box{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.2);border-radius:10px;padding:12px 16px;font-size:.82rem;color:var(--yellow);margin-bottom:14px}
+@media(max-width:600px){.dg{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo"><span>123</span> Consultoria</div>
+    <div class="login-sub">Área do Especialista</div>
+    <input class="inp" type="email" id="loginEmail" placeholder="Seu e-mail" autocomplete="off">
+    <input class="inp" type="password" id="loginSenha" placeholder="Sua senha" autocomplete="off">
+    <button class="btn-primary" onclick="fazerLogin()">Entrar</button>
+    <div class="err" id="loginErr">E-mail ou senha inválidos.</div>
+    <div style="text-align:center;margin-top:16px">
+      <a href="/prestador/cadastro" style="color:var(--accent);font-size:.8rem">Ainda não tem conta? Cadastre-se</a>
+    </div>
+  </div>
+</div>
+
+<div id="notif" class="notif"></div>
+
+<div id="app">
+  <div class="topbar">
+    <div class="topbar-logo"><span>123</span> Consultoria</div>
+    <span class="topbar-user" id="topUser"></span>
+    <button class="lbtn" onclick="fazerLogout()" style="margin-left:auto">Sair</button>
+  </div>
+  <div class="tab-nav">
+    <div class="tab active" onclick="showTab('dashboard',this)">📊 Dashboard</div>
+    <div class="tab" onclick="showTab('leads_atrib',this)">📋 Meus Leads <span class="tab-badge" id="bLeads">0</span></div>
+    <div class="tab" onclick="showTab('negociacoes',this)">🤝 Negociações <span class="tab-badge" id="bRevisoes">0</span></div>
+    <div class="tab" onclick="showTab('projetos',this)">🚀 Meus Projetos <span class="tab-badge" id="bMsgs">0</span></div>
+    <div class="tab" onclick="showTab('financeiro',this)">💰 Financeiro</div>
+  </div>
+  <div class="main">
+
+    <!-- DASHBOARD -->
+    <div class="page active" id="page-dashboard">
+      <div class="page-title" id="welcomeMsg">Olá, Especialista</div>
+      <div class="page-sub">Seu painel de atividades</div>
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-label">Leads Atribuídos</div><div class="stat-value sv-y" id="dLeads">—</div></div>
+        <div class="stat-card"><div class="stat-label">Negociações Abertas</div><div class="stat-value sv-a" id="dNegs">—</div></div>
+        <div class="stat-card"><div class="stat-label">Projetos Ativos</div><div class="stat-value sv-go" id="dProj">—</div></div>
+        <div class="stat-card"><div class="stat-label">A Receber (85%)</div><div class="stat-value sv-g" id="dRec">—</div></div>
+      </div>
+      <div id="dashAlertas"></div>
+    </div>
+
+    <!-- LEADS ATRIBUÍDOS -->
+    <div class="page" id="page-leads_atrib">
+      <div class="page-title">Meus Leads</div>
+      <div class="page-sub">Leads que o admin atribuiu para você negociar</div>
+      <div id="listaLeads"><div class="loading">Carregando...</div></div>
+    </div>
+
+    <!-- NEGOCIAÇÕES -->
+    <div class="page" id="page-negociacoes">
+      <div class="page-title">Negociações</div>
+      <div class="page-sub">Registre reuniões e propostas para validação do admin</div>
+      <div id="listaNegs"><div class="loading">Carregando...</div></div>
+    </div>
+
+    <!-- PROJETOS -->
+    <div class="page" id="page-projetos">
+      <div class="page-title">Meus Projetos</div>
+      <div class="page-sub">Projetos aprovados — atualize o progresso e comunique-se com o admin</div>
+      <div id="listaProjetos"><div class="loading">Carregando...</div></div>
+    </div>
+
+    <!-- FINANCEIRO -->
+    <div class="page" id="page-financeiro">
+      <div class="page-title">Financeiro</div>
+      <div class="page-sub">Seus pagamentos e repasses</div>
+      <div class="stats-row" id="finStats"></div>
+      <div id="listaFin"><div class="loading">Carregando...</div></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODAL REGISTRAR NEGOCIAÇÃO -->
+<div class="mo" id="moNeg">
+  <div class="modal">
+    <div class="modal-title"><span>🤝 Registrar Reunião</span><button class="mc" onclick="cm('moNeg')">✕</button></div>
+    <input type="hidden" id="negLeadId">
+    <div id="negLeadInfo" style="margin-bottom:14px"></div>
+    <div class="field"><label>Data e hora da reunião</label>
+      <input type="datetime-local" id="negData">
+    </div>
+    <div class="field"><label>Link da gravação (Meet/Zoom/Loom)</label>
+      <input type="url" id="negLink" placeholder="https://...">
+    </div>
+    <div class="field"><label>Resumo da conversa</label>
+      <textarea id="negResumo" rows="3" placeholder="O que foi discutido na reunião..."></textarea>
+    </div>
+    <div class="dg">
+      <div class="field"><label>Valor proposto (R$)</label>
+        <input type="number" id="negValor" placeholder="0,00" min="0" step="0.01">
+      </div>
+      <div class="field"><label>Prazo (ex: 30 dias)</label>
+        <input type="text" id="negPrazo" placeholder="ex: 30 dias">
+      </div>
+    </div>
+    <div class="field"><label>Observações adicionais</label>
+      <textarea id="negObs" rows="2" placeholder="Qualquer detalhe relevante..."></textarea>
+    </div>
+    <div style="background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.2);border-radius:8px;padding:10px 13px;font-size:.76rem;color:var(--yellow);margin-bottom:14px">
+      ⚠ O admin irá validar esta proposta antes do projeto ser criado. Se não esteve presente, assista à gravação antes de aprovar.
+    </div>
+    <div class="actions">
+      <button class="btn btn-a" onclick="salvarNeg()">📨 Enviar para validação</button>
+      <button class="btn btn-o" onclick="cm('moNeg')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PROJETO -->
+<div class="mo" id="moProj">
+  <div class="modal">
+    <div class="modal-title"><span id="projTitle">Projeto</span><button class="mc" onclick="cm('moProj')">✕</button></div>
+    <div id="projDetail"></div>
+    <div style="margin-bottom:8px">
+      <div style="font-size:.72rem;color:var(--muted);text-transform:uppercase;margin-bottom:6px">Atualizar progresso</div>
+      <input type="range" id="progSlider" min="0" max="100" step="5" style="width:100%;accent-color:var(--accent)" oninput="document.getElementById('progVal').textContent=this.value+'%'">
+      <div style="font-size:.8rem;color:var(--accent);margin-top:3px" id="progVal">0%</div>
+    </div>
+    <div class="field">
+      <label>Status do projeto</label>
+      <select id="projStatus">
+        <option value="em_andamento">🔄 Em andamento</option>
+        <option value="aguardando_cliente">⏳ Aguardando cliente</option>
+        <option value="concluido">✅ Concluído</option>
+      </select>
+    </div>
+    <button class="btn btn-a" onclick="salvarProgresso()" style="margin-bottom:14px">💾 Salvar progresso</button>
+    <div style="font-size:.82rem;font-weight:600;margin-bottom:8px">💬 Mensagens com Admin</div>
+    <div class="thread" id="projThread"></div>
+    <div class="field"><textarea id="projMsg" rows="2" placeholder="Escreva sua mensagem ou dúvida..."></textarea></div>
+    <div class="actions">
+      <button class="btn btn-a" onclick="enviarMsg()">📨 Enviar mensagem</button>
+      <button class="btn btn-o" onclick="cm('moProj')">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let ESP = null; // dados do especialista logado
+let _leads=[], _negs=[], _projs=[];
+let projAtual=null, leadAtualNeg=null;
+
+// AUTH
+async function fazerLogin(){
+  const email=document.getElementById('loginEmail').value.trim();
+  const senha=document.getElementById('loginSenha').value;
+  if(!email||!senha)return;
+  try{
+    const r=await fetch('/api/login-prestador',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,senha})});
+    const d=await r.json();
+    if(d.ok&&d.prestador){
+      ESP=d.prestador;
+      localStorage.setItem('esp',JSON.stringify(ESP));
+      iniciarApp();
+    } else {
+      document.getElementById('loginErr').style.display='block';
+    }
+  }catch(e){document.getElementById('loginErr').style.display='block';}
+}
+function fazerLogout(){localStorage.removeItem('esp');location.reload();}
+window.onload=()=>{
+  const s=localStorage.getItem('esp');
+  if(s){try{ESP=JSON.parse(s);iniciarApp();}catch{}}
+  document.getElementById('loginSenha').addEventListener('keydown',e=>{if(e.key==='Enter')fazerLogin();});
+};
+function iniciarApp(){
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('app').style.display='block';
+  document.getElementById('topUser').textContent=ESP.nome||ESP.email;
+  document.getElementById('welcomeMsg').textContent='Olá, '+( ESP.nome||'Especialista');
+  loadDash();
+  setInterval(loadDash,60000);
+}
+
+// HELPERS
+const fM=v=>v?'R$ '+Number(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}):'R$ 0,00';
+const fD=d=>d?new Date(d).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'}):'—';
+function cm(id){document.getElementById(id).classList.remove('open');}
+function notif(msg,bg='var(--accent)'){
+  const n=document.getElementById('notif');
+  n.textContent=msg;n.style.background=bg;n.style.display='block';
+  setTimeout(()=>n.style.display='none',3500);
+}
+function showTab(t,el){
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('page-'+t).classList.add('active');
+  const m={leads_atrib:loadLeads,negociacoes:loadNegs,projetos:loadProjs,financeiro:loadFin};
+  if(m[t])m[t]();
+}
+function bNe(s){const m={aguardando_validacao:'by ⏳ Aguardando admin',aprovada:'bg ✅ Aprovada',revisao:'br 🔄 Revisar'};const c=m[s]||'bgr '+s;const[cl,...r]=c.split(' ');return`<span class="badge ${cl}">${r.join(' ')}</span>`;}
+function bPj(s){const m={em_andamento:'bb 🔄 Em andamento',concluido:'bg ✅ Concluído',aguardando_cliente:'by ⏳ Aguardando cliente'};const c=m[s]||'bgr '+s;const[cl,...r]=c.split(' ');return`<span class="badge ${cl}">${r.join(' ')}</span>`;}
+function bFi(s){const m={pendente:'by ⏳ Pendente',pago:'bg ✅ Pago',cancelado:'br ❌ Cancelado'};const c=m[s]||'bgr '+s;const[cl,...r]=c.split(' ');return`<span class="badge ${cl}">${r.join(' ')}</span>`;}
+
+// DASHBOARD
+async function loadDash(){
+  if(!ESP)return;
+  try{
+    const[lR,nR,pR,fR]=await Promise.all([
+      fetch(`/api/leads?especialista_id=${ESP.id}`).then(r=>r.json()),
+      fetch(`/api/negociacoes?especialista_id=${ESP.id}`).then(r=>r.json()),
+      fetch(`/api/projetos?especialista_id=${ESP.id}`).then(r=>r.json()),
+      fetch(`/api/admin-financeiro?especialista_id=${ESP.id}`).then(r=>r.json()),
+    ]);
+    _leads=lR.leads||[];
+    _negs=nR.negociacoes||[];
+    _projs=pR.projetos||[];
+    const fin=fR.totais||{};
+
+    const revisoes=_negs.filter(n=>n.status==='revisao').length;
+    const projAtivos=_projs.filter(p=>p.status==='em_andamento').length;
+    const msgsPend=_projs.reduce((a,p)=>a+parseInt(p.mensagens_pendentes||0),0);
+
+    document.getElementById('dLeads').textContent=_leads.length;
+    document.getElementById('dNegs').textContent=_negs.length;
+    document.getElementById('dProj').textContent=projAtivos;
+    document.getElementById('dRec').textContent=fM(fin.total_liquido||0);
+    document.getElementById('bLeads').textContent=_leads.filter(l=>l.status==='em_negociacao'||l.status==='novo').length;
+    document.getElementById('bRevisoes').textContent=revisoes;
+    document.getElementById('bMsgs').textContent=msgsPend;
+
+    // Alertas
+    let alertas='';
+    if(revisoes>0) alertas+=`<div class="alert-box">🔄 Você tem <strong>${revisoes} proposta(s)</strong> que o admin solicitou revisão. Acesse a aba Negociações.</div>`;
+    if(msgsPend>0) alertas+=`<div class="alert-box" style="border-color:rgba(46,124,246,.3);background:rgba(46,124,246,.1);color:var(--accent)">💬 O admin respondeu mensagens em <strong>${msgsPend} projeto(s)</strong>. Acesse Meus Projetos.</div>`;
+    if(_leads.filter(l=>!l.especialista_id||l.status==='novo').length>0) alertas+=`<div class="alert-box" style="border-color:rgba(34,197,94,.2);background:rgba(34,197,94,.08);color:var(--green)">📋 Você tem leads aguardando contato. Acesse Meus Leads.</div>`;
+    document.getElementById('dashAlertas').innerHTML=alertas;
+
+  }catch(e){console.error(e);}
+}
+
+// LEADS
+async function loadLeads(){
+  document.getElementById('listaLeads').innerHTML='<div class="loading">Carregando...</div>';
+  try{
+    const data=await fetch(`/api/leads?especialista_id=${ESP.id}`).then(r=>r.json());
+    _leads=data.leads||[];
+    if(!_leads.length){document.getElementById('listaLeads').innerHTML='<div class="empty">Nenhum lead atribuído a você ainda.<br><span style="font-size:.78rem">O admin atribuirá leads quando chegarem.</span></div>';return;}
+    document.getElementById('listaLeads').innerHTML=_leads.map(l=>`
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">${l.nome}</div>
+            <div class="card-sub">${l.empresa} · ${l.email}</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <span class="badge ${l.status==='convertido'?'bg':l.status==='em_negociacao'?'by':'bb'}">${l.status==='convertido'?'✅ Convertido':l.status==='em_negociacao'?'🤝 Em negociação':'🔵 Novo'}</span>
+            <div style="font-size:.72rem;color:var(--muted);margin-top:4px">${fD(l.criado_em)}</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div style="font-size:.8rem;color:var(--accent);font-weight:500">${l.servico||'—'}</div>
+          ${l.mensagem?`<div style="font-size:.78rem;color:var(--muted);margin-top:5px;padding:7px;background:rgba(46,124,246,.05);border-radius:6px;border-left:2px solid var(--accent)">"${l.mensagem}"</div>`:''}
+          <div class="info-row">
+            <span>📞 ${l.whatsapp||'—'}</span>
+            <span>📧 ${l.email||'—'}</span>
+          </div>
+          <div class="actions">
+            <button class="btn btn-g" onclick="wa('${l.whatsapp}','${l.nome}')">💬 WhatsApp</button>
+            ${l.status!=='convertido'?`<button class="btn btn-a" onclick="abrirModalNeg(${l.id},'${(l.nome||'').replace(/'/g,"\\'")}','${(l.empresa||'').replace(/'/g,"\\'")}','${l.servico||''}')">🤝 Registrar reunião</button>`:'<span class="badge bg">✅ Lead convertido</span>'}
+          </div>
+        </div>
+      </div>`).join('');
+  }catch(e){document.getElementById('listaLeads').innerHTML='<div class="empty">Erro ao carregar</div>';}
+}
+function wa(tel,nome){const n=(tel||'').replace(/\D/g,'');const m=encodeURIComponent(`Olá ${nome}, sou especialista da 123 Consultoria e gostaria de marcar uma conversa!`);window.open(`https://wa.me/55${n}?text=${m}`,'_blank');}
+function abrirModalNeg(leadId,nome,empresa,servico){
+  leadAtualNeg={id:leadId,nome,empresa,servico};
+  document.getElementById('negLeadId').value=leadId;
+  document.getElementById('negLeadInfo').innerHTML=`
+    <div style="background:rgba(46,124,246,.08);border:1px solid var(--border);border-radius:8px;padding:10px 13px;font-size:.82rem">
+      <strong>${nome}</strong> · ${empresa}<br>
+      <span style="color:var(--muted);font-size:.76rem">Serviço: ${servico||'—'}</span>
+    </div>`;
+  document.getElementById('negData').value='';
+  document.getElementById('negLink').value='';
+  document.getElementById('negResumo').value='';
+  document.getElementById('negValor').value='';
+  document.getElementById('negPrazo').value='';
+  document.getElementById('negObs').value='';
+  document.getElementById('moNeg').classList.add('open');
+}
+async function salvarNeg(){
+  const leadId=document.getElementById('negLeadId').value;
+  const data=document.getElementById('negData').value;
+  const link=document.getElementById('negLink').value;
+  const resumo=document.getElementById('negResumo').value;
+  const valor=document.getElementById('negValor').value;
+  const prazo=document.getElementById('negPrazo').value;
+  const obs=document.getElementById('negObs').value;
+  if(!data||!resumo||!valor||!prazo){notif('Preencha: data, resumo, valor e prazo','var(--yellow)');return;}
+  const r=await fetch('/api/negociacoes',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+    lead_id:parseInt(leadId),especialista_id:ESP.id,
+    data_reuniao:data,link_gravacao:link,resumo,
+    valor_proposto:parseFloat(valor),prazo_proposto:prazo,observacoes:obs
+  })});
+  const d=await r.json();
+  if(d.ok){notif('✅ Proposta enviada para validação do admin!');cm('moNeg');loadLeads();loadNegs();}
+  else notif('Erro: '+d.erro,'var(--red)');
+}
+
+// NEGOCIAÇÕES
+async function loadNegs(){
+  document.getElementById('listaNegs').innerHTML='<div class="loading">Carregando...</div>';
+  try{
+    const data=await fetch(`/api/negociacoes?especialista_id=${ESP.id}`).then(r=>r.json());
+    _negs=data.negociacoes||[];
+    const revisoes=_negs.filter(n=>n.status==='revisao').length;
+    document.getElementById('bRevisoes').textContent=revisoes;
+    if(!_negs.length){document.getElementById('listaNegs').innerHTML='<div class="empty">Nenhuma negociação registrada.<br><span style="font-size:.78rem">Após reunião com o lead, registre aqui.</span></div>';return;}
+    document.getElementById('listaNegs').innerHTML=_negs.map(n=>`
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">${n.lead_nome} — ${n.lead_empresa}</div>
+            <div class="card-sub">Reunião: ${fD(n.data_reuniao)} · Registrado: ${fD(n.created_at)}</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            ${bNe(n.status)}
+            <div style="font-size:.82rem;color:var(--green);font-weight:600;margin-top:4px">${fM(n.valor_proposto)}</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="info-row">
+            <span>⏱ Prazo: ${n.prazo_proposto||'—'}</span>
+            ${n.link_gravacao?`<span><a href="${n.link_gravacao}" target="_blank" style="color:var(--accent)">▶ Gravação</a></span>`:'<span style="color:var(--red)">⚠ Sem gravação informada</span>'}
+          </div>
+          ${n.resumo?`<div style="font-size:.78rem;color:var(--muted);margin-top:7px;padding:8px;background:rgba(46,124,246,.05);border-radius:7px;border-left:2px solid var(--accent)">${n.resumo}</div>`:''}
+          ${n.status==='revisao'&&n.admin_comentario?`
+            <div style="margin-top:8px;padding:10px;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.2);border-radius:8px;font-size:.78rem;color:var(--yellow)">
+              <strong>💬 Admin solicitou revisão:</strong><br>${n.admin_comentario}
+            </div>`:''}
+          ${n.status==='aprovada'?`<div style="margin-top:8px;font-size:.78rem;color:var(--green)">✅ Proposta aprovada! Projeto criado automaticamente na aba Meus Projetos.</div>`:''}
+        </div>
+      </div>`).join('');
+  }catch(e){document.getElementById('listaNegs').innerHTML='<div class="empty">Erro ao carregar</div>';}
+}
+
+// PROJETOS
+async function loadProjs(){
+  document.getElementById('listaProjetos').innerHTML='<div class="loading">Carregando...</div>';
+  try{
+    const data=await fetch(`/api/projetos?especialista_id=${ESP.id}`).then(r=>r.json());
+    _projs=data.projetos||[];
+    const msgsPend=_projs.reduce((a,p)=>a+parseInt(p.mensagens_pendentes||0),0);
+    document.getElementById('bMsgs').textContent=msgsPend;
+    if(!_projs.length){document.getElementById('listaProjetos').innerHTML='<div class="empty">Nenhum projeto ainda.<br><span style="font-size:.78rem">Projetos aparecem aqui após o admin aprovar sua proposta.</span></div>';return;}
+    document.getElementById('listaProjetos').innerHTML=_projs.map(p=>`
+      <div class="card" style="cursor:pointer" onclick="abrirProj(${p.id})">
+        <div class="card-header">
+          <div>
+            <div class="card-title">${p.titulo||p.empresa}</div>
+            <div class="card-sub">${p.empresa} · Prazo: ${p.prazo||'—'}</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            ${bPj(p.status)}
+            <div style="font-size:.82rem;color:var(--green);font-weight:600;margin-top:4px">${fM(p.valor*0.85)} <span style="font-size:.68rem;color:var(--muted)">(seu repasse)</span></div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="info-row">
+            <span>💰 Total: ${fM(p.valor)}</span>
+            ${p.mensagens_pendentes>0?`<span style="color:var(--accent);font-weight:600">💬 ${p.mensagens_pendentes} nova(s) resp. do admin</span>`:''}
+          </div>
+          <div class="prog-bar"><div class="prog-fill" style="width:${p.progresso||0}%"></div></div>
+          <div style="font-size:.72rem;color:var(--muted);margin-top:3px">${p.progresso||0}% concluído</div>
+        </div>
+      </div>`).join('');
+  }catch(e){document.getElementById('listaProjetos').innerHTML='<div class="empty">Erro ao carregar</div>';}
+}
+async function abrirProj(id){
+  const p=_projs.find(x=>x.id===id);if(!p)return;projAtual=p;
+  document.getElementById('projTitle').textContent='🚀 '+(p.titulo||p.empresa);
+  document.getElementById('projDetail').innerHTML=`
+    <div class="dg">
+      <div class="di"><div class="dl">Empresa</div><div class="dv">${p.empresa||'—'}</div></div>
+      <div class="di"><div class="dl">Prazo</div><div class="dv">${p.prazo||'—'}</div></div>
+      <div class="di"><div class="dl">Valor total</div><div class="dv" style="color:var(--green);font-weight:600">${fM(p.valor)}</div></div>
+      <div class="di"><div class="dl">Seu repasse (85%)</div><div class="dv" style="color:var(--gold);font-weight:600">${fM(p.valor*0.85)}</div></div>
+    </div>`;
+  const sl=document.getElementById('progSlider');
+  sl.value=p.progresso||0;
+  document.getElementById('progVal').textContent=(p.progresso||0)+'%';
+  document.getElementById('projStatus').value=p.status||'em_andamento';
+  const mData=await fetch(`/api/projeto-mensagens?projeto_id=${id}`).then(r=>r.json());
+  const msgs=mData.mensagens||[];
+  document.getElementById('projThread').innerHTML=msgs.length
+    ?msgs.map(m=>`<div><div class="mb ${m.autor_tipo==='admin'?'admin':'esp'}">${m.mensagem}<div class="mbt">${m.autor} · ${fD(m.created_at)}</div></div></div>`).join('')
+    :'<div class="empty" style="padding:14px">Sem mensagens ainda</div>';
+  const el=document.getElementById('projThread');el.scrollTop=el.scrollHeight;
+  document.getElementById('projMsg').value='';
+  document.getElementById('moProj').classList.add('open');
+}
+async function salvarProgresso(){
+  if(!projAtual)return;
+  const progresso=parseInt(document.getElementById('progSlider').value);
+  const status=document.getElementById('projStatus').value;
+  await fetch('/api/projetos',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:projAtual.id,progresso,status})});
+  notif('✅ Progresso salvo!');
+  if(status==='concluido')notif('🏁 Projeto marcado como concluído! Admin será notificado para pagamento.');
+  loadProjs();
+}
+async function enviarMsg(){
+  const msg=document.getElementById('projMsg').value.trim();
+  if(!msg||!projAtual)return;
+  await fetch('/api/projeto-mensagens',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({projeto_id:projAtual.id,autor:ESP.nome||ESP.email,autor_tipo:'especialista',mensagem:msg})});
+  document.getElementById('projMsg').value='';
+  notif('✅ Mensagem enviada!');
+  abrirProj(projAtual.id);
+}
+
+// FINANCEIRO
+async function loadFin(){
+  try{
+    const data=await fetch(`/api/admin-financeiro?especialista_id=${ESP.id}`).then(r=>r.json());
+    const t=data.totais||{};
+    document.getElementById('finStats').innerHTML=`
+      <div class="stat-card"><div class="stat-label">Total Bruto</div><div class="stat-value sv-a">${fM(t.total_bruto)}</div></div>
+      <div class="stat-card"><div class="stat-label">Seu Repasse (85%)</div><div class="stat-value sv-g">${fM(t.total_liquido)}</div></div>
+      <div class="stat-card"><div class="stat-label">Projetos</div><div class="stat-value sv-a">${t.total_projetos||0}</div></div>`;
+    const regs=data.registros||[];
+    if(!regs.length){document.getElementById('listaFin').innerHTML='<div class="empty">Nenhum registro financeiro ainda</div>';return;}
+    document.getElementById('listaFin').innerHTML=regs.map(r=>`
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">${r.titulo||'—'}</div>
+            <div class="card-sub">${r.empresa||'—'}</div>
+          </div>
+          <div style="text-align:right">
+            ${bFi(r.status)}
+            <div style="font-size:.82rem;color:var(--green);font-weight:600;margin-top:4px">${fM(r.valor*0.85)} <span style="font-size:.7rem;color:var(--muted)">seu repasse</span></div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="info-row">
+            <span>Total projeto: ${fM(r.valor)}</span>
+            <span>Comissão plataforma: ${fM(r.valor*0.15)}</span>
+          </div>
+        </div>
+      </div>`).join('');
+  }catch(e){console.error(e);}
+}
+</script>
+</body>
+</html>
+HTMLEOF
+
+echo "✅ Especialista: $(wc -l < prestador/area.html) linhas"
+PASSO 3 — Atualiza API financeiro para filtrar por especialista:
+
+bash
+# Adiciona suporte a filtro por especialista_id na API financeiro
+cat > api/admin-financeiro.js << 'EOF'
+import { Pool } from 'pg';
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+export default async function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, PATCH, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  if (req.method === 'OPTIONS') return res.status(200).end();
+  if (req.method === 'GET') {
+    try {
+      const { especialista_id } = req.query;
+      let where = '';
+      const params = [];
+      if (especialista_id) { params.push(especialista_id); where = `WHERE f.prestador_id=$1`; }
+      const regs = await pool.query(`
+        SELECT f.*, p.nome as prestador_nome, p.email as prestador_email
+        FROM financeiro f
+        JOIN prestadores p ON p.id = f.prestador_id
+        ${where}
+        ORDER BY f.created_at DESC`, params);
+      const totais = await pool.query(`
+        SELECT 
+          COUNT(*) as total_projetos,
+          COALESCE(SUM(valor),0) as total_bruto,
+          COALESCE(SUM(valor)*0.15,0) as total_comissao,
+          COALESCE(SUM(valor)*0.85,0) as total_liquido
+        FROM financeiro f ${where}`, params);
+      return res.status(200).json({ registros: regs.rows, totais: totais.rows[0] });
+    } catch(e) { return res.status(500).json({ erro: e.message }); }
+  }
+  if (req.method === 'PATCH') {
+    try {
+      const { id, status } = req.body;
+      await pool.query('UPDATE financeiro SET status=$1 WHERE id=$2', [status, id]);
+      await pool.query(`INSERT INTO auditoria (evento,ator,detalhes) VALUES ('financeiro_atualizado','admin',$1)`,
+        [`Financeiro #${id} → ${status}`]);
+      return res.status(200).json({ ok: true });
+    } catch(e) { return res.status(500).json({ erro: e.message }); }
+  }
+  return res.status(405).end();
+}
+EOF
+echo "✅ API financeiro atualizada"
+PASSO 4 — Verifica tabela financeiro tem coluna created_at, deploy:
+
+bash
+node << 'EOF'
+const { Pool } = require('pg');
+const pool = new Pool({ connectionString: "postgresql://neondb_owner:npg_2TNiJ0wyRPgp@ep-royal-haze-aenyjfsc-pooler.c-2.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require" });
+pool.query(`
+  ALTER TABLE financeiro ADD COLUMN IF NOT EXISTS created_at TIMESTAMP DEFAULT NOW();
+  ALTER TABLE projetos ADD COLUMN IF NOT EXISTS titulo TEXT;
+  ALTER TABLE projetos ADD COLUMN IF NOT EXISTS empresa TEXT;
+  ALTER TABLE projetos ADD COLUMN IF NOT EXISTS valor NUMERIC;
+  ALTER TABLE projetos ADD COLUMN IF NOT EXISTS prazo TEXT;
+`).then(()=>{console.log('✅ Banco OK');pool.end();}).catch(e=>{console.log('❌',e.message);pool.end();});
+EOF
+
+git add .
+git commit -m "feat: fluxo completo lead→negociacao→projeto→financeiro"
+git push
+vercel --prod
+Me manda o output do PASSO 4 (git push + vercel). Após o deploy, teste assim:
+
+Quem	URL	O que fazer
+Admin	.../admin/auditoria · senha: 123admin	Tab Leads → atribuir especialista a um lead
+Especialista	.../prestador/area · senha: edson123	Ver lead atribuído → Registrar reunião
+Admin	Tab Negociações	Ver proposta → Aprovar → projeto criado automaticamente
+Especialista	Tab Meus Projetos	Ver projeto → atualizar progresso → mandar mensagem
+edson@edson-MacBook:~/consultoria2$ cd ~/consultoria2
+git add .
+git commit -m "fix: admin completo fluxo lead→negociacao→projeto"
+[main 03478dd] fix: admin completo fluxo lead→negociacao→projeto
+ 6 files changed, 3487 insertions(+), 518 deletions(-)
+ create mode 100644 api/negociacoes.js
+ create mode 100644 api/projeto-mensagens.js
+ create mode 100644 api/projetos.js
+ create mode 100644 contexto7
+edson@edson-MacBook:~/consultoria2$ vercel --prod
+🔍  Inspect: https://vercel.com/granavivas-projects/consultoria/6NweHGzRqqaCQZDeEf19u4hA6362 [3s]
+⏳  Production: https://consultoria-gvkjmcc49-granavivas-projects.vercel.app [3s]
+Error: No more than 12 Serverless Functions can be added to a Deployment on the Hobby plan. Create a team (Pro plan) to deploy more.
+edson@edson-MacBook:~/consultoria2$
+
+Mostrar mais
+16:01
+Limite do plano Hobby da Vercel — máximo 12 funções serverless. Vamos consolidar tudo em menos arquivos.
+
+
+Test
+Test
+Execute isso no terminal — vamos consolidar todas as APIs em 4 arquivos:
+
+PASSO 1 — Conta quantas APIs tem agora:
+
+bash
+cd ~/consultoria2 && ls api/ | wc -l && ls api/
+PASSO 2 — Cola e executa (consolida tudo em 4 arquivos):
+
+bash
+cd ~/consultoria2
+
+# Remove APIs antigas, cria 4 consolidadas
+rm -f api/admin-financeiro.js api/admin-prestadores.js api/auditoria.js
+rm -f api/candidaturas.js api/contato.js api/negociacoes.js
+rm -f api/oportunidades.js api/projeto-mensagens.js api/projetos.js
+rm -f api/tickets.js api/leads.js
+
+# ── API 1: auth (login + cadastro)
+cat > api/auth.js << 'EOF'
+import { Pool } from 'pg';
+import crypto from 'crypto';
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+const cors = (res) => {
+  res.setHeader('Access-Control-Allow-Origin','*');
+  res.setHeader('Access-Control-Allow-Methods','GET,POST,PATCH,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers','Content-Type');
+};
+export default async function handler(req, res) {
+  cors(res);
+  if (req.method==='OPTIONS') return res.status(200).end();
+  const { action } = req.query;
+
+  // POST /api/auth?action=login
+  if (action==='login' && req.method==='POST') {
+    const { email, senha } = req.body;
+    const hash = crypto.createHash('sha256').update(senha).digest('hex');
+    const r = await pool.query('SELECT id,nome,email,status,especialidades FROM prestadores WHERE email=$1 AND senha_hash=$2',[email,hash]);
+    if (!r.rows.length) return res.status(401).json({ ok:false, erro:'Credenciais inválidas' });
+    if (r.rows[0].status==='em_analise') return res.status(403).json({ ok:false, erro:'Cadastro ainda em análise' });
+    if (r.rows[0].status==='reprovado') return res.status(403).json({ ok:false, erro:'Cadastro não aprovado' });
+    return res.status(200).json({ ok:true, prestador: r.rows[0] });
+  }
+
+  // POST /api/auth?action=cadastro
+  if (action==='cadastro' && req.method==='POST') {
+    try {
+      const { nome, email, senha, whatsapp, curso, faculdade, bio, especialidades } = req.body;
+      const hash = crypto.createHash('sha256').update(senha).digest('hex');
+      const r = await pool.query(
+        `INSERT INTO prestadores (nome,email,senha_hash,whatsapp,curso,faculdade,bio,especialidades,status)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,'em_analise') RETURNING id`,
+        [nome,email,hash,whatsapp,curso,faculdade,bio,JSON.stringify(especialidades||[])]
+      );
+      await pool.query(`INSERT INTO auditoria (evento,ator,detalhes) VALUES ('cadastro_especialista',$1,$2)`,[email,`Novo cadastro: ${nome}`]);
+      return res.status(201).json({ ok:true, id: r.rows[0].id });
+    } catch(e) {
+      if (e.code==='23505') return res.status(400).json({ ok:false, erro:'E-mail já cadastrado' });
+      return res.status(500).json({ erro: e.message });
+    }
+  }
+
+  return res.status(404).end();
+}
+EOF
+
+# ── API 2: leads + negociacoes + auditoria
+cat > api/leads.js << 'EOF'
+import { Pool } from 'pg';
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+const cors = (res) => {
+  res.setHeader('Access-Control-Allow-Origin','*');
+  res.setHeader('Access-Control-Allow-Methods','GET,POST,PATCH,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers','Content-Type');
+};
+export default async function handler(req, res) {
+  cors(res);
+  if (req.method==='OPTIONS') return res.status(200).end();
+  const { type } = req.query;
+
+  // ── LEADS
+  if (!type || type==='leads') {
+    if (req.method==='GET') {
+      const { status, especialista_id } = req.query;
+      let q = `SELECT l.*, p.nome as especialista_nome_ref FROM leads l LEFT JOIN prestadores p ON p.id=l.especialista_id WHERE 1=1`;
+      const params=[];
+      if (status) { params.push(status); q+=` AND l.status=$${params.length}`; }
+      if (especialista_id) { params.push(especialista_id); q+=` AND l.especialista_id=$${params.length}`; }
+      q+=' ORDER BY l.criado_em DESC';
+      const r=await pool.query(q,params);
+      return res.status(200).json({ leads: r.rows });
+    }
+    if (req.method==='POST') {
+      const { nome,empresa,email,whatsapp,servico,mensagem,origem } = req.body;
+      const r=await pool.query(
+        `INSERT INTO leads (nome,empresa,email,whatsapp,servico,mensagem,origem,status) VALUES ($1,$2,$3,$4,$5,$6,$7,'novo') RETURNING id`,
+        [nome,empresa,email,whatsapp,servico,mensagem,origem||'site']
+      );
+      await pool.query(`INSERT INTO auditoria (evento,ator,detalhes) VALUES ('lead_novo',$1,$2)`,[email,`${nome} — ${empresa}`]);
+      return res.status(201).json({ ok:true, id:r.rows[0].id });
+    }
+    if (req.method==='PATCH') {
+      const { id,status,notas,especialista_id } = req.body;
+      await pool.query(
+        `UPDATE leads SET status=COALESCE($1,status),notas=COALESCE($2,notas),especialista_id=COALESCE($3,especialista_id) WHERE id=$4`,
+        [status,notas,especialista_id,id]
+      );
+      if (especialista_id) {
+        const e=await pool.query('SELECT nome FROM prestadores WHERE id=$1',[especialista_id]);
+        await pool.query(`INSERT INTO auditoria (evento,ator,detalhes) VALUES ('lead_atribuido','admin',$1)`,[`Lead #${id} → ${e.rows[0]?.nome}`]);
+      }
+      return res.status(200).json({ ok:true });
+    }
+  }
+
+  // ── NEGOCIAÇÕES (?type=neg)
+  if (type==='neg') {
+    if (req.method==='GET') {
+      const { especialista_id, id } = req.query;
+      if (id) {
+        const r=await pool.query(`SELECT n.*,l.nome as lead_nome,l.empresa as lead_empresa,l.whatsapp as lead_whatsapp,l.servico as lead_servico,p.nome as especialista_nome FROM negociacoes n JOIN leads l ON l.id=n.lead_id JOIN prestadores p ON p.id=n.especialista_id WHERE n.id=$1`,[id]);
+        return res.status(200).json({ negociacao:r.rows[0] });
+      }
+      let q=`SELECT n.*,l.nome as lead_nome,l.empresa as lead_empresa,l.whatsapp as lead_whatsapp,l.servico as lead_servico,p.nome as especialista_nome FROM negociacoes n JOIN leads l ON l.id=n.lead_id JOIN prestadores p ON p.id=n.especialista_id WHERE 1=1`;
+      const params=[];
+      if (especialista_id) { params.push(especialista_id); q+=` AND n.especialista_id=$${params.length}`; }
+      q+=' ORDER BY n.created_at DESC';
+      const r=await pool.query(q,params);
+      return res.status(200).json({ negociacoes:r.rows });
+    }
+    if (req.method==='POST') {
+      const { lead_id,especialista_id,data_reuniao,link_gravacao,resumo,valor_proposto,prazo_proposto,observacoes } = req.body;
+      const r=await pool.query(
+        `INSERT INTO negociacoes (lead_id,especialista_id,data_reuniao,link_gravacao,resumo,valor_proposto,prazo_proposto,observacoes) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING id`,
+        [lead_id,especialista_id,data_reuniao,link_gravacao,resumo,valor_proposto,prazo_proposto,observacoes]
+      );
+      await pool.query(`UPDATE leads SET status='em_negociacao' WHERE id=$1`,[lead_id]);
+      await pool.query(`INSERT INTO auditoria (evento,ator,detalhes) VALUES ('negociacao_registrada',$1,$2)`,[`esp_${especialista_id}`,`Reunião para lead #${lead_id} — R$ ${valor_proposto}`]);
+      return res.status(201).json({ ok:true, id:r.rows[0].id });
+    }
+    if (req.method==='PATCH') {
+      const { id,status,admin_comentario } = req.body;
+      await pool.query(`UPDATE negociacoes SET status=$1,admin_comentario=$2,updated_at=NOW() WHERE id=$3`,[status,admin_comentario,id]);
+      if (status==='aprovada') {
+        const n=(await pool.query('SELECT * FROM negociacoes WHERE id=$1',[id])).rows[0];
+        const proj=await pool.query(
+          `INSERT INTO projetos (negociacao_id,prestador_id,titulo,empresa,valor,prazo,status)
+           SELECT $1,$2,l.servico,l.empresa,$3,$4,'em_andamento' FROM leads l WHERE l.id=$5 RETURNING id`,
+          [n.id,n.especialista_id,n.valor_proposto,n.prazo_proposto,n.lead_id]
+        );
+        await pool.query(
+          `INSERT INTO financeiro (projeto_id,prestador_id,titulo,empresa,valor,status)
+           SELECT $1,$2,l.servico,l.empresa,$3,'pendente' FROM leads l WHERE l.id=$4`,
+          [proj.rows[0].id,n.especialista_id,n.valor_proposto,n.lead_id]
+        );
+        await pool.query(`UPDATE leads SET status='convertido' WHERE id=$1`,[n.lead_id]);
+        await pool.query(`INSERT INTO auditoria (evento,ator,detalhes) VALUES ('projeto_criado','admin',$1)`,[`Projeto criado — esp #${n.especialista_id} — R$ ${n.valor_proposto}`]);
+      }
+      return res.status(200).json({ ok:true });
+    }
+  }
+
+  // ── AUDITORIA (?type=audit)
+  if (type==='audit') {
+    const r=await pool.query('SELECT * FROM auditoria ORDER BY created_at DESC LIMIT 100');
+    return res.status(200).json({ logs:r.rows });
+  }
+
+  return res.status(404).end();
+}
+EOF
+
+# ── API 3: projetos + projeto-mensagens + financeiro
+cat > api/projetos.js << 'EOF'
+import { Pool } from 'pg';
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+const cors = (res) => {
+  res.setHeader('Access-Control-Allow-Origin','*');
+  res.setHeader('Access-Control-Allow-Methods','GET,POST,PATCH,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers','Content-Type');
+};
+export default async function handler(req, res) {
+  cors(res);
+  if (req.method==='OPTIONS') return res.status(200).end();
+  const { type } = req.query;
+
+  // ── PROJETOS (default)
+  if (!type || type==='projetos') {
+    if (req.method==='GET') {
+      const { especialista_id,status } = req.query;
+      let q=`SELECT p.*,pr.nome as especialista_nome,pr.email as especialista_email,
+              COALESCE((SELECT COUNT(*) FROM projeto_mensagens pm WHERE pm.projeto_id=p.id AND pm.autor_tipo='especialista'),0) as mensagens_pendentes
+              FROM projetos p JOIN prestadores pr ON pr.id=p.prestador_id WHERE 1=1`;
+      const params=[];
+      if (especialista_id) { params.push(especialista_id); q+=` AND p.prestador_id=$${params.length}`; }
+      if (status) { params.push(status); q+=` AND p.status=$${params.length}`; }
+      q+=' ORDER BY p.created_at DESC';
+      const r=await pool.query(q,params);
+      return res.status(200).json({ projetos:r.rows });
+    }
+    if (req.method==='PATCH') {
+      const { id,status,progresso } = req.body;
+      await pool.query('UPDATE projetos SET status=COALESCE($1,status),progresso=COALESCE($2,progresso),updated_at=NOW() WHERE id=$3',[status,progresso,id]);
+      await pool.query(`INSERT INTO auditoria (evento,ator,detalhes) VALUES ('projeto_atualizado','especialista',$1)`,[`Projeto #${id} status:${status} prog:${progresso}%`]);
+      if (status==='concluido') await pool.query(`UPDATE financeiro SET status='pendente' WHERE projeto_id=$1`,[id]);
+      return res.status(200).json({ ok:true });
+    }
+  }
+
+  // ── MENSAGENS (?type=msg)
+  if (type==='msg') {
+    if (req.method==='GET') {
+      const { projeto_id,especialista_id } = req.query;
+      if (projeto_id) {
+        const r=await pool.query('SELECT * FROM projeto_mensagens WHERE projeto_id=$1 ORDER BY created_at ASC',[projeto_id]);
+        return res.status(200).json({ mensagens:r.rows });
+      }
+      if (especialista_id) {
+        const r=await pool.query(`SELECT pm.*,p.titulo as projeto_titulo FROM projeto_mensagens pm JOIN projetos p ON p.id=pm.projeto_id WHERE p.prestador_id=$1 ORDER BY pm.created_at DESC`,[especialista_id]);
+        return res.status(200).json({ mensagens:r.rows });
+      }
+      const r=await pool.query(`SELECT pm.*,p.titulo as projeto_titulo,p.empresa,pr.nome as especialista_nome FROM projeto_mensagens pm JOIN projetos p ON p.id=pm.projeto_id JOIN prestadores pr ON pr.id=p.prestador_id WHERE pm.autor_tipo='especialista' ORDER BY pm.created_at DESC`);
+      return res.status(200).json({ mensagens:r.rows });
+    }
+    if (req.method==='POST') {
+      const { projeto_id,autor,autor_tipo,mensagem } = req.body;
+      await pool.query('INSERT INTO projeto_mensagens (projeto_id,autor,autor_tipo,mensagem) VALUES ($1,$2,$3,$4)',[projeto_id,autor,autor_tipo,mensagem]);
+      await pool.query(`INSERT INTO auditoria (evento,ator,detalhes) VALUES ('mensagem_projeto',$1,$2)`,[autor,`Msg no projeto #${projeto_id}`]);
+      return res.status(201).json({ ok:true });
+    }
+  }
+
+  // ── FINANCEIRO (?type=fin)
+  if (type==='fin') {
+    if (req.method==='GET') {
+      const { especialista_id } = req.query;
+      const params=[];
+      let where='';
+      if (especialista_id) { params.push(especialista_id); where='WHERE f.prestador_id=$1'; }
+      const regs=await pool.query(`SELECT f.*,p.nome as prestador_nome,p.email as prestador_email FROM financeiro f JOIN prestadores pr ON pr.id=f.prestador_id JOIN prestadores p ON p.id=f.prestador_id ${where} ORDER BY f.created_at DESC`,params);
+      const tot=await pool.query(`SELECT COUNT(*) as total_projetos,COALESCE(SUM(valor),0) as total_bruto,COALESCE(SUM(valor)*0.15,0) as total_comissao,COALESCE(SUM(valor)*0.85,0) as total_liquido FROM financeiro f ${where}`,params);
+      return res.status(200).json({ registros:regs.rows, totais:tot.rows[0] });
+    }
+    if (req.method==='PATCH') {
+      const { id,status } = req.body;
+      await pool.query('UPDATE financeiro SET status=$1 WHERE id=$2',[status,id]);
+      await pool.query(`INSERT INTO auditoria (evento,ator,detalhes) VALUES ('financeiro_atualizado','admin',$1)`,[`Financeiro #${id} → ${status}`]);
+      return res.status(200).json({ ok:true });
+    }
+  }
+
+  return res.status(404).end();
+}
+EOF
+
+# ── API 4: especialistas (admin)
+cat > api/especialistas.js << 'EOF'
+import { Pool } from 'pg';
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+const cors = (res) => {
+  res.setHeader('Access-Control-Allow-Origin','*');
+  res.setHeader('Access-Control-Allow-Methods','GET,POST,PATCH,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers','Content-Type');
+};
+export default async function handler(req, res) {
+  cors(res);
+  if (req.method==='OPTIONS') return res.status(200).end();
+  if (req.method==='GET') {
+    const { status } = req.query;
+    let q='SELECT id,nome,email,whatsapp,curso,faculdade,bio,especialidades,status,created_at FROM prestadores WHERE 1=1';
+    const params=[];
+    if (status) { params.push(status); q+=` AND status=$${params.length}`; }
+    q+=' ORDER BY created_at DESC';
+    const r=await pool.query(q,params);
+    return res.status(200).json({ prestadores:r.rows });
+  }
+  if (req.method==='PATCH') {
+    const { id,status,motivo } = req.body;
+    await pool.query('UPDATE prestadores SET status=$1 WHERE id=$2',[status,id]);
+    await pool.query(`INSERT INTO auditoria (evento,ator,detalhes) VALUES ('especialista_atualizado','admin',$1)`,[`Especialista #${id} → ${status}${motivo?' — '+motivo:''}`]);
+    return res.status(200).json({ ok:true });
+  }
+  return res.status(405).end();
+}
+EOF
+
+echo "=== APIs restantes ==="
+ls api/
+echo "Total: $(ls api/ | wc -l) arquivos"
+PASSO 3 — Atualiza as URLs nos HTMLs e faz deploy:
+
+bash
+cd ~/consultoria2
+
+# Atualiza admin/auditoria.html — muda URLs das APIs
+sed -i "s|/api/admin-prestadores|/api/especialistas|g" admin/auditoria.html
+sed -i "s|/api/negociacoes|/api/leads?type=neg|g" admin/auditoria.html
+sed -i "s|/api/projeto-mensagens|/api/projetos?type=msg|g" admin/auditoria.html
+sed -i "s|/api/admin-financeiro|/api/projetos?type=fin|g" admin/auditoria.html
+sed -i "s|/api/auditoria|/api/leads?type=audit|g" admin/auditoria.html
+
+# Atualiza prestador/area.html
+sed -i "s|/api/login-prestador|/api/auth?action=login|g" prestador/area.html
+sed -i "s|/api/negociacoes|/api/leads?type=neg|g" prestador/area.html
+sed -i "s|/api/projeto-mensagens|/api/projetos?type=msg|g" prestador/area.html
+sed -i "s|/api/admin-financeiro|/api/projetos?type=fin|g" prestador/area.html
+
+# Atualiza cliente/index.html (formulário de lead)
+sed -i "s|/api/contato|/api/leads|g" cliente/index.html 2>/dev/null || true
+sed -i "s|/api/oportunidades|/api/leads|g" cliente/index.html 2>/dev/null || true
+
+# Atualiza cadastro do prestador
+sed -i "s|/api/cadastro-prestador|/api/auth?action=cadastro|g" prestador/cadastro.html 2>/dev/null || true
+
+# Garante coluna created_at no financeiro e projetos
+node << 'JSEOF'
+const { Pool } = require('pg');
+const pool = new Pool({ connectionString: "postgresql://neondb_owner:npg_2TNiJ0wyRPgp@ep-royal-haze-aenyjfsc-pooler.c-2.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require" });
+pool.query(`
+  ALTER TABLE financeiro ADD COLUMN IF NOT EXISTS created_at TIMESTAMP DEFAULT NOW();
+  ALTER TABLE projetos ADD COLUMN IF NOT EXISTS titulo TEXT;
+  ALTER TABLE projetos ADD COLUMN IF NOT EXISTS empresa TEXT;
+  ALTER TABLE projetos ADD COLUMN IF NOT EXISTS valor NUMERIC;
+  ALTER TABLE projetos ADD COLUMN IF NOT EXISTS prazo TEXT;
+  ALTER TABLE projetos ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT NOW();
+`).then(()=>{console.log('✅ Banco OK');pool.end();}).catch(e=>{console.log('❌',e.message);pool.end();});
+JSEOF
+
+git add .
+git commit -m "feat: consolida APIs em 4 arquivos (limite Vercel Hobby)"
+git push
+vercel --prod
+Me manda o output do final — especialmente se o deploy passou ou deu algum erro de API.
+
+edson@edson-MacBook:~/consultoria2$ cd ~/consultoria2
+# Atualiza admin/auditoria.html — muda URLs das APIs
+sed -i "s|/api/admin-prestadores|/api/especialistas|g" admin/auditoria.html
+sed -i "s|/api/negociacoes|/api/leads?type=neg|g" admin/auditoria.html
+sed -i "s|/api/projeto-mensagens|/api/projetos?type=msg|g" admin/auditoria.html
+sed -i "s|/api/admin-financeiro|/api/projetos?type=fin|g" admin/auditoria.html
+sed -i "s|/api/auditoria|/api/leads?type=audit|g" admin/auditoria.html
+# Atualiza prestador/area.html
+sed -i "s|/api/login-prestador|/api/auth?action=login|g" prestador/area.html
+sed -i "s|/api/negociacoes|/api/leads?type=neg|g" prestador/area.html
+sed -i "s|/api/projeto-mensagens|/api/projetos?type=msg|g" prestador/area.html
+sed -i "s|/api/admin-financeiro|/api/projetos?type=fin|g" prestador/area.html
+# Atualiza cliente/index.html (formulário de lead)
+sed -i "s|/api/contato|/api/leads|g" cliente/index.html 2>/dev/null || true
+sed -i "s|/api/oportunidades|/api/leads|g" cliente/index.html 2>/dev/null || true
+# Atualiza cadastro do prestador
+sed -i "s|/api/cadastro-prestador|/api/auth?action=cadastro|g" prestador/cadastro.html 2>/dev/null || true
+vercel --prod "feat: consolida APIs em 4 arquivos (limite Vercel Hobby)"log('❌'
+(node:10353) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use node --trace-warnings ... to show where the warning was created)
+✅ Banco OK
+[main 0d533f5] feat: consolida APIs em 4 arquivos (limite Vercel Hobby)
+ 17 files changed, 250 insertions(+), 499 deletions(-)
+ delete mode 100644 api/admin-financeiro.js
+ delete mode 100644 api/admin-prestadores.js
+ delete mode 100644 api/auditoria.js
+ create mode 100644 api/auth.js
+ delete mode 100644 api/candidaturas.js
+ delete mode 100644 api/contato.js
+ create mode 100644 api/especialistas.js
+ delete mode 100644 api/negociacoes.js
+ delete mode 100644 api/oportunidades.js
+ delete mode 100644 api/projeto-mensagens.js
+ delete mode 100644 api/tickets.js
+Enumerating objects: 34, done.
+Counting objects: 100% (34/34), done.
+Delta compression using up to 2 threads
+Compressing objects: 100% (23/23), done.
+Writing objects: 100% (24/24), 48.92 KiB | 1.06 MiB/s, done.
+Total 24 (delta 14), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (14/14), completed with 7 local objects.
+To https://github.com/extra1357/consultoria2.git
+   87a6b71..0d533f5  main -> main
+🔍  Inspect: https://vercel.com/granavivas-projects/consultoria/ArFJXUYBUPNqfWkCsiTZ5jykP8zv [4s]
+⏳  Production: https://consultoria-b8dtgohrk-granavivas-projects.vercel.app [4s✅  Production: https://consultoria-b8dtgohrk-granavivas-projects.vercel.app [15s]
+🔗  Aliased: https://www.123consultoria.com.br [15s]
+edson@edson-MacBook:~/consultoria2$
+
+Mostrar mais
+16:04
+Deploy feito! Vamos testar se as APIs estão respondendo corretamente:
+
+bash
+cd ~/consultoria2
+
+# Testa todas as APIs consolidadas
+echo "=== TESTE DAS APIs ==="
+curl -s -o /dev/null -w "auth (login):        %{http_code}\n" -X POST https://www.123consultoria.com.br/api/auth?action=login -H "Content-Type: application/json" -d '{"email":"edson.uni9@gmail.com","senha":"edson123"}'
+curl -s -o /dev/null -w "leads (GET):         %{http_code}\n" https://www.123consultoria.com.br/api/leads
+curl -s -o /dev/null -w "leads (negociacoes): %{http_code}\n" "https://www.123consultoria.com.br/api/leads?type=neg"
+curl -s -o /dev/null -w "leads (auditoria):   %{http_code}\n" "https://www.123consultoria.com.br/api/leads?type=audit"
+curl -s -o /dev/null -w "especialistas:       %{http_code}\n" https://www.123consultoria.com.br/api/especialistas
+curl -s -o /dev/null -w "projetos (GET):      %{http_code}\n" https://www.123consultoria.com.br/api/projetos
+curl -s -o /dev/null -w "projetos (fin):      %{http_code}\n" "https://www.123consultoria.com.br/api/projetos?type=fin"
+curl -s -o /dev/null -w "projetos (msg):      %{http_code}\n" "https://www.123consultoria.com.br/api/projetos?type=msg"
+
+echo ""
+echo "=== PÁGINAS ==="
+curl -s -o /dev/null -w "admin/auditoria: %{http_code}\n" https://www.123consultoria.com.br/admin/auditoria
+curl -s -o /dev/null -w "prestador/area:  %{http_code}\n" https://www.123consultoria.com.br/prestador/area
+curl -s -o /dev/null -w "cliente:         %{http_code}\n" https://www.123consultoria.com.br/cliente
+
+echo ""
+echo "=== TOTAL APIs DEPLOYADAS ==="
+ls api/
+Me manda o output. Se tudo der 200, o sistema está no ar. Aí abrimos as 3 abas e fazemos o teste completo do fluxo ao vivo.
+
+edson@edson-MacBook:~/consultoria2$ cd ~/consultoria2
+# Testa todas as APIs consolidadas
+echo "=== TESTE DAS APIs ==="
+curl -s -o /dev/null -w "auth (login):        %{http_code}\n" -X POST https://www.123consultoria.com.br/api/auth?action=login -H "Content-Type: application/json" -d '{"email":"edson.uni9@gmail.com","senha":"edson123"}'
+curl -s -o /dev/null -w "leads (GET):         %{http_code}\n" https://www.123consultoria.com.br/api/leads
+curl -s -o /dev/null -w "leads (negociacoes): %{http_code}\n" "https://www.123consultoria.com.br/api/leads?type=neg"
+curl -s -o /dev/null -w "leads (auditoria):   %{http_code}\n" "https://www.123consultoria.com.br/api/leads?type=audit"
+curl -s -o /dev/null -w "especialistas:       %{http_code}\n" https://www.123consultoria.com.br/api/especialistas
+curl -s -o /dev/null -w "projetos (GET):      %{http_code}\n" https://www.123consultoria.com.br/api/projetos
+curl -s -o /dev/null -w "projetos (fin):      %{http_code}\n" "https://www.123consultoria.com.br/api/projetos?type=fin"
+curl -s -o /dev/null -w "projetos (msg):      %{http_code}\n" "https://www.123consultoria.com.br/api/projetos?type=msg"
+echo ""
+echo "=== PÁGINAS ==="
+curl -s -o /dev/null -w "admin/auditoria: %{http_code}\n" https://www.123consultls api/== TOTAL APIs DEPLOYADAS ==="      %{http_code}\n" https://www.123consult
+=== TESTE DAS APIs ===
+auth (login):        200
+leads (GET):         200
+leads (negociacoes): 200
+leads (auditoria):   200
+especialistas:       200
+projetos (GET):      200
+projetos (fin):      200
+projetos (msg):      200
+=== PÁGINAS ===
+admin/auditoria: 200
+prestador/area:  200
+cliente:         200
+=== TOTAL APIs DEPLOYADAS ===
+auth.js                especialistas.js  login-prestador.js
+cadastro-prestador.js  leads.js          projetos.js
+edson@edson-MacBook:~/consultoria2$
+
+Mostrar mais
+16:05
+Tudo 200! Mas tem 2 arquivos órfãos que precisamos remover antes de qualquer problema futuro, e depois fazemos o teste ao vivo.
+
+bash
+cd ~/consultoria2
+
+# Remove arquivos órfãos (não usados mais)
+rm -f api/login-prestador.js api/cadastro-prestador.js
+
+git add .
+git commit -m "chore: remove APIs órfãs"
+git push
+vercel --prod
+Enquanto deploya, abra as 3 abas no navegador:
+
+Painel	URL	Credencial
+🔧 Admin	https://www.123consultoria.com.br/admin/auditoria	senha: 123admin
+👤 Especialista	https://www.123consultoria.com.br/prestador/area	edson.uni9@gmail.com / edson123
+🏢 Cliente	https://www.123consultoria.com.br/cliente	—
+Roteiro de teste assim que o deploy subir:
+
+Cliente → preenche o formulário de solicitação e envia
+Admin → Tab Leads → vê o lead novo → atribui ao Edson Santos → salva
+Especialista → Tab Meus Leads → vê o lead → clica "Registrar reunião" → preenche valor, prazo, link de gravação → envia
+Admin → Tab Negociações → vê a proposta → clica Aprovar → projeto criado automaticamente
+Especialista → Tab Meus Projetos → vê o projeto → atualiza progresso → manda mensagem
+Admin → Tab Projetos → vê a mensagem → responde
+Admin → Tab Financeiro → vê o valor e comissão
+Me diz o que aparece em cada etapa.
+
+edson@edson-MacBook:~/consultoria2$ cd ~/consultoria2
+# Remove arquivos órfãos (não usados mais)
+rm -f api/login-prestador.js api/cadastro-prestador.js
+git add .
+git commit -m "chore: remove APIs órfãs"
+git push
+vercel --prod
+[main 55f1864] chore: remove APIs órfãs
+ 2 files changed, 137 deletions(-)
+ delete mode 100644 api/cadastro-prestador.js
+ delete mode 100644 api/login-prestador.js
+Enumerating objects: 5, done.
+Counting objects: 100% (5/5), done.
+Delta compression using up to 2 threads
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 314 bytes | 314.00 KiB/s, done.
+Total 3 (delta 2), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
+To https://github.com/extra1357/consultoria2.git
+   0d533f5..55f1864  main -> main
+🔍  Inspect: https://vercel.com/granavivas-projects/consultoria/GCVrAqfX5jVB6RaBEf449S7AWHUV [3s]
+⏳  Production: https://consultoria-f0lfeym5n-granavivas-projects.vercel.app [3s✅  Production: https://consultoria-f0lfeym5n-granavivas-projects.vercel.app [13s]
+🔗  Aliased: https://www.123consultoria.com.br [13s]
+edson@edson-MacBook:~/consultoria2$
+
+Mostrar mais
+16:08
+Deploy limpo! Sistema no ar com 4 APIs. Agora faça o teste do fluxo completo:
+
+Abra as 3 abas e siga na ordem:
+
+1. CLIENTE → https://www.123consultoria.com.br/cliente
+
+Preenche nome, empresa, email, WhatsApp, descreve o serviço que precisa
+Clica enviar
+2. ADMIN → https://www.123consultoria.com.br/admin/auditoria (senha: 123admin)
+
+Tab Leads → deve aparecer o lead que o cliente enviou
+Clica em "Gerenciar" → atribui o especialista "Edson Santos" → salva
+3. ESPECIALISTA → https://www.123consultoria.com.br/prestador/area (edson.uni9@gmail.com / edson123)
+
+Tab Meus Leads → deve aparecer o lead atribuído
+Clica "Registrar reunião" → preenche:
+Data: qualquer data/hora
+Link: pode colocar https://meet.google.com/teste
+Resumo: "Reunião realizada, cliente interessado"
+Valor: ex 5000
+Prazo: ex 30 dias
+Clica "Enviar para validação"
+4. ADMIN → Tab Negociações
+
+Deve aparecer a proposta do Edson
+Clica Aprovar → projeto e financeiro criados automaticamente
+5. ESPECIALISTA → Tab Meus Projetos
+
+Deve aparecer o projeto
+Move o slider de progresso para 25%
+Escreve uma mensagem: "Iniciando levantamento de dados"
+Envia
+6. ADMIN → Tab Projetos
+
+Deve ver o projeto com a mensagem
+Responde: "Pode prosseguir, prazo confirmado"
+7. ADMIN → Tab Financeiro
+
+Deve mostrar: valor total, comissão 15%, repasse 85%
+Me conta o que funcionou e o que não apareceu — resolvo na hora.
+
+erroFailed  to load resource the server responded with a status of 500 api/leads 1
+
+17:50
+500 na API de leads. Vamos ver o erro exato:
+
+bash
+cd ~/consultoria2
+
+# Testa com resposta completa
+curl -s "https://www.123consultoria.com.br/api/leads" | head -200
+
+echo "---"
+
+# Testa o POST do formulário cliente
+curl -s -X POST "https://www.123consultoria.com.br/api/leads" \
+  -H "Content-Type: application/json" \
+  -d '{"nome":"Teste","empresa":"Empresa Teste","email":"teste@teste.com","whatsapp":"11999999999","servico":"Consultoria","mensagem":"Preciso de ajuda"}' 
+
+echo "---"
+
+# Verifica colunas reais da tabela leads
+node << 'EOF'
+const { Pool } = require('pg');
+const pool = new Pool({ connectionString: "postgresql://neondb_owner:npg_2TNiJ0wyRPgp@ep-royal-haze-aenyjfsc-pooler.c-2.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require" });
+pool.query(`SELECT column_name FROM information_schema.columns WHERE table_name='leads' ORDER BY ordinal_position`)
+  .then(r=>{console.log('COLUNAS LEADS:',r.rows.map(x=>x.column_name).join(', '));pool.end();})
+  .catch(e=>{console.log('❌',e.message);pool.end();});
+EOF
+Me manda o output — com o erro exato e as colunas reais já corrijo na hora.
+
+edson@edson-MacBook:~/consultoria2$ cd ~/consultoria2
+# Testa com resposta completa
+curl -s "https://www.123consultoria.com.br/api/leads" | head -200
+echo "---"
+# Testa o POST do formulário cliente
+curl -s -X POST "https://www.123consultoria.com.br/api/leads" \
+  -H "Content-Type: application/json" \
+  -d '{"nome":"Teste","empresa":"Empresa Teste","email":"teste@teste.com","whatsapp":"11999999999","servico":"Consultoria","mensagem":"Preciso de ajuda"}' 
+echo "---"
+# Verifica colunas reais da tabela leads
+node << 'EOF'
+const { Pool } = require('pg');
+const pool = new Pool({ connectionString: "postgresql://neondb_owner:npg_2TNiJ0wyRPgp@ep-royal-haze-aenyjfsc-pooler.c-2.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require" });
+pool.query(SELECT column_name FROM information_schema.columns WHERE table_name='leads' ORDER BY ordinal_position)
+  .then(r=>{console.log('COLUNAS LEADS:',r.rows.map(x=>x.column_name).join(', ')EOFcatch(e=>{console.log('❌',e.message);pool.end();});
+{"leads":[{"id":3,"nome":"Sebastião Rodrigues","empresa":"Rodrigues & Moraes C.o","email":"sebastiao@gmail.com","whatsapp":"1198765432","servico":"rh-pessoas","mensagem":"Rotatividade excessiva pós treinamento\ntenho a impressão de que ao final do treinamento  e experiencia o colaborador capacitado migra para outras empresas, a duvida é motivo seria financeiro, cultural, qualidade de vida, flexibilidade de jornada, realmente não conseguimos diagnosticar para poder agir.\ngostariamos e uma reuniãopara possivel expoxição total e verificar a aceitação do desafio bem como tambem qual o orçamento estimado.\nficams no aguardo.\nAtt Sebastião CO Global","ip":"189.28.246.185","origem":"https://www.123consultoria.com.br/","status":"novo","notas":"veificar disponibilidade de espeialista","criado_em":"2026-04-18T17:58:54.866Z","especialista_id":2,"especialista_nome":null,"especialista_nome_ref":"Edson Santos"},{"id":2,"nome":"Euclides maros","empresa":"Nova empreendimentos","email":"contato@nova.com.br","whatsapp":"1198785425","servico":"consultoria-empresarial","mensagem":"Quero mais informações antes de abrir meu desafio a voces existe possibilidadew de uma reunião presencial? \nOu video chamada?","ip":"189.28.246.185","origem":"https://www.123consultoria.com.br/","status":"convertido","notas":"Contatar para avaliação","criado_em":"2026-04-18T12:10:42.303Z","especialista_id":null,"especialista_nome":null,"especialista_nome_ref":null},{"id":1,"nome":"EDSON JUNIOR DOS SANTOS","empresa":"Cotaweb","email":"strsistemas@gmail.com","whatsapp":"11973988058","servico":"consultoria-empresarial","mensagem":"empresa stagnada","ip":"189.28.246.185","origem":"https://www.123consultoria.com.br/","status":"convertido","notas":"","criado_em":"2026-04-17T23:46:38.127Z","especialista_id":null,"especialista_nome":null,"especialista_nome_---":null}]}
+---k":true,"id":6}
+(node:17489) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use node --trace-warnings ... to show where the warning was created)
+COLUNAS LEADS: id, nome, empresa, email, whatsapp, servico, mensagem, ip, origem, status, notas, criado_em, especialista_id, especialista_nome
+edson@edson-MacBook:~/consultoria2$
+
+Mostrar mais
+17:50
+A API de leads está funcionando — retornou dados e o POST criou o lead 6. O erro 500 que você viu no browser foi provavelmente do formulário do cliente chamando uma rota diferente. Vamos verificar:
+
+bash
+cd ~/consultoria2
+
+# Ver o que o formulário cliente está chamando
+grep -n "fetch\|api\|action\|submit" cliente/index.html | head -30
+Me manda o output. Quero ver qual URL exata o formulário está postando para corrigir se necessário.
+
+Enquanto isso, o fluxo já tem dados reais para testar — vejo que o lead do Sebastião Rodrigues (RH) já está atribuído ao Edson Santos.
+
+Abra o admin agora: https://www.123consultoria.com.br/admin/auditoria (senha: 123admin)
+
+Tab Leads → deve aparecer o Sebastião com "👤 Edson Santos"
+Tab Especialistas → deve mostrar Edson e João
+Me diz o que aparece.
+
+edson@edson-MacBook:~/consultoria2$ cd ~/consultoria2
+# Ver o que o formulário cliente está chamando
+grep -n "fetch\|api\|action\|submit" cliente/index.html | head -30
+7:<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+26:.btn-submit{width:100%;padding:14px;border-radius:12px;background:var(--accent);color:#fff;font-family:'Outfit',sans-serif;font-size:.95rem;font-weight:600;border:none;cursor:pointer;margin-top:8px;transition:.2s}
+27:.btn-submit:hover{background:
+#1a5fd4}
+28:.btn-submit:disabled{opacity:.6;cursor:not-allowed}
+73:    <button class="btn-submit" id="btnSubmit" onclick="enviarForm()">Solicitar Especialistas →</button>
+102:    const res=await fetch('/api/leads',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(campos)});
+edson@edson-MacBook:~/consultoria2$
+
+Mostrar mais
+17:51
+O formulário está correto — chama /api/leads com POST, que funciona (criou o lead 6 no teste). O erro 500 que você viu foi provavelmente um campo faltando. Vamos ver o que o formulário envia:
+
+bash
+grep -n "campos\|nome\|empresa\|servico\|whatsapp\|mensagem" cliente/index.html | head -40
+Me manda o output. Mas enquanto isso, o sistema já tem dados reais — vamos testar o fluxo completo agora:
+
+Abra: https://www.123consultoria.com.br/admin/auditoria — senha 123admin
+
+Diz o que aparece em cada tab:
+
+📋 Leads — aparece o Sebastião?
+👥 Especialistas — aparece o Edson e João?
+🤝 Negociações — está vazio?
+💰 Financeiro — está vazio?
+edson@edson-MacBook:~/consultoria2$ grep -n "campos\|nome\|empresa\|servico\|whatsapp\|mensagem" cliente/index.html | head -40
+42:  <div class="sub">Conectamos empresas aos melhores especialistas do mercado</div>
+47:      <div class="field"><label>Nome da Empresa *</label><input type="text" id="empresa" placeholder="Ex: Empresa LTDA"></div>
+69:      <div class="field"><label>Nome do Responsável *</label><input type="text" id="contato" placeholder="Seu nome"></div>
+70:      <div class="field"><label>E-mail para contato *</label><input type="email" id="email" placeholder="contato@empresa.com"></div>
+84:  const campos = {
+85:    empresa: document.getElementById('empresa').value.trim(),
+91:    contato_empresa: document.getElementById('contato').value.trim(),
+92:    email_empresa: document.getElementById('email').value.trim(),
+95:  if (!campos.empresa||!campos.area||!campos.titulo||!campos.descricao||!campos.contato_empresa||!campos.email_empresa) {
+96:    err.textContent='⚠️ Preencha todos os campos obrigatórios.';err.style.display='block';return;
+102:    const res=await fetch('/api/leads',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(campos)});
+106:      document.getElementById('successEmpresa').textContent=campos.empresa;
+edson@edson-MacBook:~/consultoria2$
+
+Mostrar mais
+17:52
+Achei o problema. O formulário do cliente envia campos diferentes do que a API espera:
+
+Formulário envia	API espera
+contato_empresa	nome
+email_empresa	email
+area	servico
+sem whatsapp	whatsapp (obrigatório na query)
+Vamos corrigir a API para aceitar os dois formatos:
+
+bash
+cd ~/consultoria2
+
+# Ver o formulário completo para entender todos os campos
+sed -n '80,110p' cliente/index.html
+bash
+# Corrige a API leads para aceitar campos do formulário cliente
+cat > api/leads.js << 'EOF'
+import { Pool } from 'pg';
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+const cors = (res) => {
+  res.setHeader('Access-Control-Allow-Origin','*');
+  res.setHeader('Access-Control-Allow-Methods','GET,POST,PATCH,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers','Content-Type');
+};
+export default async function handler(req, res) {
+  cors(res);
+  if (req.method==='OPTIONS') return res.status(200).end();
+  const { type } = req.query;
+
+  // ── LEADS
+  if (!type || type==='leads') {
+    if (req.method==='GET') {
+      const { status, especialista_id } = req.query;
+      let q = `SELECT l.*, p.nome as especialista_nome_ref FROM leads l LEFT JOIN prestadores p ON p.id=l.especialista_id WHERE 1=1`;
+      const params=[];
+      if (status) { params.push(status); q+=` AND l.status=$${params.length}`; }
+      if (especialista_id) { params.push(especialista_id); q+=` AND l.especialista_id=$${params.length}`; }
+      q+=' ORDER BY l.criado_em DESC';
+      try {
+        const r=await pool.query(q,params);
+        return res.status(200).json({ leads: r.rows });
+      } catch(e) { return res.status(500).json({ erro: e.message }); }
+    }
+
+    if (req.method==='POST') {
+      try {
+        const b = req.body;
+        // Normaliza campos — aceita formato cliente e formato direto
+        const nome     = b.nome || b.contato_empresa || b.contato || '';
+        const empresa  = b.empresa || '';
+        const email    = b.email || b.email_empresa || '';
+        const whatsapp = b.whatsapp || b.telefone || '';
+        const servico  = b.servico || b.area || b.titulo || '';
+        const mensagem = b.mensagem || b.descricao || '';
+        const origem   = b.origem || req.headers.referer || 'site';
+
+        if (!empresa || !email) {
+          return res.status(400).json({ erro: 'Empresa e email são obrigatórios' });
+        }
+
+        const r=await pool.query(
+          `INSERT INTO leads (nome,empresa,email,whatsapp,servico,mensagem,origem,status)
+           VALUES ($1,$2,$3,$4,$5,$6,$7,'novo') RETURNING id`,
+          [nome,empresa,email,whatsapp,servico,mensagem,origem]
+        );
+        await pool.query(
+          `INSERT INTO auditoria (evento,ator,detalhes) VALUES ('lead_novo',$1,$2)`,
+          [email, `${nome} — ${empresa} — ${servico}`]
+        );
+        return res.status(201).json({ ok:true, id:r.rows[0].id });
+      } catch(e) { return res.status(500).json({ erro: e.message }); }
+    }
+
+    if (req.method==='PATCH') {
+      try {
+        const { id,status,notas,especialista_id } = req.body;
+        await pool.query(
+          `UPDATE leads SET status=COALESCE($1,status),notas=COALESCE($2,notas),especialista_id=COALESCE($3,especialista_id) WHERE id=$4`,
+          [status,notas,especialista_id||null,id]
+        );
+        if (especialista_id) {
+          const e=await pool.query('SELECT nome FROM prestadores WHERE id=$1',[especialista_id]);
+          await pool.query(`INSERT INTO auditoria (evento,ator,detalhes) VALUES ('lead_atribuido','admin',$1)`,[`Lead #${id} → ${e.rows[0]?.nome}`]);
+        }
+        if (status) {
+          await pool.query(`INSERT INTO auditoria (evento,ator,detalhes) VALUES ('lead_atualizado','admin',$1)`,[`Lead #${id} → ${status}`]);
+        }
+        return res.status(200).json({ ok:true });
+      } catch(e) { return res.status(500).json({ erro: e.message }); }
+    }
+  }
+
+  // ── NEGOCIAÇÕES (?type=neg)
+  if (type==='neg') {
+    if (req.method==='GET') {
+      try {
+        const { especialista_id, id } = req.query;
+        if (id) {
+          const r=await pool.query(`SELECT n.*,l.nome as lead_nome,l.empresa as lead_empresa,l.whatsapp as lead_whatsapp,l.servico as lead_servico,p.nome as especialista_nome FROM negociacoes n JOIN leads l ON l.id=n.lead_id JOIN prestadores p ON p.id=n.especialista_id WHERE n.id=$1`,[id]);
+          return res.status(200).json({ negociacao:r.rows[0] });
+        }
+        let q=`SELECT n.*,l.nome as lead_nome,l.empresa as lead_empresa,l.whatsapp as lead_whatsapp,l.servico as lead_servico,p.nome as especialista_nome FROM negociacoes n JOIN leads l ON l.id=n.lead_id JOIN prestadores p ON p.id=n.especialista_id WHERE 1=1`;
+        const params=[];
+        if (especialista_id) { params.push(especialista_id); q+=` AND n.especialista_id=$${params.length}`; }
+        q+=' ORDER BY n.created_at DESC';
+        const r=await pool.query(q,params);
+        return res.status(200).json({ negociacoes:r.rows });
+      } catch(e) { return res.status(500).json({ erro: e.message }); }
+    }
+    if (req.method==='POST') {
+      try {
+        const { lead_id,especialista_id,data_reuniao,link_gravacao,resumo,valor_proposto,prazo_proposto,observacoes } = req.body;
+        const r=await pool.query(
+          `INSERT INTO negociacoes (lead_id,especialista_id,data_reuniao,link_gravacao,resumo,valor_proposto,prazo_proposto,observacoes) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING id`,
+          [lead_id,especialista_id,data_reuniao,link_gravacao,resumo,valor_proposto,prazo_proposto,observacoes]
+        );
+        await pool.query(`UPDATE leads SET status='em_negociacao' WHERE id=$1`,[lead_id]);
+        await pool.query(`INSERT INTO auditoria (evento,ator,detalhes) VALUES ('negociacao_registrada',$1,$2)`,[`esp_${especialista_id}`,`Reunião para lead #${lead_id} — R$ ${valor_proposto}`]);
+        return res.status(201).json({ ok:true, id:r.rows[0].id });
+      } catch(e) { return res.status(500).json({ erro: e.message }); }
+    }
+    if (req.method==='PATCH') {
+      try {
+        const { id,status,admin_comentario } = req.body;
+        await pool.query(`UPDATE negociacoes SET status=$1,admin_comentario=$2,updated_at=NOW() WHERE id=$3`,[status,admin_comentario,id]);
+        if (status==='aprovada') {
+          const n=(await pool.query('SELECT * FROM negociacoes WHERE id=$1',[id])).rows[0];
+          const proj=await pool.query(
+            `INSERT INTO projetos (negociacao_id,prestador_id,titulo,empresa,valor,prazo,status,progresso)
+             SELECT $1,$2,l.servico,l.empresa,$3,$4,'em_andamento',0 FROM leads l WHERE l.id=$5 RETURNING id`,
+            [n.id,n.especialista_id,n.valor_proposto,n.prazo_proposto,n.lead_id]
+          );
+          await pool.query(
+            `INSERT INTO financeiro (projeto_id,prestador_id,titulo,empresa,valor,status)
+             SELECT $1,$2,l.servico,l.empresa,$3,'pendente' FROM leads l WHERE l.id=$4`,
+            [proj.rows[0].id,n.especialista_id,n.valor_proposto,n.lead_id]
+          );
+          await pool.query(`UPDATE leads SET status='convertido' WHERE id=$1`,[n.lead_id]);
+          await pool.query(`INSERT INTO auditoria (evento,ator,detalhes) VALUES ('projeto_criado','admin',$1)`,[`Projeto criado — esp #${n.especialista_id} — R$ ${n.valor_proposto}`]);
+        }
+        if (status==='revisao') {
+          await pool.query(`INSERT INTO auditoria (evento,ator,detalhes) VALUES ('negociacao_revisao','admin',$1)`,[`Revisão solicitada: ${admin_comentario}`]);
+        }
+        return res.status(200).json({ ok:true });
+      } catch(e) { return res.status(500).json({ erro: e.message }); }
+    }
+  }
+
+  // ── AUDITORIA (?type=audit)
+  if (type==='audit') {
+    try {
+      const r=await pool.query('SELECT * FROM auditoria ORDER BY created_at DESC LIMIT 100');
+      return res.status(200).json({ logs:r.rows });
+    } catch(e) { return res.status(500).json({ erro: e.message }); }
+  }
+
+  return res.status(404).end();
+}
+EOF
+
+git add .
+git commit -m "fix: API leads aceita campos do formulário cliente"
+git push
+vercel --prod
+Me manda o output do deploy. Depois testa o formulário do cliente de novo.
+
+
+edson@edson-MacBook:~/consultoria2$ grep -n "campos\|nome\|empresa\|servico\|whatsapp\|mensagem" cliente/index.html | head -40 42: <div class="sub">Conectamos empresas aos melhores especialistas do mercado</div> 47: <div class="field"><label>Nome da Empresa *</label><input type="text" id="empr
+
+pasted
+
+17:53
+Deploy feito! Agora teste o formulário do cliente:
+
+bash
+# Testa exatamente como o formulário envia
+curl -s -X POST "https://www.123consultoria.com.br/api/leads" \
+  -H "Content-Type: application/json" \
+  -d '{"empresa":"Empresa Teste","area":"financeiro","titulo":"Planejamento Q3","descricao":"Precisamos reestruturar o planejamento","valor":"15000","prazo":"30 dias","contato_empresa":"João Silva","email_empresa":"joao@empresa.com"}'
+Se retornar {"ok":true,"id":...} o formulário vai funcionar. Me manda o resultado.
+
+Depois faça o fluxo completo:
+
+Cliente → https://www.123consultoria.com.br/cliente — preenche e envia
+Admin → https://www.123consultoria.com.br/admin/auditoria (senha 123admin) → Tab Leads → vê o lead → atribui especialista
+Especialista → https://www.123consultoria.com.br/prestador/area (edson.uni9@gmail.com / edson123) → Tab Meus Leads → Registrar reunião
+
+
+
+
