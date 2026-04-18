@@ -7,6 +7,8 @@
     { "source": "/prestador/cadastro",   "destination": "/prestador/cadastro.html" },
     { "source": "/prestador/cadastro/",  "destination": "/prestador/cadastro.html" },
     { "source": "/prestador/area",       "destination": "/prestador/area.html" },
-    { "source": "/prestador/area/",      "destination": "/prestador/area.html" }
+    { "source": "/prestador/area/",      "destination": "/prestador/area.html" },
+    { "source": "/cliente",              "destination": "/cliente/index.html" },
+    { "source": "/cliente/",             "destination": "/cliente/index.html" }
   ]
 }
