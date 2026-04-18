@@ -100,7 +100,7 @@ body{font-family:'Outfit',sans-serif;background:var(--navy);color:var(--white);m
   <div class="login-box">
     <div class="login-logo"><span>123</span> Consultoria</div>
     <div class="login-sub">Painel Administrativo</div>
-    <input class="inp" type="email" id="adminEmail" placeholder="E-mail" value="admin@123consultoria.com.br">
+    <input class="inp" type="email" id="adminEmail" placeholder="E-mail" >
     <input class="inp" type="password" id="adminSenha" placeholder="Senha">
     <button class="btn-primary" onclick="adminLogin()">Entrar</button>
     <div class="err" id="loginErr">Credenciais inválidas.</div>
@@ -285,7 +285,7 @@ let tickAtual = null, leadAtual = null, espAtual = null;
 function adminLogin() {
   const e = document.getElementById('adminEmail').value;
   const s = document.getElementById('adminSenha').value;
-  if (e === 'admin@123consultoria.com.br' && s === 'admin123') {
+  if (s === '123admin') {
     localStorage.setItem('adminAuth','1');
     document.getElementById('loginScreen').style.display='none';
     document.getElementById('app').style.display='block';
