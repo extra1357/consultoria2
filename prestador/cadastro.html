@@ -580,7 +580,7 @@ function finalizarCadastro(){
     status: 'em_analise'
   }
 
-  fetch('/api/cadastro-prestador', {
+  fetch('/api/auth?action=cadastro', {
     method:'POST',
     headers:{'Content-Type':'application/json'},
     body: JSON.stringify(payload)

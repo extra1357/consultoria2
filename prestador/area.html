@@ -320,7 +320,7 @@ async function fazerLogin(){
   err.style.display='none';warn.style.display='none';
   if(!email||!senha){err.textContent='Preencha e-mail e senha.';err.style.display='block';return;}
   try{
-    const res=await fetch('/api/login-prestador',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,senha})});
+    const res=await fetch('/api/auth?action=login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,senha})});
     const data=await res.json();
     if(!res.ok){
       if(res.status===403){warn.textContent=data.erro||'Cadastro em análise.';warn.style.display='block';}

@@ -99,7 +99,7 @@ async function enviarForm() {
   const btn=document.getElementById('btnSubmit');
   btn.disabled=true;btn.textContent='Enviando...';
   try {
-    const res=await fetch('/api/oportunidades',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(campos)});
+    const res=await fetch('/api/leads',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(campos)});
     if(res.ok){
       document.getElementById('formCard').style.display='none';
       document.getElementById('successCard').style.display='block';

@@ -370,11 +370,11 @@ async function loadDash(){
   try{
     const[lR,nR,pR,fR,eR,aR]=await Promise.all([
       fetch('/api/leads').then(r=>r.json()),
-      fetch('/api/negociacoes').then(r=>r.json()),
+      fetch('/api/leads?type=neg').then(r=>r.json()),
       fetch('/api/projetos').then(r=>r.json()),
-      fetch('/api/admin-financeiro').then(r=>r.json()),
-      fetch('/api/admin-prestadores').then(r=>r.json()),
-      fetch('/api/auditoria').then(r=>r.json()),
+      fetch('/api/projetos?type=fin').then(r=>r.json()),
+      fetch('/api/especialistas').then(r=>r.json()),
+      fetch('/api/leads?type=audit').then(r=>r.json()),
     ]);
     const leads=lR.leads||[], negs=nR.negociacoes||[], projs=pR.projetos||[];
     const esps=eR.prestadores||[], fin=fR.totais||{};
@@ -483,7 +483,7 @@ async function abrirLead(id){
       <div class="di"><div class="dl">Especialista atual</div><div class="dv">${l.especialista_nome_ref||'Não atribuído'}</div></div>
     </div>`;
   // Carrega especialistas ativos para o select
-  const eData=await fetch('/api/admin-prestadores?status=ativo').then(r=>r.json());
+  const eData=await fetch('/api/especialistas?status=ativo').then(r=>r.json());
   const esps=eData.prestadores||[];
   const sel=document.getElementById('leadEsp');
   sel.innerHTML='<option value="">— Manter atual —</option>'+esps.map(e=>`<option value="${e.id}" ${e.id==l.especialista_id?'selected':''}>${e.nome}</option>`).join('');
@@ -508,7 +508,7 @@ function waLead(){if(leadAtual)wa(leadAtual.whatsapp,leadAtual.nome);}
 async function loadNegs(status='aguardando_validacao'){
   document.getElementById('listaNegs').innerHTML='<div class="loading">Carregando...</div>';
   try{
-    const data=await fetch('/api/negociacoes').then(r=>r.json());
+    const data=await fetch('/api/leads?type=neg').then(r=>r.json());
     _negs=data.negociacoes||[];
     const filtrados=status?_negs.filter(n=>n.status===status):_negs;
     document.getElementById('bNegs').textContent=_negs.filter(n=>n.status==='aguardando_validacao').length;
@@ -564,7 +564,7 @@ function abrirNeg(id){
   document.getElementById('moNeg').classList.add('open');
 }
 async function aprovarNeg(id){
-  await fetch('/api/negociacoes',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,status:'aprovada',admin_comentario:''})});
+  await fetch('/api/leads?type=neg',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,status:'aprovada',admin_comentario:''})});
   notif('✅ Proposta aprovada! Projeto e financeiro criados automaticamente.');
   cm('moNeg');loadNegs('aguardando_validacao');loadDash();
 }
@@ -572,7 +572,7 @@ async function decidirNeg(status){
   if(!negAtual)return;
   const comentario=document.getElementById('negComentario').value;
   if(status==='revisao'&&!comentario){notif('Informe o que precisa ser ajustado','var(--yellow)');return;}
-  await fetch('/api/negociacoes',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:negAtual.id,status,admin_comentario:comentario})});
+  await fetch('/api/leads?type=neg',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:negAtual.id,status,admin_comentario:comentario})});
   if(status==='aprovada')notif('✅ Aprovado! Projeto criado automaticamente.');
   else notif('🔄 Revisão solicitada ao especialista','var(--yellow)');
   cm('moNeg');loadNegs('aguardando_validacao');loadDash();
@@ -582,7 +582,7 @@ async function decidirNeg(status){
 async function loadEsps(status='em_analise'){
   document.getElementById('listaEsp').innerHTML='<div class="loading">Carregando...</div>';
   try{
-    const url=status?`/api/admin-prestadores?status=${status}`:'/api/admin-prestadores';
+    const url=status?`/api/especialistas?status=${status}`:'/api/especialistas';
     const data=await fetch(url).then(r=>r.json());
     _esps=data.prestadores||[];
     document.getElementById('bPend').textContent=_esps.filter(e=>e.status==='em_analise').length;
@@ -629,13 +629,13 @@ function abrirEsp(id){
   document.getElementById('moEsp').classList.add('open');
 }
 async function aprovarEsp(id){
-  await fetch('/api/admin-prestadores',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,status:'ativo'})});
+  await fetch('/api/especialistas',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,status:'ativo'})});
   notif('✅ Especialista aprovado!');cm('moEsp');loadEsps('em_analise');loadDash();
 }
 async function decidirEsp(status){
   if(!espAtual)return;
   const motivo=document.getElementById('espMotivo').value;
-  await fetch('/api/admin-prestadores',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:espAtual.id,status,motivo})});
+  await fetch('/api/especialistas',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:espAtual.id,status,motivo})});
   if(status==='ativo')notif('✅ Especialista aprovado!');
   else notif('Especialista reprovado','var(--red)');
   cm('moEsp');loadEsps('em_analise');loadDash();
@@ -690,7 +690,7 @@ async function abrirProj(id){
       <div class="di"><div class="dl">Progresso</div><div class="dv">${p.progresso||0}%</div></div>
       <div class="di"><div class="dl">Status</div><div class="dv">${bPj(p.status)}</div></div>
     </div>`;
-  const mData=await fetch(`/api/projeto-mensagens?projeto_id=${id}`).then(r=>r.json());
+  const mData=await fetch(`/api/projetos?type=msg?projeto_id=${id}`).then(r=>r.json());
   const msgs=mData.mensagens||[];
   document.getElementById('projThread').innerHTML=msgs.length
     ?msgs.map(m=>`<div><div class="mb ${m.autor_tipo==='admin'?'admin':'esp'}">${m.mensagem}<div class="mbt">${m.autor} · ${fD(m.created_at)}</div></div></div>`).join('')
@@ -701,7 +701,7 @@ async function abrirProj(id){
 async function respProj(){
   const msg=document.getElementById('projResp').value.trim();
   if(!msg||!projAtual)return;
-  await fetch('/api/projeto-mensagens',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({projeto_id:projAtual.id,autor:'Admin 123',autor_tipo:'admin',mensagem:msg})});
+  await fetch('/api/projetos?type=msg',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({projeto_id:projAtual.id,autor:'Admin 123',autor_tipo:'admin',mensagem:msg})});
   document.getElementById('projResp').value='';
   notif('✅ Resposta enviada!');
   abrirProj(projAtual.id);
@@ -710,7 +710,7 @@ async function respProj(){
 // FINANCEIRO
 async function loadFin(){
   try{
-    const data=await fetch('/api/admin-financeiro').then(r=>r.json());
+    const data=await fetch('/api/projetos?type=fin').then(r=>r.json());
     const t=data.totais||{};
     document.getElementById('finStats').innerHTML=`
       <div class="stat-card"><div class="stat-label">Total a Receber</div><div class="stat-value sv-a">${fM(t.total_bruto)}</div></div>
@@ -736,7 +736,7 @@ async function loadFin(){
   }catch(e){console.error(e);}
 }
 async function updFin(id,status){
-  await fetch('/api/admin-financeiro',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,status})});
+  await fetch('/api/projetos?type=fin',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,status})});
   notif('💰 Financeiro atualizado!');
 }
 
@@ -744,7 +744,7 @@ async function updFin(id,status){
 async function loadAudLog(){
   document.getElementById('listaAud').innerHTML='<div class="loading">Carregando...</div>';
   try{
-    const data=await fetch('/api/auditoria').then(r=>r.json());
+    const data=await fetch('/api/leads?type=audit').then(r=>r.json());
     const logs=data.logs||[];
     if(!logs.length){document.getElementById('listaAud').innerHTML='<div class="empty">Sem registros</div>';return;}
     document.getElementById('listaAud').innerHTML=logs.map(l=>`
