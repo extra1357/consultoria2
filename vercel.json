@@ -1,14 +1,14 @@
 {
   "rewrites": [
-    { "source": "/admin",                "destination": "/admin/index.html" },
-    { "source": "/admin/",               "destination": "/admin/index.html" },
-    { "source": "/admin/auditoria",      "destination": "/admin/auditoria.html" },
-    { "source": "/admin/auditoria/",     "destination": "/admin/auditoria.html" },
-    { "source": "/prestador/cadastro",   "destination": "/prestador/cadastro.html" },
-    { "source": "/prestador/cadastro/",  "destination": "/prestador/cadastro.html" },
-    { "source": "/prestador/area",       "destination": "/prestador/area.html" },
-    { "source": "/prestador/area/",      "destination": "/prestador/area.html" },
-    { "source": "/cliente",              "destination": "/cliente/index.html" },
-    { "source": "/cliente/",             "destination": "/cliente/index.html" }
+    { "source": "/admin",               "destination": "/admin/index.html" },
+    { "source": "/admin/",              "destination": "/admin/index.html" },
+    { "source": "/admin/auditoria",     "destination": "/admin/auditoria.html" },
+    { "source": "/admin/auditoria/",    "destination": "/admin/auditoria.html" },
+    { "source": "/prestador/cadastro",  "destination": "/prestador/cadastro.html" },
+    { "source": "/prestador/cadastro/", "destination": "/prestador/cadastro.html" },
+    { "source": "/prestador/area",      "destination": "/prestador/area.html" },
+    { "source": "/prestador/area/",     "destination": "/prestador/area.html" },
+    { "source": "/cliente",             "destination": "/cliente/index.html" },
+    { "source": "/cliente/",            "destination": "/cliente/index.html" }
   ]
 }

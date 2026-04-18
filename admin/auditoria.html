@@ -3,504 +3,525 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Auditoria Admin | 123 Consultoria</title>
-<meta name="robots" content="noindex, nofollow">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<title>Admin | 123 Consultoria</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-:root{--navy:#0A1628;--navy2:#0F1E36;--navy3:#152540;--accent:#2E7CF6;--gold:#D4A843;--white:#FFF;--muted:#8A9AB5;--faint:#3A4F70;--green:#22c55e;--red:#ef4444;--yellow:#f59e0b}
-body{font-family:'Outfit',sans-serif;background:var(--navy);color:var(--white);min-height:100vh;display:flex}
-
-/* LOGIN */
+:root{--navy:#060f1e;--navy2:#0a1628;--card:#0d1f38;--accent:#2e7cf6;--accent2:#1a5fd4;--gold:#c9a84c;--green:#22c55e;--red:#ef4444;--yellow:#f59e0b;--white:#f0f4ff;--muted:#6b82a8;--border:rgba(46,124,246,0.12)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Outfit',sans-serif;background:var(--navy);color:var(--white);min-height:100vh}
 #loginScreen{position:fixed;inset:0;background:var(--navy);z-index:999;display:flex;align-items:center;justify-content:center}
-.login-box{background:rgba(15,30,54,0.98);border:1px solid rgba(212,168,67,0.2);border-radius:20px;padding:48px;width:100%;max-width:380px;text-align:center}
-.login-logo{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:700;margin-bottom:4px}
+.login-box{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:40px;width:100%;max-width:380px;text-align:center}
+.login-logo{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700;margin-bottom:4px}
 .login-logo span{color:var(--accent)}
-.admin-badge{display:inline-block;padding:4px 12px;border-radius:20px;background:rgba(212,168,67,0.1);border:1px solid rgba(212,168,67,0.2);color:var(--gold);font-size:.75rem;margin-bottom:24px;letter-spacing:.06em}
-.login-input{width:100%;background:rgba(10,22,40,0.8);border:1px solid rgba(46,124,246,0.2);border-radius:10px;padding:13px 16px;color:var(--white);font-family:'Outfit',sans-serif;font-size:.9rem;margin-bottom:12px;outline:none}
-.login-input:focus{border-color:var(--accent)}
-.login-btn{width:100%;padding:13px;border-radius:10px;background:var(--accent);color:#fff;font-family:'Outfit',sans-serif;font-size:.9rem;font-weight:600;border:none;cursor:pointer}
-.login-err{color:var(--red);font-size:.8rem;margin-top:10px;display:none}
-
-/* SIDEBAR */
-.sidebar{width:220px;min-height:100vh;background:rgba(8,16,30,0.99);border-right:1px solid rgba(212,168,67,0.08);display:flex;flex-direction:column;padding:24px 0;flex-shrink:0}
-.sidebar-brand{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;padding:0 20px 12px}
-.sidebar-brand span{color:var(--accent)}
-.admin-tag{margin:0 20px 20px;padding:4px 10px;border-radius:6px;background:rgba(212,168,67,0.1);border:1px solid rgba(212,168,67,0.15);color:var(--gold);font-size:.72rem;letter-spacing:.06em;text-align:center}
-.nav-item{display:flex;align-items:center;gap:10px;padding:11px 20px;color:var(--muted);font-size:.85rem;cursor:pointer;border:none;background:none;width:100%;text-align:left;transition:.2s}
-.nav-item:hover,.nav-item.active{color:var(--white);background:rgba(46,124,246,0.07)}
-.nav-item.active{border-left:3px solid var(--gold)}
-.sidebar-logout{padding:16px 20px;border-top:1px solid rgba(255,255,255,0.04);margin-top:auto}
-.logout-btn{color:var(--muted);font-size:.8rem;cursor:pointer;background:none;border:none;font-family:'Outfit',sans-serif}
-
-/* MAIN */
-.main{flex:1;overflow:hidden;display:flex;flex-direction:column}
-.topbar{padding:18px 36px;border-bottom:1px solid rgba(212,168,67,0.08);display:flex;justify-content:space-between;align-items:center}
-.topbar-title{font-family:'Cormorant Garamond',serif;font-size:1.4rem}
-.topbar-title em{color:var(--gold);font-style:italic}
-.content{flex:1;overflow-y:auto;padding:36px}
-
-/* MÉTRICAS */
-.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:36px}
-.metric-card{background:rgba(15,30,54,0.8);border:1px solid rgba(46,124,246,0.1);border-radius:12px;padding:20px}
-.metric-label{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
-.metric-val{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700}
-.metric-sub{font-size:.72rem;color:var(--faint);margin-top:4px}
-
-/* FILTROS */
-.filters{display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap}
-.filter-input{background:rgba(10,22,40,0.8);border:1px solid rgba(46,124,246,0.15);border-radius:8px;padding:9px 14px;color:var(--white);font-family:'Outfit',sans-serif;font-size:.83rem;outline:none}
-.filter-input:focus{border-color:var(--accent)}
-.filter-btn{padding:9px 18px;border-radius:8px;border:1px solid rgba(46,124,246,0.2);background:rgba(46,124,246,0.08);color:var(--muted);font-size:.83rem;cursor:pointer;font-family:'Outfit',sans-serif;transition:.2s}
-.filter-btn:hover,.filter-btn.active{background:rgba(46,124,246,0.15);color:var(--white);border-color:var(--accent)}
-
-/* TABELAS */
-.section-title{font-family:'Cormorant Garamond',serif;font-size:1.2rem;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
-.table-wrap{background:rgba(15,30,54,0.7);border:1px solid rgba(46,124,246,0.08);border-radius:12px;overflow:hidden;margin-bottom:28px}
-table{width:100%;border-collapse:collapse}
-thead tr{background:rgba(8,16,30,0.6)}
-th{padding:12px 18px;text-align:left;font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:500}
-td{padding:12px 18px;font-size:.83rem;border-top:1px solid rgba(46,124,246,0.05);color:var(--white)}
-tr:hover td{background:rgba(46,124,246,0.03)}
-.badge{display:inline-flex;padding:3px 9px;border-radius:20px;font-size:.72rem;font-weight:500}
-.badge-green{background:rgba(34,197,94,0.1);color:var(--green);border:1px solid rgba(34,197,94,0.15)}
-.badge-yellow{background:rgba(245,158,11,0.1);color:var(--yellow);border:1px solid rgba(245,158,11,0.15)}
-.badge-blue{background:rgba(46,124,246,0.1);color:#7ab8ff;border:1px solid rgba(46,124,246,0.15)}
-.badge-red{background:rgba(239,68,68,0.1);color:var(--red);border:1px solid rgba(239,68,68,0.15)}
-.btn-mini{padding:5px 12px;border-radius:6px;font-size:.75rem;border:1px solid rgba(46,124,246,0.2);background:transparent;color:var(--muted);cursor:pointer;font-family:'Outfit',sans-serif;transition:.2s}
-.btn-mini:hover{border-color:var(--accent);color:var(--white)}
-.btn-approve{border-color:rgba(34,197,94,0.3);color:var(--green)}
-.btn-approve:hover{background:rgba(34,197,94,0.1);border-color:var(--green);color:var(--green)}
-.btn-reject{border-color:rgba(239,68,68,0.3);color:var(--red)}
-.btn-reject:hover{background:rgba(239,68,68,0.1);border-color:var(--red);color:var(--red)}
-
-/* LOG */
-.log-list{display:flex;flex-direction:column;gap:0}
-.log-item{display:flex;gap:16px;padding:14px 0;border-bottom:1px solid rgba(46,124,246,0.06)}
-.log-item:last-child{border-bottom:none}
-.log-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:5px}
-.log-dot-green{background:var(--green)}
-.log-dot-blue{background:var(--accent)}
-.log-dot-yellow{background:var(--yellow)}
-.log-dot-red{background:var(--red)}
-.log-text{font-size:.83rem;color:var(--muted);line-height:1.6}
-.log-text strong{color:var(--white)}
-.log-time{font-size:.72rem;color:var(--faint);margin-top:3px}
-
-/* PAINÉIS */
-.panel{display:none}
-.panel.active{display:block}
-
-/* MODAL */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:500;display:none;align-items:center;justify-content:center}
-.modal-overlay.open{display:flex}
-.modal{background:var(--navy2);border:1px solid rgba(46,124,246,0.15);border-radius:16px;padding:36px;max-width:600px;width:90%;max-height:80vh;overflow-y:auto}
-.modal-title{font-family:'Cormorant Garamond',serif;font-size:1.4rem;margin-bottom:20px}
-.modal-field{margin-bottom:14px}
-.modal-field label{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:4px}
-.modal-field span{font-size:.88rem;color:var(--white)}
-.modal-actions{display:flex;gap:12px;margin-top:24px;justify-content:flex-end}
+.login-sub{color:var(--muted);font-size:.82rem;margin-bottom:28px}
+.inp{width:100%;background:rgba(6,15,30,.8);border:1px solid var(--border);border-radius:10px;padding:12px 14px;color:var(--white);font-family:'Outfit',sans-serif;font-size:.9rem;margin-bottom:12px;outline:none}
+.inp:focus{border-color:var(--accent)}
+.btn-primary{width:100%;padding:13px;border-radius:10px;background:var(--accent);color:#fff;font-family:'Outfit',sans-serif;font-size:.9rem;font-weight:600;border:none;cursor:pointer}
+.btn-primary:hover{background:var(--accent2)}
+.err{color:var(--red);font-size:.8rem;margin-top:8px;display:none}
+#app{display:none}
+.topbar{position:fixed;top:0;left:0;right:0;height:56px;background:var(--navy2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;gap:16px;z-index:100}
+.topbar-logo{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700}
+.topbar-logo span{color:var(--accent)}
+.topbar-badge{font-size:.72rem;background:rgba(46,124,246,.15);color:var(--accent);padding:3px 10px;border-radius:20px;font-weight:600}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+.tab-nav{display:flex;gap:2px;background:var(--navy2);border-bottom:1px solid var(--border);padding:0 24px;position:fixed;top:56px;left:0;right:0;z-index:99;overflow-x:auto}
+.tab{padding:13px 16px;font-size:.83rem;font-weight:500;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:.2s;white-space:nowrap}
+.tab:hover{color:var(--white)}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.tab-badge{background:var(--red);color:#fff;font-size:.62rem;padding:2px 6px;border-radius:10px;margin-left:5px;font-weight:700}
+.main{margin-top:108px;padding:24px;max-width:1100px;margin-left:auto;margin-right:auto}
+.page{display:none}.page.active{display:block}
+.page-title{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:600;margin-bottom:4px}
+.page-sub{color:var(--muted);font-size:.85rem;margin-bottom:22px}
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:22px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 18px}
+.stat-label{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px}
+.stat-value{font-size:1.5rem;font-weight:700;font-family:'Cormorant Garamond',serif}
+.sv-green{color:var(--green)}.sv-accent{color:var(--accent)}.sv-gold{color:var(--gold)}.sv-yellow{color:var(--yellow)}.sv-red{color:var(--red)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;margin-bottom:10px;overflow:hidden}
+.card-header{padding:14px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.card-body{padding:14px 18px}
+.card-title{font-weight:600;font-size:.9rem}
+.card-sub{font-size:.76rem;color:var(--muted);margin-top:2px}
+.badge{padding:3px 9px;border-radius:20px;font-size:.7rem;font-weight:600;white-space:nowrap}
+.bg{background:rgba(34,197,94,.15);color:var(--green)}
+.by{background:rgba(245,158,11,.15);color:var(--yellow)}
+.bb{background:rgba(46,124,246,.15);color:var(--accent)}
+.br{background:rgba(239,68,68,.15);color:var(--red)}
+.bgr{background:rgba(107,130,168,.15);color:var(--muted)}
+.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}
+.btn{padding:6px 13px;border-radius:8px;font-size:.76rem;font-weight:600;cursor:pointer;border:none;font-family:'Outfit',sans-serif;transition:.2s}
+.btn-g{background:rgba(34,197,94,.15);color:var(--green);border:1px solid rgba(34,197,94,.2)}.btn-g:hover{background:rgba(34,197,94,.3)}
+.btn-r{background:rgba(239,68,68,.15);color:var(--red);border:1px solid rgba(239,68,68,.2)}.btn-r:hover{background:rgba(239,68,68,.3)}
+.btn-a{background:var(--accent);color:#fff}.btn-a:hover{background:var(--accent2)}
+.btn-o{background:transparent;border:1px solid var(--border);color:var(--muted)}.btn-o:hover{border-color:var(--accent);color:var(--accent)}
+.filter-row{display:flex;gap:7px;margin-bottom:14px;flex-wrap:wrap}
+.fb{padding:6px 13px;border-radius:20px;font-size:.76rem;font-weight:500;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Outfit',sans-serif;transition:.2s}
+.fb:hover,.fb.active{border-color:var(--accent);color:var(--accent);background:rgba(46,124,246,.08)}
+.empty{text-align:center;padding:36px;color:var(--muted);font-size:.85rem}
+.table{width:100%;border-collapse:collapse}
+.table th{text-align:left;font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;padding:9px 12px;border-bottom:1px solid var(--border)}
+.table td{padding:11px 12px;border-bottom:1px solid rgba(46,124,246,.06);font-size:.82rem;vertical-align:middle}
+.mo{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:500;display:none;align-items:center;justify-content:center;padding:20px}
+.mo.open{display:flex}
+.modal{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:26px;width:100%;max-width:500px;max-height:88vh;overflow-y:auto}
+.modal-title{font-size:.95rem;font-weight:600;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+.mc{background:none;border:none;color:var(--muted);cursor:pointer;font-size:1rem}
+.field{margin-bottom:12px}
+.field label{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;display:block;margin-bottom:4px}
+.field input,.field textarea,.field select{width:100%;background:rgba(6,15,30,.8);border:1px solid var(--border);border-radius:8px;padding:9px 11px;color:var(--white);font-family:'Outfit',sans-serif;font-size:.86rem;outline:none}
+.field textarea{resize:vertical;min-height:80px}
+.thread{display:flex;flex-direction:column;gap:9px;max-height:280px;overflow-y:auto;margin-bottom:12px}
+.mb{padding:9px 13px;border-radius:10px;font-size:.82rem;line-height:1.5;max-width:84%}
+.mb.admin{background:var(--accent);align-self:flex-end;border-radius:10px 2px 10px 10px}
+.mb.prestador{background:rgba(46,124,246,.1);border:1px solid var(--border);align-self:flex-start;border-radius:2px 10px 10px 10px}
+.mbt{font-size:.66rem;color:rgba(255,255,255,.45);margin-top:3px}
+.loading{text-align:center;padding:28px;color:var(--muted);font-size:.83rem}
+.lbtn{background:transparent;border:1px solid var(--border);color:var(--muted);padding:6px 13px;border-radius:8px;font-size:.78rem;cursor:pointer;font-family:'Outfit',sans-serif}
+.lbtn:hover{border-color:var(--red);color:var(--red)}
+.notif{position:fixed;top:66px;right:20px;padding:11px 18px;border-radius:10px;font-size:.83rem;font-weight:600;z-index:999;display:none;animation:sli .3s ease}
+@keyframes sli{from{transform:translateX(110%)}to{transform:translateX(0)}}
+.info-row{display:flex;gap:16px;flex-wrap:wrap;font-size:.78rem;color:var(--muted);margin-top:7px}
 </style>
 </head>
 <body>
 
-<!-- LOGIN ADMIN -->
 <div id="loginScreen">
   <div class="login-box">
     <div class="login-logo"><span>123</span> Consultoria</div>
-    <div class="admin-badge">ACESSO ADMINISTRATIVO</div>
-    <input class="login-input" type="email" id="adminEmail" placeholder="E-mail administrador">
-    <input class="login-input" type="password" id="adminSenha" placeholder="Senha admin">
-    <button class="login-btn" onclick="fazerLoginAdmin()">Acessar painel</button>
-    <div class="login-err" id="loginErr">Credenciais incorretas.</div>
+    <div class="login-sub">Painel Administrativo</div>
+    <input class="inp" type="email" id="adminEmail" placeholder="E-mail" value="admin@123consultoria.com.br">
+    <input class="inp" type="password" id="adminSenha" placeholder="Senha">
+    <button class="btn-primary" onclick="adminLogin()">Entrar</button>
+    <div class="err" id="loginErr">Credenciais inválidas.</div>
   </div>
 </div>
 
-<!-- MODAL DETALHES PRESTADOR -->
-<div class="modal-overlay" id="modalOverlay">
-  <div class="modal">
-    <div class="modal-title" id="modalTitle">Detalhes do Prestador</div>
-    <div id="modalBody"></div>
-    <div class="modal-actions">
-      <button class="btn-mini btn-approve" onclick="aprovarPrestador()">✅ Aprovar cadastro</button>
-      <button class="btn-mini btn-reject" onclick="rejeitarPrestador()">❌ Rejeitar</button>
-      <button class="btn-mini" onclick="fecharModal()">Fechar</button>
-    </div>
-  </div>
-</div>
+<div id="notif" class="notif"></div>
 
-<!-- APP -->
-<div class="sidebar">
-  <div class="sidebar-brand"><span>123</span> Consultoria</div>
-  <div class="admin-tag">ADMINISTRADOR</div>
-  <nav>
-    <button class="nav-item active" onclick="showPanel('overview',this)">📊 Visão Geral</button>
-    <button class="nav-item" onclick="showPanel('prestadores',this)">👥 Prestadores</button>
-    <button class="nav-item" onclick="showPanel('contratos',this)">📄 Contratos</button>
-    <button class="nav-item" onclick="showPanel('projetos',this)">📁 Projetos</button>
-    <button class="nav-item" onclick="showPanel('financeiro',this)">💰 Financeiro</button>
-    <button class="nav-item" onclick="showPanel('log',this)">🔍 Log de Auditoria</button>
-  </nav>
-  <div class="sidebar-logout">
-    <button class="logout-btn" onclick="logout()">← Sair</button>
-  </div>
-</div>
-
-<div class="main">
+<div id="app">
   <div class="topbar">
-    <div class="topbar-title" id="topTitle">Visão <em>Geral</em></div>
-    <div style="font-size:.78rem;color:var(--muted)" id="topDate"></div>
+    <div class="topbar-logo"><span>123</span> Consultoria</div>
+    <span class="topbar-badge">⚙ Admin</span>
+    <div class="topbar-right">
+      <span style="font-size:.78rem;color:var(--muted)" id="clock"></span>
+      <button class="lbtn" onclick="adminLogout()">Sair</button>
+    </div>
   </div>
-  <div class="content">
+  <div class="tab-nav">
+    <div class="tab active" onclick="showTab('dashboard')">📊 Dashboard</div>
+    <div class="tab" onclick="showTab('especialistas')">👥 Especialistas <span class="tab-badge" id="bPend">0</span></div>
+    <div class="tab" onclick="showTab('oportunidades')">🎯 Oportunidades <span class="tab-badge" id="bOport">0</span></div>
+    <div class="tab" onclick="showTab('candidaturas')">✋ Candidaturas <span class="tab-badge" id="bCand">0</span></div>
+    <div class="tab" onclick="showTab('financeiro')">💰 Financeiro</div>
+    <div class="tab" onclick="showTab('tickets')">💬 Tickets <span class="tab-badge" id="bTick">0</span></div>
+  </div>
+  <div class="main">
 
-    <!-- OVERVIEW -->
-    <div class="panel active" id="panelOverview">
-      <div class="metrics">
-        <div class="metric-card"><div class="metric-label">Prestadores cadastrados</div><div class="metric-val" id="mTotal">0</div><div class="metric-sub">total na plataforma</div></div>
-        <div class="metric-card"><div class="metric-label">Em análise</div><div class="metric-val" style="color:var(--yellow)" id="mAnalise">0</div><div class="metric-sub">aguardando aprovação</div></div>
-        <div class="metric-card"><div class="metric-label">Ativos</div><div class="metric-val" style="color:var(--green)" id="mAtivos">0</div><div class="metric-sub">aprovados e operando</div></div>
-        <div class="metric-card"><div class="metric-label">Contratos gerados</div><div class="metric-val" id="mContratos">0</div><div class="metric-sub">desde o início</div></div>
-        <div class="metric-card"><div class="metric-label">Volume plataforma</div><div class="metric-val" id="mVolume">R$0</div><div class="metric-sub">total transacionado</div></div>
-        <div class="metric-card"><div class="metric-label">Comissão acumulada</div><div class="metric-val" style="color:var(--gold)" id="mComissao">R$0</div><div class="metric-sub">15% dos projetos</div></div>
+    <div class="page active" id="page-dashboard">
+      <div class="page-title">Dashboard</div>
+      <div class="page-sub">Visão geral do negócio em tempo real</div>
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-label">Especialistas Ativos</div><div class="stat-value sv-accent" id="dAtivos">—</div></div>
+        <div class="stat-card"><div class="stat-label">Pendentes Aprovação</div><div class="stat-value sv-yellow" id="dPend">—</div></div>
+        <div class="stat-card"><div class="stat-label">Oportunidades Abertas</div><div class="stat-value sv-gold" id="dOport">—</div></div>
+        <div class="stat-card"><div class="stat-label">Candidaturas Pendentes</div><div class="stat-value sv-accent" id="dCand">—</div></div>
+        <div class="stat-card"><div class="stat-label">Receita Plataforma</div><div class="stat-value sv-green" id="dReceita">R$ 0</div></div>
+        <div class="stat-card"><div class="stat-label">Tickets Abertos</div><div class="stat-value sv-red" id="dTick">—</div></div>
       </div>
-
-      <div class="section-title">Cadastros recentes <span style="font-size:.8rem;color:var(--muted);font-family:'Outfit'">últimos 10</span></div>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Nome</th><th>E-mail</th><th>Especialidades</th><th>Cadastro</th><th>Status</th><th>Ação</th></tr></thead>
-          <tbody id="tbRecentes"><tr><td colspan="6" style="text-align:center;padding:30px;color:var(--faint)">Nenhum cadastro ainda</td></tr></tbody>
-        </table>
-      </div>
-
-      <div class="section-title">Últimas atividades</div>
-      <div class="table-wrap" style="padding:20px 24px">
-        <div class="log-list" id="logRecente">
-          <div class="log-item">
-            <div class="log-dot log-dot-blue"></div>
-            <div><div class="log-text"><strong>Sistema iniciado</strong> — painel de auditoria carregado</div><div class="log-time">agora</div></div>
-          </div>
-        </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div><div style="font-size:.88rem;font-weight:600;margin-bottom:10px">📋 Últimas Ações</div><div id="dashAud"><div class="loading">Carregando...</div></div></div>
+        <div><div style="font-size:.88rem;font-weight:600;margin-bottom:10px">💬 Tickets Urgentes</div><div id="dashTick"><div class="loading">Carregando...</div></div></div>
       </div>
     </div>
 
-    <!-- PRESTADORES -->
-    <div class="panel" id="panelPrestadores">
-      <div class="filters">
-        <input class="filter-input" type="text" id="searchPrestador" placeholder="Buscar por nome ou e-mail..." oninput="filtrarPrestadores()">
-        <button class="filter-btn active" onclick="filtrarStatus('todos',this)">Todos</button>
-        <button class="filter-btn" onclick="filtrarStatus('em_analise',this)">Em análise</button>
-        <button class="filter-btn" onclick="filtrarStatus('ativo',this)">Ativos</button>
-        <button class="filter-btn" onclick="filtrarStatus('rejeitado',this)">Rejeitados</button>
+    <div class="page" id="page-especialistas">
+      <div class="page-title">Especialistas</div>
+      <div class="page-sub">Gerencie os especialistas cadastrados</div>
+      <div class="filter-row">
+        <button class="fb active" onclick="filtP('em_analise',this)">⏳ Pendentes</button>
+        <button class="fb" onclick="filtP('ativo',this)">✅ Ativos</button>
+        <button class="fb" onclick="filtP('reprovado',this)">❌ Reprovados</button>
+        <button class="fb" onclick="filtP('',this)">🔍 Todos</button>
       </div>
-      <div class="section-title">Prestadores cadastrados</div>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Nome</th><th>CPF</th><th>CNPJ</th><th>Formação</th><th>Especialidades</th><th>Protocolo</th><th>Status</th><th>Ação</th></tr></thead>
-          <tbody id="tbPrestadores"><tr><td colspan="8" style="text-align:center;padding:30px;color:var(--faint)">Nenhum cadastro ainda</td></tr></tbody>
-        </table>
-      </div>
+      <div id="listaEsp"><div class="loading">Carregando...</div></div>
     </div>
 
-    <!-- CONTRATOS -->
-    <div class="panel" id="panelContratos">
-      <div class="section-title">Contratos gerados pela plataforma</div>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Protocolo</th><th>Especialista</th><th>Tipo</th><th>Data</th><th>Assinado</th><th>Foro</th><th>PDF</th></tr></thead>
-          <tbody id="tbContratos"><tr><td colspan="7" style="text-align:center;padding:30px;color:var(--faint)">Nenhum contrato gerado ainda</td></tr></tbody>
-        </table>
+    <div class="page" id="page-oportunidades">
+      <div class="page-title">Oportunidades</div>
+      <div class="page-sub">Pedidos dos clientes — analise e publique para os especialistas</div>
+      <div class="filter-row">
+        <button class="fb active" onclick="filtO('pendente',this)">⏳ Pendentes</button>
+        <button class="fb" onclick="filtO('aberta',this)">✅ Abertas</button>
+        <button class="fb" onclick="filtO('em_andamento',this)">🔄 Em andamento</button>
+        <button class="fb" onclick="filtO('concluida',this)">🏁 Concluídas</button>
       </div>
+      <div id="listaOport"><div class="loading">Carregando...</div></div>
     </div>
 
-    <!-- PROJETOS -->
-    <div class="panel" id="panelProjetos">
-      <div class="section-title">Projetos da plataforma</div>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Código</th><th>Empresa cliente</th><th>Especialista</th><th>Vertical</th><th>Valor bruto</th><th>Comissão (15%)</th><th>Repasse (85%)</th><th>Status</th><th>NF emitida</th></tr></thead>
-          <tbody><tr><td colspan="9" style="text-align:center;padding:30px;color:var(--faint)">Nenhum projeto ainda</td></tr></tbody>
+    <div class="page" id="page-candidaturas">
+      <div class="page-title">Candidaturas</div>
+      <div class="page-sub">Escolha o especialista ideal para cada projeto</div>
+      <div id="listaCand"><div class="loading">Carregando...</div></div>
+    </div>
+
+    <div class="page" id="page-financeiro">
+      <div class="page-title">Financeiro</div>
+      <div class="page-sub">Acompanhamento financeiro de todos os projetos</div>
+      <div class="stats-row" id="finStats"></div>
+      <div class="card">
+        <table class="table">
+          <thead><tr><th>Especialista</th><th>Projeto</th><th>Empresa</th><th>Bruto</th><th>Comissão 15%</th><th>Líquido</th><th>NF</th><th>Status</th><th>Ação</th></tr></thead>
+          <tbody id="finBody"><tr><td colspan="9" class="empty">Carregando...</td></tr></tbody>
         </table>
       </div>
     </div>
 
-    <!-- FINANCEIRO -->
-    <div class="panel" id="panelFinanceiro">
-      <div class="metrics">
-        <div class="metric-card"><div class="metric-label">Total recebido</div><div class="metric-val" id="fTotal">R$0</div></div>
-        <div class="metric-card"><div class="metric-label">Comissões (15%)</div><div class="metric-val" style="color:var(--gold)" id="fComissao">R$0</div></div>
-        <div class="metric-card"><div class="metric-label">Repassado prestadores</div><div class="metric-val" id="fRepasse">R$0</div></div>
-        <div class="metric-card"><div class="metric-label">A repassar</div><div class="metric-val" style="color:var(--yellow)" id="fPendente">R$0</div></div>
+    <div class="page" id="page-tickets">
+      <div class="page-title">Tickets de Suporte</div>
+      <div class="page-sub">Mensagens abertas pelos especialistas</div>
+      <div class="filter-row">
+        <button class="fb active" onclick="filtT('aberto',this)">🔴 Abertos</button>
+        <button class="fb" onclick="filtT('respondido',this)">🟡 Respondidos</button>
+        <button class="fb" onclick="filtT('fechado',this)">✅ Fechados</button>
       </div>
-      <div class="section-title">Extrato financeiro</div>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Data</th><th>Projeto</th><th>Especialista</th><th>Valor bruto</th><th>Comissão</th><th>Repasse</th><th>Status repasse</th></tr></thead>
-          <tbody><tr><td colspan="7" style="text-align:center;padding:30px;color:var(--faint)">Nenhuma movimentação</td></tr></tbody>
-        </table>
-      </div>
+      <div id="listaTick"><div class="loading">Carregando...</div></div>
     </div>
 
-    <!-- LOG DE AUDITORIA -->
-    <div class="panel" id="panelLog">
-      <div class="filters">
-        <input class="filter-input" type="date" id="logDataInicio">
-        <input class="filter-input" type="date" id="logDataFim">
-        <select class="filter-input" id="logTipo">
-          <option value="">Todos os eventos</option>
-          <option>Cadastro</option>
-          <option>Aprovação</option>
-          <option>Rejeição</option>
-          <option>Contrato gerado</option>
-          <option>Login</option>
-          <option>Projeto criado</option>
-          <option>Pagamento</option>
-        </select>
-        <button class="filter-btn" onclick="exportarLog()">⬇ Exportar CSV</button>
-      </div>
-      <div class="section-title">Registro de auditoria completo</div>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Data/Hora</th><th>Evento</th><th>Ator</th><th>Detalhes</th><th>IP</th></tr></thead>
-          <tbody id="tbLog">
-            <tr>
-              <td id="logDtSistema"></td>
-              <td><span class="badge badge-blue">Sistema iniciado</span></td>
-              <td>admin</td>
-              <td>Painel de auditoria carregado</td>
-              <td>—</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+  </div>
+</div>
 
+<!-- Modal especialista -->
+<div class="mo" id="moEsp">
+  <div class="modal">
+    <div class="modal-title">Detalhes do Especialista <button class="mc" onclick="cm('moEsp')">✕</button></div>
+    <div id="moEspBody"></div>
+    <div style="display:flex;gap:8px;margin-top:14px" id="moEspAct"></div>
+  </div>
+</div>
+
+<!-- Modal ticket -->
+<div class="mo" id="moTick">
+  <div class="modal">
+    <div class="modal-title"><span id="tickTitle">Ticket</span> <button class="mc" onclick="cm('moTick')">✕</button></div>
+    <div class="thread" id="tickThread"></div>
+    <div class="field"><label>Resposta</label><textarea id="tickResp" placeholder="Digite sua resposta..."></textarea></div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-a" style="flex:1;padding:10px;border-radius:8px" onclick="respTick()">Enviar</button>
+      <button class="btn btn-o" style="padding:10px 14px;border-radius:8px" onclick="fecharTick()">Fechar Ticket</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal reprovar -->
+<div class="mo" id="moMotivo">
+  <div class="modal">
+    <div class="modal-title">Motivo da Reprovação <button class="mc" onclick="cm('moMotivo')">✕</button></div>
+    <div class="field"><label>Motivo</label><textarea id="motivoTxt" placeholder="Explique o motivo..."></textarea></div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-r" style="flex:1;padding:10px;border-radius:8px" onclick="confirmarRep()">Confirmar</button>
+      <button class="btn btn-o" style="padding:10px 14px;border-radius:8px" onclick="cm('moMotivo')">Cancelar</button>
+    </div>
   </div>
 </div>
 
 <script>
-// ─── ADMIN CREDENTIALS (trocar por env var na API) ────────────────────────
-const ADMIN_EMAIL = 'admin@123consultoria.com.br'
-const ADMIN_SENHA = 'admin@123'
+let tickAtual=null, repId=null, espList=[];
 
-document.getElementById('topDate').textContent = new Date().toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long',year:'numeric'})
-document.getElementById('logDtSistema').textContent = new Date().toLocaleString('pt-BR')
-
-function fazerLoginAdmin(){
-  const e = document.getElementById('adminEmail').value.trim()
-  const s = document.getElementById('adminSenha').value
-  if(e === ADMIN_EMAIL && s === ADMIN_SENHA){
-    sessionStorage.setItem('admin_logado','1')
-    document.getElementById('loginScreen').style.display='none'
-    carregarDados()
-    registrarLog('Login','Admin logado no painel de auditoria')
-  } else {
-    document.getElementById('loginErr').style.display='block'
+function adminLogin(){
+  const e=document.getElementById('adminEmail').value.trim();
+  const s=document.getElementById('adminSenha').value;
+  if(e==='admin@123consultoria.com.br'&&s==='admin@123'){
+    sessionStorage.setItem('adm','1');
+    document.getElementById('loginScreen').style.display='none';
+    document.getElementById('app').style.display='block';
+    init();
+  } else { document.getElementById('loginErr').style.display='block'; }
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  document.getElementById('adminSenha').addEventListener('keydown',e=>{if(e.key==='Enter')adminLogin();});
+  if(sessionStorage.getItem('adm')){
+    document.getElementById('loginScreen').style.display='none';
+    document.getElementById('app').style.display='block';
+    init();
   }
+  setInterval(()=>{document.getElementById('clock').textContent=new Date().toLocaleTimeString('pt-BR');},1000);
+});
+function adminLogout(){sessionStorage.removeItem('adm');location.reload();}
+
+function showTab(n){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('page-'+n).classList.add('active');
+  document.querySelectorAll('.tab').forEach(t=>{if(t.getAttribute('onclick')?.includes("'"+n+"'"))t.classList.add('active');});
+}
+function notif(msg,cor='var(--green)'){
+  const el=document.getElementById('notif');
+  el.textContent=msg;el.style.background=cor;el.style.display='block';
+  setTimeout(()=>el.style.display='none',3000);
+}
+function cm(id){document.getElementById(id).classList.remove('open');}
+function pJ(v){try{return typeof v==='string'?JSON.parse(v):v||[];}catch{return[];}}
+function fM(v){return'R$ '+Number(v||0).toLocaleString('pt-BR',{minimumFractionDigits:0});}
+function fMF(v){return'R$ '+Number(v||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function fD(d){if(!d)return'—';return new Date(d).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'});}
+function esc(s){return(s||'').replace(/'/g,"\\'");}
+function bSt(s){const m={ativo:['bg','✅ Ativo'],em_analise:['by','⏳ Em análise'],reprovado:['br','❌ Reprovado']};const[c,t]=m[s]||['bgr',s];return`<span class="badge ${c}">${t}</span>`;}
+function bOp(s){const m={pendente:['by','⏳ Pendente'],aberta:['bb','✅ Aberta'],em_andamento:['bg','🔄 Em andamento'],concluida:['bgr','🏁 Concluída'],cancelada:['br','❌ Cancelada']};const[c,t]=m[s]||['bgr',s];return`<span class="badge ${c}">${t}</span>`;}
+function bCa(s){const m={pendente:['by','⏳ Pendente'],aprovada:['bg','✅ Aprovada'],reprovada:['br','❌ Recusada']};const[c,t]=m[s]||['bgr',s];return`<span class="badge ${c}">${t}</span>`;}
+function bFi(s){const m={pendente:['by','Pendente'],pago:['bg','✅ Pago'],cancelado:['br','Cancelado']};const[c,t]=m[s]||['bgr',s];return`<span class="badge ${c}">${t}</span>`;}
+function bTi(s){const m={aberto:['br','🔴 Aberto'],respondido:['by','🟡 Respondido'],fechado:['bg','✅ Fechado']};const[c,t]=m[s]||['bgr',s];return`<span class="badge ${c}">${t}</span>`;}
+
+async function init(){
+  await Promise.all([loadDash(),loadEsp('em_analise'),loadOport('pendente'),loadCand(),loadFin(),loadTick('aberto')]);
 }
 
-function logout(){
-  sessionStorage.removeItem('admin_logado')
-  location.reload()
+// DASHBOARD
+async function loadDash(){
+  try{
+    const [at,pe,op,ti,fi,ca]=await Promise.all([
+      fetch('/api/admin-prestadores?status=ativo').then(r=>r.json()),
+      fetch('/api/admin-prestadores?status=em_analise').then(r=>r.json()),
+      fetch('/api/oportunidades?status=aberta').then(r=>r.json()),
+      fetch('/api/tickets').then(r=>r.json()),
+      fetch('/api/admin-financeiro').then(r=>r.json()),
+      fetch('/api/candidaturas').then(r=>r.json()),
+    ]);
+    const ativos=at.prestadores?.length||0;
+    const pend=pe.prestadores?.length||0;
+    const oports=op.oportunidades?.length||0;
+    const ticks=(ti.tickets||[]).filter(t=>t.status==='aberto').length;
+    const cands=(ca.candidaturas||[]).filter(c=>c.status==='pendente').length;
+    document.getElementById('dAtivos').textContent=ativos;
+    document.getElementById('dPend').textContent=pend;
+    document.getElementById('dOport').textContent=oports;
+    document.getElementById('dCand').textContent=cands;
+    document.getElementById('dTick').textContent=ticks;
+    document.getElementById('dReceita').textContent=fM(fi.totais?.total_comissao||0);
+    document.getElementById('bPend').textContent=pend;
+    document.getElementById('bOport').textContent=oports;
+    document.getElementById('bCand').textContent=cands;
+    document.getElementById('bTick').textContent=ticks;
+    // Auditoria
+    const aud=await fetch('/api/auditoria').then(r=>r.json()).catch(()=>({logs:[]}));
+    document.getElementById('dashAud').innerHTML=(aud.logs||[]).length===0
+      ?'<div class="empty">Nenhuma ação ainda</div>'
+      :(aud.logs||[]).slice(0,5).map(l=>`<div class="card" style="margin-bottom:7px"><div class="card-body" style="padding:10px 14px"><div style="font-size:.8rem;font-weight:500">${l.evento||'—'}</div><div style="font-size:.72rem;color:var(--muted)">${l.detalhes||''} · ${fD(l.created_at)}</div></div></div>`).join('');
+    // Tickets urgentes
+    const tabs=(ti.tickets||[]).filter(t=>t.status==='aberto').slice(0,3);
+    document.getElementById('dashTick').innerHTML=tabs.length===0
+      ?'<div class="empty">Nenhum ticket aberto 🎉</div>'
+      :tabs.map(t=>`<div class="card" style="margin-bottom:7px;cursor:pointer" onclick="abrirTick(${t.id},'${esc(t.assunto)}')"><div class="card-body" style="padding:10px 14px"><div style="font-size:.8rem;font-weight:500">${t.assunto||'—'}</div><div style="font-size:.72rem;color:var(--muted)">${t.prestador_nome} · ${fD(t.created_at)}</div></div></div>`).join('');
+  }catch(e){console.error(e);}
 }
 
-if(sessionStorage.getItem('admin_logado')){
-  document.getElementById('loginScreen').style.display='none'
-  carregarDados()
+// ESPECIALISTAS
+async function loadEsp(status='em_analise'){
+  document.getElementById('listaEsp').innerHTML='<div class="loading">Carregando...</div>';
+  try{
+    const url=status?`/api/admin-prestadores?status=${status}`:'/api/admin-prestadores';
+    const data=await fetch(url).then(r=>r.json());
+    espList=data.prestadores||[];
+    if(!espList.length){document.getElementById('listaEsp').innerHTML='<div class="empty">Nenhum especialista encontrado</div>';return;}
+    document.getElementById('listaEsp').innerHTML=espList.map(p=>{
+      const es=pJ(p.especialidades);
+      return`<div class="card">
+        <div class="card-header">
+          <div><div class="card-title">${p.nome||'—'}</div><div class="card-sub">${p.email} · ${p.whatsapp||'—'}</div></div>
+          ${bSt(p.status)}
+        </div>
+        <div class="card-body">
+          <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:9px">${es.map(e=>`<span class="badge bb">${e}</span>`).join('')||'<span style="color:var(--muted);font-size:.78rem">Sem especialidades</span>'}</div>
+          ${p.bio?`<div style="font-size:.78rem;color:var(--muted);margin-bottom:8px">${p.bio.substring(0,100)}${p.bio.length>100?'...':''}</div>`:''}
+          <div class="info-row"><span>📅 ${fD(p.created_at)}</span></div>
+          <div class="actions">
+            <button class="btn btn-o" onclick="verEsp(${p.id})">👁 Detalhes</button>
+            ${p.status==='em_analise'?`<button class="btn btn-g" onclick="aprovarP(${p.id})">✅ Aprovar</button><button class="btn btn-r" onclick="iniciarRep(${p.id})">❌ Reprovar</button>`:''}
+            ${p.status==='ativo'?`<button class="btn btn-r" onclick="iniciarRep(${p.id})">🚫 Suspender</button>`:''}
+            ${p.status==='reprovado'?`<button class="btn btn-g" onclick="aprovarP(${p.id})">↩ Reativar</button>`:''}
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  }catch(e){document.getElementById('listaEsp').innerHTML='<div class="empty">Erro ao carregar</div>';}
 }
-
-// ─── CARREGAR DADOS ───────────────────────────────────────────────────────
-function carregarDados(){
-  fetch('/api/admin/prestadores')
-    .then(r=>r.json())
-    .then(data => renderPrestadores(data))
-    .catch(() => {
-      // Sem API: tenta localStorage para demo
-      const keys = Object.keys(localStorage).filter(k=>k.startsWith('prestador_'))
-      const lista = keys.map(k => JSON.parse(localStorage.getItem(k)))
-      renderPrestadores(lista)
-    })
+function filtP(s,btn){document.querySelectorAll('#page-especialistas .fb').forEach(b=>b.classList.remove('active'));btn.classList.add('active');loadEsp(s);}
+async function aprovarP(id){
+  await fetch('/api/admin-prestadores',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,status:'ativo'})});
+  notif('✅ Especialista aprovado!');loadEsp();loadDash();
 }
-
-let todosOsPrestadores = []
-let filtroStatus = 'todos'
-
-function renderPrestadores(lista){
-  todosOsPrestadores = lista
-  const analise = lista.filter(p=>p.status==='em_analise'||!p.status).length
-  const ativos = lista.filter(p=>p.status==='ativo').length
-  document.getElementById('mTotal').textContent = lista.length
-  document.getElementById('mAnalise').textContent = analise
-  document.getElementById('mAtivos').textContent = ativos
-  document.getElementById('mContratos').textContent = lista.length * 2
-  renderTabelaPrestadores(lista)
-  renderTabelaRecentes(lista.slice(0,10))
+function iniciarRep(id){repId=id;document.getElementById('moMotivo').classList.add('open');}
+async function confirmarRep(){
+  const motivo=document.getElementById('motivoTxt').value;
+  await fetch('/api/admin-prestadores',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:repId,status:'reprovado',motivo})});
+  cm('moMotivo');notif('Especialista reprovado','var(--red)');
+  document.getElementById('motivoTxt').value='';loadEsp();loadDash();
 }
-
-function renderTabelaPrestadores(lista){
-  const tb = document.getElementById('tbPrestadores')
-  if(!lista.length){ tb.innerHTML='<tr><td colspan="8" style="text-align:center;padding:30px;color:var(--faint)">Nenhum cadastro</td></tr>'; return }
-  tb.innerHTML = lista.map((p,i) => `
-    <tr>
-      <td>${p.nome||'—'}</td>
-      <td style="font-family:monospace;font-size:.78rem">${p.cpf||'—'}</td>
-      <td style="font-family:monospace;font-size:.78rem">${p.cnpj||'—'}</td>
-      <td style="font-size:.78rem">${p.curso||'—'}<br><span style="color:var(--faint)">${p.faculdade||''} ${p.anoFormacao?'('+p.anoFormacao+')':''}</span></td>
-      <td style="font-size:.75rem">${(p.especialidades||[]).map(e=>`<span class="badge badge-blue" style="margin:2px">${e}</span>`).join('')}</td>
-      <td style="font-family:monospace;font-size:.72rem;color:var(--faint)">${p.protocolo||'—'}</td>
-      <td>${badgeStatus(p.status)}</td>
-      <td>
-        <button class="btn-mini" onclick="verDetalhes(${i})" style="margin-right:4px">👁 Ver</button>
-        ${(!p.status||p.status==='em_analise')?`<button class="btn-mini btn-approve" onclick="aprovarIdx(${i})">✅</button> <button class="btn-mini btn-reject" onclick="rejeitarIdx(${i})">❌</button>`:''}
-      </td>
-    </tr>
-  `).join('')
-}
-
-function renderTabelaRecentes(lista){
-  const tb = document.getElementById('tbRecentes')
-  if(!lista.length){ tb.innerHTML='<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--faint)">Nenhum cadastro</td></tr>'; return }
-  tb.innerHTML = lista.map((p,i) => `
-    <tr>
-      <td>${p.nome||'—'}</td>
-      <td style="font-size:.82rem">${p.email||'—'}</td>
-      <td style="font-size:.75rem">${(p.especialidades||[]).slice(0,2).map(e=>`<span class="badge badge-blue" style="margin:2px">${e}</span>`).join('')}${(p.especialidades||[]).length>2?`<span style="color:var(--faint)"> +${(p.especialidades||[]).length-2}</span>`:''}</td>
-      <td style="font-size:.78rem;color:var(--muted)">${p.dataContrato||'—'}</td>
-      <td>${badgeStatus(p.status)}</td>
-      <td><button class="btn-mini" onclick="verDetalhes(${i})">Ver</button></td>
-    </tr>
-  `).join('')
-}
-
-function badgeStatus(s){
-  if(s==='ativo') return '<span class="badge badge-green">Ativo</span>'
-  if(s==='rejeitado') return '<span class="badge badge-red">Rejeitado</span>'
-  return '<span class="badge badge-yellow">Em análise</span>'
-}
-
-// ─── FILTROS ──────────────────────────────────────────────────────────────
-function filtrarStatus(st, btn){
-  filtroStatus = st
-  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'))
-  btn.classList.add('active')
-  aplicarFiltros()
-}
-
-function filtrarPrestadores(){ aplicarFiltros() }
-
-function aplicarFiltros(){
-  const q = document.getElementById('searchPrestador').value.toLowerCase()
-  let lista = todosOsPrestadores
-  if(filtroStatus !== 'todos') lista = lista.filter(p => (p.status||'em_analise') === filtroStatus)
-  if(q) lista = lista.filter(p => (p.nome||'').toLowerCase().includes(q) || (p.email||'').toLowerCase().includes(q))
-  renderTabelaPrestadores(lista)
-}
-
-// ─── MODAL ────────────────────────────────────────────────────────────────
-let prestadorAtual = null
-
-function verDetalhes(idx){
-  prestadorAtual = todosOsPrestadores[idx]
-  const p = prestadorAtual
-  document.getElementById('modalTitle').textContent = p.nome || 'Prestador'
-  document.getElementById('modalBody').innerHTML = `
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-      <div class="modal-field"><label>CPF</label><span>${p.cpf||'—'}</span></div>
-      <div class="modal-field"><label>CNPJ</label><span>${p.cnpj||'—'}</span></div>
-      <div class="modal-field"><label>E-mail</label><span>${p.email||'—'}</span></div>
-      <div class="modal-field"><label>WhatsApp</label><span>${p.whatsapp||'—'}</span></div>
-      <div class="modal-field"><label>Formação</label><span>${p.curso||'—'} — ${p.faculdade||'—'} (${p.anoFormacao||'—'})</span></div>
-      <div class="modal-field"><label>Regime</label><span>${p.regime||'—'}</span></div>
-      <div class="modal-field" style="grid-column:1/-1"><label>Experiências</label><span style="font-size:.82rem;line-height:1.6;display:block">${p.experiencias||'—'}</span></div>
-      <div class="modal-field" style="grid-column:1/-1"><label>Especialidades</label><span>${(p.especialidades||[]).map(e=>`<span class="badge badge-blue" style="margin:2px">${e}</span>`).join('')||'—'}</span></div>
-      <div class="modal-field" style="grid-column:1/-1"><label>Bio</label><span style="font-size:.82rem;line-height:1.6;display:block">${p.bio||'—'}</span></div>
-      <div class="modal-field"><label>Protocolo</label><span style="font-family:monospace">${p.protocolo||'—'}</span></div>
-      <div class="modal-field"><label>Contratos assinados</label><span>${p.assinou_prestacao&&p.assinou_nda?'✅ Ambos assinados':'⚠️ Pendente'}</span></div>
+function verEsp(id){
+  const p=espList.find(x=>x.id===id);if(!p)return;
+  const es=pJ(p.especialidades);
+  document.getElementById('moEspBody').innerHTML=`
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+      <div><div style="font-size:.7rem;color:var(--muted);text-transform:uppercase;margin-bottom:2px">Nome</div>${p.nome||'—'}</div>
+      <div><div style="font-size:.7rem;color:var(--muted);text-transform:uppercase;margin-bottom:2px">E-mail</div>${p.email||'—'}</div>
+      <div><div style="font-size:.7rem;color:var(--muted);text-transform:uppercase;margin-bottom:2px">WhatsApp</div>${p.whatsapp||'—'}</div>
+      <div><div style="font-size:.7rem;color:var(--muted);text-transform:uppercase;margin-bottom:2px">Status</div>${bSt(p.status)}</div>
     </div>
-  `
-  document.getElementById('modalOverlay').classList.add('open')
+    <div style="margin-bottom:10px"><div style="font-size:.7rem;color:var(--muted);text-transform:uppercase;margin-bottom:5px">Especialidades</div><div style="display:flex;flex-wrap:wrap;gap:5px">${es.map(e=>`<span class="badge bb">${e}</span>`).join('')||'—'}</div></div>
+    <div><div style="font-size:.7rem;color:var(--muted);text-transform:uppercase;margin-bottom:5px">Bio</div><div style="font-size:.82rem;color:var(--muted);line-height:1.5">${p.bio||'—'}</div></div>
+    <div style="margin-top:10px"><div style="font-size:.7rem;color:var(--muted);text-transform:uppercase;margin-bottom:3px">Cadastro</div><div style="font-size:.78rem;color:var(--muted)">${fD(p.created_at)}</div></div>`;
+  document.getElementById('moEspAct').innerHTML=p.status==='em_analise'
+    ?`<button class="btn btn-g" style="flex:1;padding:10px;border-radius:8px" onclick="aprovarP(${p.id});cm('moEsp')">✅ Aprovar</button>
+       <button class="btn btn-r" style="padding:10px 14px;border-radius:8px" onclick="cm('moEsp');iniciarRep(${p.id})">❌ Reprovar</button>`
+    :`<button class="btn btn-o" style="padding:10px 16px;border-radius:8px" onclick="cm('moEsp')">Fechar</button>`;
+  document.getElementById('moEsp').classList.add('open');
 }
 
-function fecharModal(){ document.getElementById('modalOverlay').classList.remove('open') }
-document.getElementById('modalOverlay').addEventListener('click', e => { if(e.target===e.currentTarget) fecharModal() })
-
-function aprovarPrestador(){
-  if(!prestadorAtual) return
-  prestadorAtual.status = 'ativo'
-  salvarPrestador(prestadorAtual)
-  registrarLog('Aprovação', `Prestador ${prestadorAtual.nome} aprovado`)
-  carregarDados()
-  fecharModal()
+// OPORTUNIDADES
+async function loadOport(status='pendente'){
+  document.getElementById('listaOport').innerHTML='<div class="loading">Carregando...</div>';
+  try{
+    const data=await fetch(`/api/oportunidades?status=${status}`).then(r=>r.json());
+    const lista=data.oportunidades||[];
+    if(!lista.length){document.getElementById('listaOport').innerHTML='<div class="empty">Nenhuma oportunidade</div>';return;}
+    document.getElementById('listaOport').innerHTML=lista.map(o=>`
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-title">${o.titulo}</div><div class="card-sub">${o.empresa} · ${o.area||'—'}</div></div>
+          <div style="text-align:right">${bOp(o.status)}<div style="font-size:1rem;font-weight:700;color:var(--green);margin-top:3px;font-family:'Cormorant Garamond',serif">${fM(o.valor)}</div></div>
+        </div>
+        <div class="card-body">
+          <p style="font-size:.8rem;color:var(--muted);margin-bottom:10px">${o.descricao||'—'}</p>
+          <div class="info-row"><span>📅 ${o.prazo||'—'}</span><span>📧 ${o.email_empresa||'—'}</span><span>👤 ${o.contato_empresa||'—'}</span></div>
+          <div class="actions">
+            ${o.status==='pendente'?`<button class="btn btn-g" onclick="pubOport(${o.id})">✅ Publicar para especialistas</button>`:''}
+            ${o.status==='aberta'?`<button class="btn btn-o" onclick="showTab('candidaturas')">✋ Ver candidaturas</button>`:''}
+            <button class="btn btn-r" onclick="updOport(${o.id},'cancelada')">❌ Cancelar</button>
+          </div>
+        </div>
+      </div>`).join('');
+  }catch(e){document.getElementById('listaOport').innerHTML='<div class="empty">Erro ao carregar</div>';}
+}
+function filtO(s,btn){document.querySelectorAll('#page-oportunidades .fb').forEach(b=>b.classList.remove('active'));btn.classList.add('active');loadOport(s);}
+async function pubOport(id){
+  await fetch('/api/oportunidades',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,status:'aberta'})});
+  notif('✅ Publicada! Especialistas podem se candidatar.');loadOport('pendente');loadDash();
+}
+async function updOport(id,status){
+  await fetch('/api/oportunidades',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,status})});
+  notif('Oportunidade atualizada');loadOport();
 }
 
-function rejeitarPrestador(){
-  if(!prestadorAtual) return
-  prestadorAtual.status = 'rejeitado'
-  salvarPrestador(prestadorAtual)
-  registrarLog('Rejeição', `Prestador ${prestadorAtual.nome} rejeitado`)
-  carregarDados()
-  fecharModal()
+// CANDIDATURAS
+async function loadCand(){
+  document.getElementById('listaCand').innerHTML='<div class="loading">Carregando...</div>';
+  try{
+    const data=await fetch('/api/candidaturas').then(r=>r.json());
+    const lista=data.candidaturas||[];
+    document.getElementById('bCand').textContent=lista.filter(c=>c.status==='pendente').length;
+    if(!lista.length){document.getElementById('listaCand').innerHTML='<div class="empty">Nenhuma candidatura ainda</div>';return;}
+    document.getElementById('listaCand').innerHTML=lista.map(c=>`
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-title">${c.prestador_nome}</div><div class="card-sub">${c.prestador_email}</div></div>
+          <div style="text-align:right">${bCa(c.status)}<div style="font-size:.75rem;color:var(--muted);margin-top:3px">${c.oportunidade_titulo||'—'}</div></div>
+        </div>
+        <div class="card-body">
+          <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px">${pJ(c.especialidades).map(e=>`<span class="badge bb">${e}</span>`).join('')}</div>
+          ${c.mensagem?`<div style="font-size:.8rem;color:var(--muted);margin-bottom:9px;padding:9px;background:rgba(46,124,246,.05);border-radius:7px;border-left:2px solid var(--accent)">"${c.mensagem}"</div>`:''}
+          <div class="info-row"><span>💰 ${fM(c.valor)}</span><span>🏢 ${c.empresa}</span><span>📅 ${fD(c.created_at)}</span></div>
+          ${c.status==='pendente'?`<div class="actions"><button class="btn btn-g" onclick="decidirCand(${c.id},'aprovada')">✅ Escolher este especialista</button><button class="btn btn-r" onclick="decidirCand(${c.id},'reprovada')">❌ Recusar</button></div>`:''}
+        </div>
+      </div>`).join('');
+  }catch(e){document.getElementById('listaCand').innerHTML='<div class="empty">Erro ao carregar</div>';}
+}
+async function decidirCand(id,status){
+  await fetch('/api/candidaturas',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({candidatura_id:id,status})});
+  if(status==='aprovada')notif('✅ Especialista escolhido! Projeto criado automaticamente.');
+  else notif('Candidatura recusada','var(--yellow)');
+  loadCand();loadFin();loadDash();
 }
 
-function aprovarIdx(idx){
-  todosOsPrestadores[idx].status = 'ativo'
-  salvarPrestador(todosOsPrestadores[idx])
-  registrarLog('Aprovação', `Prestador ${todosOsPrestadores[idx].nome} aprovado`)
-  carregarDados()
+// FINANCEIRO
+async function loadFin(){
+  try{
+    const data=await fetch('/api/admin-financeiro').then(r=>r.json());
+    const t=data.totais||{};
+    document.getElementById('finStats').innerHTML=`
+      <div class="stat-card"><div class="stat-label">Total Bruto</div><div class="stat-value sv-accent">${fM(t.total_bruto)}</div></div>
+      <div class="stat-card"><div class="stat-label">Receita Plataforma</div><div class="stat-value sv-green">${fM(t.total_comissao)}</div></div>
+      <div class="stat-card"><div class="stat-label">Repasse Especialistas</div><div class="stat-value sv-gold">${fM(t.total_liquido)}</div></div>
+      <div class="stat-card"><div class="stat-label">Total Projetos</div><div class="stat-value sv-accent">${t.total_projetos||0}</div></div>`;
+    const regs=data.registros||[];
+    const tbody=document.getElementById('finBody');
+    if(!regs.length){tbody.innerHTML='<tr><td colspan="9" class="empty">Nenhum projeto financeiro ainda</td></tr>';return;}
+    tbody.innerHTML=regs.map(r=>`<tr>
+      <td><div style="font-weight:500">${r.prestador_nome}</div><div style="font-size:.7rem;color:var(--muted)">${r.prestador_email}</div></td>
+      <td>${r.titulo||'—'}</td><td>${r.empresa||'—'}</td>
+      <td style="font-weight:600">${fMF(r.valor)}</td>
+      <td style="color:var(--accent)">${fMF(r.valor*0.15)}</td>
+      <td style="color:var(--green);font-weight:600">${fMF(r.valor*0.85)}</td>
+      <td>${r.nf_emitida?'<span class="badge bg">✓</span>':'<span class="badge by">Pendente</span>'}</td>
+      <td>${bFi(r.status)}</td>
+      <td><select onchange="updFin(${r.id},this.value)" style="background:var(--navy);border:1px solid var(--border);color:var(--white);border-radius:6px;padding:3px 7px;font-size:.73rem">
+        <option value="pendente" ${r.status==='pendente'?'selected':''}>Pendente</option>
+        <option value="pago" ${r.status==='pago'?'selected':''}>Pago</option>
+        <option value="cancelado" ${r.status==='cancelado'?'selected':''}>Cancelado</option>
+      </select></td>
+    </tr>`).join('');
+  }catch(e){console.error(e);}
+}
+async function updFin(id,status){
+  await fetch('/api/admin-financeiro',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,status})});
+  notif('💰 Financeiro atualizado!');
 }
 
-function rejeitarIdx(idx){
-  todosOsPrestadores[idx].status = 'rejeitado'
-  salvarPrestador(todosOsPrestadores[idx])
-  registrarLog('Rejeição', `Prestador ${todosOsPrestadores[idx].nome} rejeitado`)
-  carregarDados()
+// TICKETS
+async function loadTick(status='aberto'){
+  document.getElementById('listaTick').innerHTML='<div class="loading">Carregando...</div>';
+  try{
+    const data=await fetch('/api/tickets').then(r=>r.json());
+    const todos=data.tickets||[];
+    document.getElementById('bTick').textContent=todos.filter(t=>t.status==='aberto').length;
+    const lista=todos.filter(t=>t.status===status);
+    if(!lista.length){document.getElementById('listaTick').innerHTML='<div class="empty">Nenhum ticket</div>';return;}
+    document.getElementById('listaTick').innerHTML=lista.map(t=>`
+      <div class="card" style="cursor:pointer" onclick="abrirTick(${t.id},'${esc(t.assunto)}')">
+        <div class="card-header">
+          <div><div class="card-title">${t.assunto||'—'}</div><div class="card-sub">${t.prestador_nome} · ${fD(t.created_at)}</div></div>
+          ${bTi(t.status)}
+        </div>
+      </div>`).join('');
+  }catch(e){document.getElementById('listaTick').innerHTML='<div class="empty">Erro ao carregar</div>';}
 }
-
-function salvarPrestador(p){
-  fetch('/api/admin/prestadores/'+p.protocolo, {
-    method:'PATCH',
-    headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({status: p.status})
-  }).catch(()=>{
-    // fallback localStorage
-    if(p.email) localStorage.setItem('prestador_'+p.email, JSON.stringify(p))
-  })
+function filtT(s,btn){document.querySelectorAll('#page-tickets .fb').forEach(b=>b.classList.remove('active'));btn.classList.add('active');loadTick(s);}
+async function abrirTick(id,assunto){
+  tickAtual=id;
+  document.getElementById('tickTitle').textContent='💬 '+(assunto||'Ticket');
+  document.getElementById('tickThread').innerHTML='<div class="loading">Carregando...</div>';
+  document.getElementById('moTick').classList.add('open');
+  const data=await fetch(`/api/tickets?ticket_id=${id}`).then(r=>r.json());
+  const msgs=data.mensagens||[];
+  document.getElementById('tickThread').innerHTML=msgs.length===0
+    ?'<div class="empty">Sem mensagens</div>'
+    :msgs.map(m=>`<div><div class="mb ${m.autor_tipo==='admin'?'admin':'prestador'}">${m.mensagem}<div class="mbt">${m.autor} · ${fD(m.created_at)}</div></div></div>`).join('');
+  const el=document.getElementById('tickThread');el.scrollTop=el.scrollHeight;
 }
-
-// ─── LOG ──────────────────────────────────────────────────────────────────
-const logEntries = []
-
-function registrarLog(evento, detalhes){
-  const entry = { dt: new Date().toLocaleString('pt-BR'), evento, detalhes, ator: 'admin' }
-  logEntries.unshift(entry)
-  const tb = document.getElementById('tbLog')
-  const tr = document.createElement('tr')
-  tr.innerHTML = `<td style="font-size:.78rem;color:var(--faint)">${entry.dt}</td><td><span class="badge badge-blue">${entry.evento}</span></td><td>admin</td><td style="font-size:.82rem">${entry.detalhes}</td><td>—</td>`
-  tb.insertBefore(tr, tb.firstChild)
+async function respTick(){
+  const msg=document.getElementById('tickResp').value.trim();
+  if(!msg||!tickAtual)return;
+  await fetch('/api/tickets',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({ticket_id:tickAtual,autor:'Admin 123',autor_tipo:'admin',mensagem:msg})});
+  document.getElementById('tickResp').value='';
+  notif('✅ Resposta enviada!');
+  abrirTick(tickAtual,document.getElementById('tickTitle').textContent.replace('💬 ',''));
+  loadTick('aberto');loadDash();
 }
-
-function exportarLog(){
-  const rows = [['Data/Hora','Evento','Ator','Detalhes']]
-  logEntries.forEach(e => rows.push([e.dt, e.evento, e.ator, e.detalhes]))
-  const csv = rows.map(r => r.map(c => '"'+c+'"').join(',')).join('\n')
-  const a = document.createElement('a')
-  a.href = 'data:text/csv;charset=utf-8,\uFEFF' + encodeURIComponent(csv)
-  a.download = 'auditoria-123consultoria-'+new Date().toISOString().slice(0,10)+'.csv'
-  a.click()
+async function fecharTick(){
+  if(!tickAtual)return;
+  await fetch('/api/tickets',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({ticket_id:tickAtual,status:'fechado'})});
+  cm('moTick');notif('Ticket fechado');loadTick('aberto');loadDash();
 }
-
-// ─── NAV ─────────────────────────────────────────────────────────────────
-const panelTitles = {overview:'Visão <em>Geral</em>',prestadores:'<em>Prestadores</em>',contratos:'<em>Contratos</em>',projetos:'<em>Projetos</em>',financeiro:'<em>Financeiro</em>',log:'Log de <em>Auditoria</em>'}
-
-function showPanel(id, btn){
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'))
-  document.getElementById('panel'+id.charAt(0).toUpperCase()+id.slice(1)).classList.add('active')
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'))
-  btn.classList.add('active')
-  document.getElementById('topTitle').innerHTML = panelTitles[id]
-}
-
-document.addEventListener('keydown', e => { if(e.key==='Enter') fazerLoginAdmin() })
 </script>
 </body>
 </html>

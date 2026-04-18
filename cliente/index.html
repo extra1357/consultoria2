@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solicitar Especialista | 123 Consultoria</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#060f1e;--card:#0d1f38;--accent:#2e7cf6;--green:#22c55e;--white:#f0f4ff;--muted:#6b82a8;--border:rgba(46,124,246,0.15)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Outfit',sans-serif;background:var(--navy);color:var(--white);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px}
+.wrap{width:100%;max-width:600px}
+.logo{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700;text-align:center;margin-bottom:4px}
+.logo span{color:var(--accent)}
+.sub{color:var(--muted);font-size:.88rem;text-align:center;margin-bottom:36px}
+.form-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:36px}
+.form-title{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:600;margin-bottom:6px}
+.form-desc{color:var(--muted);font-size:.83rem;margin-bottom:28px;line-height:1.5}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.field{margin-bottom:16px}
+.field label{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;display:block;margin-bottom:6px}
+.field input,.field select,.field textarea{width:100%;background:rgba(6,15,30,.8);border:1px solid var(--border);border-radius:10px;padding:12px 14px;color:var(--white);font-family:'Outfit',sans-serif;font-size:.9rem;outline:none;transition:.2s}
+.field input:focus,.field textarea:focus{border-color:var(--accent)}
+.field select option{background:#0a1628}
+.field textarea{resize:vertical;min-height:100px}
+.btn-submit{width:100%;padding:14px;border-radius:12px;background:var(--accent);color:#fff;font-family:'Outfit',sans-serif;font-size:.95rem;font-weight:600;border:none;cursor:pointer;margin-top:8px;transition:.2s}
+.btn-submit:hover{background:#1a5fd4}
+.btn-submit:disabled{opacity:.6;cursor:not-allowed}
+.success{display:none;text-align:center;padding:40px 20px}
+.success-icon{font-size:3rem;margin-bottom:16px}
+.success-title{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:600;margin-bottom:8px}
+.success-sub{color:var(--muted);font-size:.88rem;line-height:1.6}
+.back-link{text-align:center;margin-top:24px;font-size:.82rem;color:var(--muted)}
+.back-link a{color:var(--accent);text-decoration:none}
+.err{color:#ef4444;font-size:.82rem;margin-bottom:12px;display:none}
+@media(max-width:600px){.row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="logo"><span>123</span> Consultoria</div>
+  <div class="sub">Conectamos empresas aos melhores especialistas do mercado</div>
+  <div class="form-card" id="formCard">
+    <div class="form-title">Solicitar um Especialista</div>
+    <div class="form-desc">Preencha o formulário. Nossa equipe analisará e publicará para os especialistas qualificados. Em até 48h você receberá propostas.</div>
+    <div class="row">
+      <div class="field"><label>Nome da Empresa *</label><input type="text" id="empresa" placeholder="Ex: Empresa LTDA"></div>
+      <div class="field"><label>Área de Consultoria *</label>
+        <select id="area">
+          <option value="">Selecione...</option>
+          <option>Planejamento Financeiro</option>
+          <option>Gestão Estratégica</option>
+          <option>Marketing Digital</option>
+          <option>RH & Pessoas</option>
+          <option>Compliance & Governança</option>
+          <option>Fusões & Aquisições</option>
+          <option>Consultoria Empresarial</option>
+          <option>Outro</option>
+        </select>
+      </div>
+    </div>
+    <div class="field"><label>Título do Projeto *</label><input type="text" id="titulo" placeholder="Ex: Reestruturação financeira"></div>
+    <div class="field"><label>Descrição do Projeto *</label><textarea id="descricao" placeholder="Descreva o desafio, o que precisa ser feito e o resultado esperado..."></textarea></div>
+    <div class="row">
+      <div class="field"><label>Orçamento estimado (R$)</label><input type="number" id="valor" placeholder="Ex: 8000"></div>
+      <div class="field"><label>Prazo desejado</label><input type="text" id="prazo" placeholder="Ex: 30 dias"></div>
+    </div>
+    <div class="row">
+      <div class="field"><label>Nome do Responsável *</label><input type="text" id="contato" placeholder="Seu nome"></div>
+      <div class="field"><label>E-mail para contato *</label><input type="email" id="email" placeholder="contato@empresa.com"></div>
+    </div>
+    <div class="err" id="errMsg"></div>
+    <button class="btn-submit" id="btnSubmit" onclick="enviarForm()">Solicitar Especialistas →</button>
+  </div>
+  <div class="success" id="successCard">
+    <div class="success-icon">✅</div>
+    <div class="success-title">Solicitação Enviada!</div>
+    <div class="success-sub">Recebemos sua solicitação para <strong id="successEmpresa"></strong>.<br>Em até <strong>48 horas</strong> você receberá contato pelo e-mail informado.</div>
+  </div>
+  <div class="back-link"><a href="/">← Voltar ao site</a> · <a href="/prestador/cadastro.html">Seja um especialista</a></div>
+</div>
+<script>
+async function enviarForm() {
+  const campos = {
+    empresa: document.getElementById('empresa').value.trim(),
+    area: document.getElementById('area').value,
+    titulo: document.getElementById('titulo').value.trim(),
+    descricao: document.getElementById('descricao').value.trim(),
+    valor: document.getElementById('valor').value,
+    prazo: document.getElementById('prazo').value.trim(),
+    contato_empresa: document.getElementById('contato').value.trim(),
+    email_empresa: document.getElementById('email').value.trim(),
+  };
+  const err = document.getElementById('errMsg');
+  if (!campos.empresa||!campos.area||!campos.titulo||!campos.descricao||!campos.contato_empresa||!campos.email_empresa) {
+    err.textContent='⚠️ Preencha todos os campos obrigatórios.';err.style.display='block';return;
+  }
+  err.style.display='none';
+  const btn=document.getElementById('btnSubmit');
+  btn.disabled=true;btn.textContent='Enviando...';
+  try {
+    const res=await fetch('/api/oportunidades',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(campos)});
+    if(res.ok){
+      document.getElementById('formCard').style.display='none';
+      document.getElementById('successCard').style.display='block';
+      document.getElementById('successEmpresa').textContent=campos.empresa;
+    } else {
+      err.textContent='Erro ao enviar. Tente novamente.';err.style.display='block';
+      btn.disabled=false;btn.textContent='Solicitar Especialistas →';
+    }
+  } catch(e){
+    err.textContent='Erro de conexão.';err.style.display='block';
+    btn.disabled=false;btn.textContent='Solicitar Especialistas →';
+  }
+}
+</script>
+</body>
+</html>
