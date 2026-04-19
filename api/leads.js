@@ -119,6 +119,17 @@ export default async function handler(req, res) {
             [proj.rows[0].id,n.especialista_id,n.valor_proposto,n.lead_id]
           );
           await pool.query(`UPDATE leads SET status='convertido' WHERE id=$1`,[n.lead_id]);
+          await pool.query(
+            `INSERT INTO projeto_etapas (projeto_id,etapa,nome,status) VALUES
+             ($1,1,'Kickoff','em_andamento'),
+             ($1,2,'Diagnóstico','pendente'),
+             ($1,3,'Proposta','pendente'),
+             ($1,4,'Execução','pendente'),
+             ($1,5,'Entrega','pendente'),
+             ($1,6,'Encerramento','pendente')`,
+            [proj.rows[0].id]
+          );
+
           await pool.query(`INSERT INTO auditoria (evento,ator,detalhes) VALUES ('projeto_criado','admin',$1)`,[`Projeto criado — esp #${n.especialista_id} — R$ ${n.valor_proposto}`]);
         }
         if (status==='revisao') {
