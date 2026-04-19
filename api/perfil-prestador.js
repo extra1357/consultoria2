@@ -11,7 +11,7 @@ export default async function handler(req, res) {
 
   if (req.method === 'GET') {
     try {
-      const r = await pool.query('SELECT id,nome,email,especialidade,bio,especialidades,linkedin,whatsapp,status FROM prestadores WHERE id=$1', [id]);
+      const r = await pool.query('SELECT id,nome,email,especialidades,bio,linkedin,whatsapp,status FROM prestadores WHERE id=$1', [id]);
       if (!r.rows[0]) return res.status(404).json({ erro: 'Prestador não encontrado' });
       return res.status(200).json({ prestador: r.rows[0] });
     } catch(e) { return res.status(500).json({ erro: e.message }); }
