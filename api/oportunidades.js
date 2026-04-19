@@ -11,7 +11,7 @@ export default async function handler(req, res) {
   try {
     let q = `SELECT id, nome, empresa, servico, mensagem, status, criado_em
              FROM leads
-             WHERE status IN ('novo','em_analise')`;
+             WHERE status IN ('novo','em_andamento')`;
     const params = [];
 
     if (especialista_id) {

@@ -97,7 +97,7 @@ export default async function handler(req, res) {
           `INSERT INTO negociacoes (lead_id,especialista_id,data_reuniao,link_gravacao,resumo,valor_proposto,prazo_proposto,observacoes) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING id`,
           [lead_id,especialista_id,data_reuniao,link_gravacao,resumo,valor_proposto,prazo_proposto,observacoes]
         );
-        await pool.query(`UPDATE leads SET status='em_negociacao' WHERE id=$1`,[lead_id]);
+        await pool.query(`UPDATE leads SET status='em_andamento' WHERE id=$1`,[lead_id]);
         await pool.query(`INSERT INTO auditoria (evento,ator,detalhes) VALUES ('negociacao_registrada',$1,$2)`,[`esp_${especialista_id}`,`Reunião para lead #${lead_id} — R$ ${valor_proposto}`]);
         return res.status(201).json({ ok:true, id:r.rows[0].id });
       } catch(e) { return res.status(500).json({ erro: e.message }); }
