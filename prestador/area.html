@@ -824,50 +824,5 @@ async function confirmarReuniao() {
   }
 }
 
-// ── NEGOCIAÇÕES ───────────────────────────────────────────────────────────────
-async function carregarNegociacoes() {
-  try {
-    const res = await fetch('/api/leads?type=neg&especialista_id=' + prestador.id);
-    const data = await res.json();
-    renderNegociacoes(data.negociacoes || []);
-  } catch(e) { renderNegociacoes([]); }
-}
-
-function renderNegociacoes(negs) {
-  document.getElementById('badgeNegs').textContent = negs.length;
-  if (!negs.length) {
-    document.getElementById('listaNegociacoes').innerHTML =
-      '<div class="empty"><div class="empty-icon">🤝</div><div class="empty-text">Nenhuma negociação registrada ainda.<br>Após uma reunião com o lead, registre aqui para o admin aprovar o projeto.</div></div>';
-    return;
-  }
-  const statusMap = {
-    pendente:  ['badge-yellow','⏳ Aguardando aprovação'],
-    aprovada:  ['badge-green', '✅ Aprovada — Projeto criado'],
-    revisao:   ['badge-blue',  '🔄 Revisão solicitada'],
-    recusada:  ['badge-red',   '❌ Recusada'],
-  };
-  document.getElementById('listaNegociacoes').innerHTML = negs.map(n => {
-    const [cls, txt] = statusMap[n.status] || ['badge-gray', n.status];
-    return `<div class="oport-card">
-      <div class="oport-header">
-        <div>
-          <div class="oport-titulo">${n.lead_empresa || n.lead_nome || 'Negociação #'+n.id}</div>
-          <div style="font-size:.8rem;color:var(--muted);margin-top:2px">${n.lead_servico || ''}</div>
-        </div>
-        <span class="badge ${cls}">${txt}</span>
-      </div>
-      <div class="oport-meta" style="margin-top:12px">
-        <span>📅 Reunião: ${n.data_reuniao ? new Date(n.data_reuniao).toLocaleDateString('pt-BR') : '—'}</span>
-        <span>💰 Valor proposto: R$ ${Number(n.valor_proposto||0).toLocaleString('pt-BR')}</span>
-        <span>⏱ Prazo: ${n.prazo_proposto || '—'}</span>
-      </div>
-      ${n.resumo ? `<div style="font-size:.85rem;color:var(--muted);margin-top:10px;padding:10px;background:rgba(46,124,246,.05);border-radius:8px"><b>Resumo:</b> ${n.resumo}</div>` : ''}
-      ${n.admin_comentario ? `<div style="font-size:.85rem;color:var(--yellow);margin-top:8px;padding:10px;background:rgba(245,158,11,.08);border-radius:8px">💬 <b>Admin:</b> ${n.admin_comentario}</div>` : ''}
-      ${n.link_gravacao ? `<div style="margin-top:8px"><a href="${n.link_gravacao}" target="_blank" class="btn-sm btn-outline">🎥 Ver gravação</a></div>` : ''}
-    </div>`;
-  }).join('');
-}
 
 </script>
-</body>
-</html>
