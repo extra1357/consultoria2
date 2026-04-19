@@ -415,7 +415,7 @@ function renderProjetos(projetos){
   document.getElementById('statProjetos').textContent=projetos.filter(p=>p.status==='em_andamento').length;
   const html=projetos.length===0
     ?'<div class="empty"><div class="empty-icon">📁</div><div class="empty-text">Nenhum projeto ainda.<br>Candidate-se a oportunidades!</div></div>'
-    :projetos.map(p=>`<div class="projeto-card"><div class="projeto-header"><div><div class="projeto-titulo">${p.titulo}</div><div class="projeto-empresa">${p.empresa}</div></div>${badgeStatus(p.status)}</div><div class="projeto-info"><span>📅 ${p.prazo||'—'}</span><span>💰 ${fmtM(p.valor)}</span></div><div class="projeto-actions"><button class="btn-sm btn-outline" onclick="abrirModalProjeto(${p.id},${JSON.stringify(p)})">Ver detalhes</button>${p.status==='concluido'?`<button class="btn-sm btn-outline" onclick="alertNF('${p.empresa}')">📄 Emitir NF</button>`:''}</div></div>`).join('');
+    :projetos.map(p=>{_projetosMap[p.id]=p;return`<div class="projeto-card"><div class="projeto-header"><div><div class="projeto-titulo">${p.titulo}</div><div class="projeto-empresa">${p.empresa}</div></div>${badgeStatus(p.status)}</div><div class="projeto-info"><span>📅 ${p.prazo||'—'}</span><span>💰 ${fmtM(p.valor)}</span></div><div class="projeto-actions"><button class="btn-sm btn-outline" onclick="abrirModalProjeto(${p.id})">Ver detalhes</button>${p.status==='concluido'?`<button class="btn-sm btn-outline" onclick="alertNF('${p.empresa}')">📄 Emitir NF</button>`:''}</div></div>`;}).join('');
   document.getElementById('listaProjetos').innerHTML=html;
   document.getElementById('dashProjetos').innerHTML=projetos.length===0
     ?'<div class="empty"><div class="empty-icon">📁</div><div class="empty-text">Nenhum projeto ainda.</div></div>'
@@ -671,9 +671,12 @@ function renderNegociacoes(negs) {
 
 
 let _projetoAtual = null;
+let _projetosMap = {};
 let _etapaAtual = null;
 
-async function abrirModalProjeto(id, p) {
+async function abrirModalProjeto(id) {
+  const p = _projetosMap[id];
+  if (!p) return;
   _projetoAtual = p;
   document.getElementById('modalProjetoTitulo').textContent = p.titulo || 'Projeto #'+id;
   document.getElementById('modalProjetoEmpresa').textContent = '🏢 ' + (p.empresa||'—');
