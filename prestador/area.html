@@ -707,24 +707,36 @@ const etapaIcons = { pendente:'○', em_andamento:'●', concluida:'✓', revisa
 const etapaLabels = { pendente:'Pendente', em_andamento:'Em andamento', concluida:'Concluída', revisao:'Revisão' };
 
 function renderEtapas(etapas, projeto_id) {
+  const container = document.getElementById('modalEtapas');
   if (!etapas.length) {
-    document.getElementById('modalEtapas').innerHTML = '<div style="color:var(--muted);font-size:.85rem">Nenhuma etapa encontrada.</div>';
+    container.innerHTML = '<div style="color:var(--muted);font-size:.85rem">Nenhuma etapa encontrada.</div>';
     return;
   }
   let html = '';
   etapas.forEach((e, i) => {
+    const temBtn = e.status === 'em_andamento' || e.status === 'revisao';
     html += `<div class="etapa-item">
       <div class="etapa-icon ${e.status}">${etapaIcons[e.status]||'○'}</div>
       <div class="etapa-body">
         <div class="etapa-nome">${e.etapa}. ${e.nome} <span style="font-size:.75rem;font-weight:400;color:var(--muted)">${etapaLabels[e.status]||e.status}</span></div>
         ${e.progresso > 0 ? `<div class="progresso-bar"><div class="progresso-fill" style="width:${e.progresso}%"></div></div>` : ''}
         ${e.observacao ? `<div class="etapa-obs">💬 ${e.observacao}</div>` : ''}
-        ${e.status === 'em_andamento' || e.status === 'revisao' ? `<button class="btn-sm btn-outline" style="margin-top:8px;font-size:.75rem" onclick="abrirEtapaUpdate(${projeto_id},${e.etapa},'${e.nome}',${e.progresso||0})">✏️ Atualizar etapa</button>` : ''}
+        ${temBtn ? `<button class="btn-sm btn-outline" data-pid="${projeto_id}" data-etapa="${e.etapa}" data-nome="${e.etapa}" data-prog="${e.progresso||0}" style="margin-top:8px;font-size:.75rem">✏️ Atualizar etapa</button>` : ''}
       </div>
     </div>`;
     if (i < etapas.length - 1) html += '<div class="etapa-connector"></div>';
   });
-  document.getElementById('modalEtapas').innerHTML = html;
+  container.innerHTML = html;
+  // Adiciona listeners depois de inserir HTML — evita problemas com caracteres especiais no onclick inline
+  container.querySelectorAll('button[data-etapa]').forEach((btn, idx) => {
+    const etapa = etapas.find(e => e.etapa == btn.dataset.etapa);
+    btn.addEventListener('click', () => abrirEtapaUpdate(
+      parseInt(btn.dataset.pid),
+      parseInt(btn.dataset.etapa),
+      etapa ? etapa.nome : btn.dataset.etapa,
+      parseInt(btn.dataset.prog) || 0
+    ));
+  });
 }
 
 function abrirEtapaUpdate(projeto_id, etapa, nome, progresso) {
