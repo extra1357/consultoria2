@@ -415,7 +415,7 @@ function renderProjetos(projetos){
   document.getElementById('statProjetos').textContent=projetos.filter(p=>p.status==='em_andamento').length;
   const html=projetos.length===0
     ?'<div class="empty"><div class="empty-icon">📁</div><div class="empty-text">Nenhum projeto ainda.<br>Candidate-se a oportunidades!</div></div>'
-    :projetos.map(p=>{_projetosMap[p.id]=p;return`<div class="projeto-card"><div class="projeto-header"><div><div class="projeto-titulo">${p.titulo}</div><div class="projeto-empresa">${p.empresa}</div></div>${badgeStatus(p.status)}</div><div class="projeto-info"><span>📅 ${p.prazo||'—'}</span><span>💰 ${fmtM(p.valor)}</span></div><div class="projeto-actions"><button class="btn-sm btn-outline" onclick="abrirModalProjeto(${p.id})">Ver detalhes</button>${p.status==='concluido'?`<button class="btn-sm btn-outline" onclick="alertNF('${p.empresa}')">📄 Emitir NF</button>`:''}</div></div>`;}).join('');
+    :projetos.map(p=>{_projetosMap[p.id]=p;return`<div class="projeto-card"><div class="projeto-header"><div><div class="projeto-titulo">${p.titulo}</div><div class="projeto-empresa">${p.empresa}</div></div>${badgeStatus(p.status)}</div><div class="projeto-info"><span>📅 ${p.prazo||'—'}</span><span>💰 ${fmtM(p.valor)}</span></div><div class="projeto-actions"><button class="btn-sm btn-outline" onclick="abrirModalProjeto(${p.id})">Ver detalhes</button>${p.status==='em_andamento'?`<button class="btn-sm btn-accent" onclick="marcarEntregue(${p.id})">📦 Marcar como entregue</button>`:''} ${p.status==='finalizado'?`<button class="btn-sm btn-outline" onclick="alertNF('${p.empresa}')">📄 Emitir NF</button>`:''}</div></div>`;}).join('');
   document.getElementById('listaProjetos').innerHTML=html;
   document.getElementById('dashProjetos').innerHTML=projetos.length===0
     ?'<div class="empty"><div class="empty-icon">📁</div><div class="empty-text">Nenhum projeto ainda.</div></div>'
@@ -451,7 +451,7 @@ function renderFinanceiro(registros){
   document.getElementById('statReceber').textContent=fmtM(liq);
   document.getElementById('totalReceber').textContent=fmtMF(liq);
   document.getElementById('totalComissao').textContent=fmtMF(com);
-  document.getElementById('nfAlert').style.display=registros.some(r=>!r.nf_emitida&&r.status==='concluido')?'flex':'none';
+  document.getElementById('nfAlert').style.display=registros.some(r=>!r.nf_emitida&&r.status==='finalizado')?'flex':'none';
   const tbody=document.getElementById('finTabela');
   if(!registros.length){tbody.innerHTML='<tr><td colspan="7" style="text-align:center;padding:30px;color:var(--muted)">Nenhum registro ainda</td></tr>';return;}
   tbody.innerHTML=registros.map(r=>`<tr><td>${r.titulo}</td><td>${r.empresa}</td><td>${fmtMF(r.valor)}</td><td style="color:var(--muted)">${fmtMF(r.valor*.15)}</td><td style="color:var(--green);font-weight:600">${fmtMF(r.valor*.85)}</td><td>${r.nf_emitida?'<span class="badge badge-green">Emitida</span>':'<span class="badge badge-yellow">Pendente</span>'}</td><td>${badgeStatus(r.status)}</td></tr>`).join('');
@@ -504,7 +504,7 @@ function showPage(nome){
   if(window.innerWidth<=768)toggleSidebar();
 }
 function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sidebarOverlay').classList.toggle('open');}
-function badgeStatus(s){const map={em_andamento:['badge-blue','Em andamento'],concluido:['badge-green','Concluído'],pendente:['badge-yellow','Pendente'],cancelado:['badge-red','Cancelado'],em_analise:['badge-gray','Em análise']};const[cls,txt]=map[s]||['badge-gray',s||'—'];return`<span class="badge ${cls}">${txt}</span>`;}
+function badgeStatus(s){const map={em_andamento:['badge-blue','Em andamento'],finalizado:['badge-green','Finalizado'],entregue:['badge-yellow','Entregue'],reprovado:['badge-red','Reprovado'],pendente:['badge-yellow','Pendente'],cancelado:['badge-red','Cancelado'],em_analise:['badge-gray','Em análise']};const[cls,txt]=map[s]||['badge-gray',s||'—'];return`<span class="badge ${cls}">${txt}</span>`;}
 function fmtM(v){return'R$ '+Number(v||0).toLocaleString('pt-BR');}
 function fmtMF(v){return'R$ '+Number(v||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});}
 
@@ -784,6 +784,24 @@ async function salvarEtapa() {
   } catch(e) { alert('Erro de conexão.'); }
 }
 
+
+async function marcarEntregue(id) {
+  if (!confirm('Confirma que o projeto foi entregue? O admin irá revisar antes de finalizar.')) return;
+  try {
+    const r = await fetch('/api/projetos', {
+      method: 'PATCH',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ id, status: 'entregue' })
+    });
+    const d = await r.json();
+    if (d.ok) {
+      alert('✅ Projeto marcado como entregue! Aguarde a auditoria do admin.');
+      carregarProjetos();
+    } else {
+      alert('Erro: ' + (d.erro || 'Tente novamente'));
+    }
+  } catch(e) { alert('Erro de conexão.'); }
+}
 </script>
 
 <div class="modal-overlay" id="modalProjeto" style="z-index:600">

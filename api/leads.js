@@ -108,6 +108,13 @@ export default async function handler(req, res) {
         await pool.query(`UPDATE negociacoes SET status=$1,admin_comentario=$2,updated_at=NOW() WHERE id=$3`,[status,admin_comentario,id]);
         if (status==='aprovada') {
           const n=(await pool.query('SELECT * FROM negociacoes WHERE id=$1',[id])).rows[0];
+          // Bloqueia se especialista já tem projeto ativo
+          const ocupado=await pool.query(
+            `SELECT id FROM projetos WHERE prestador_id=$1 AND status IN ('em_andamento','entregue') LIMIT 1`,
+            [n.especialista_id]
+          );
+          if (ocupado.rows.length>0)
+            return res.status(400).json({ erro: 'Especialista já possui um projeto ativo. Aguarde a finalização antes de aprovar outro.' });
           const proj=await pool.query(
             `INSERT INTO projetos (negociacao_id,prestador_id,titulo,empresa,valor,prazo,status,progresso)
              SELECT $1,$2,l.servico,l.empresa,$3,$4,'em_andamento',0 FROM leads l WHERE l.id=$5 RETURNING id`,
