@@ -131,6 +131,20 @@ body{font-family:'Outfit',sans-serif;background:var(--navy);color:var(--white);m
   .perfil-grid{grid-template-columns:1fr}.msg-container{grid-template-columns:1fr;height:auto}
   .msg-list{height:200px;border-right:none;border-bottom:1px solid var(--border)}
 }
+
+.etapa-item{display:flex;gap:12px;margin-bottom:12px;align-items:flex-start}
+.etapa-icon{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;flex-shrink:0;margin-top:2px}
+.etapa-icon.pendente{background:rgba(255,255,255,.06);color:var(--muted);border:1px solid var(--border)}
+.etapa-icon.em_andamento{background:rgba(46,124,246,.15);color:#2e7cf6;border:1px solid rgba(46,124,246,.3)}
+.etapa-icon.concluida{background:rgba(34,197,94,.15);color:#22c55e;border:1px solid rgba(34,197,94,.3)}
+.etapa-icon.revisao{background:rgba(251,191,36,.15);color:#fbbf24;border:1px solid rgba(251,191,36,.3)}
+.etapa-body{flex:1}
+.etapa-nome{font-size:.88rem;font-weight:600;margin-bottom:2px}
+.etapa-obs{font-size:.78rem;color:var(--muted);margin-top:4px}
+.etapa-connector{width:2px;height:16px;background:var(--border);margin-left:15px}
+.progresso-bar{height:4px;background:var(--border);border-radius:2px;margin-top:6px;overflow:hidden}
+.progresso-fill{height:100%;background:#2e7cf6;border-radius:2px;transition:.3s}
+
 </style>
 </head>
 <body>
@@ -401,7 +415,7 @@ function renderProjetos(projetos){
   document.getElementById('statProjetos').textContent=projetos.filter(p=>p.status==='em_andamento').length;
   const html=projetos.length===0
     ?'<div class="empty"><div class="empty-icon">📁</div><div class="empty-text">Nenhum projeto ainda.<br>Candidate-se a oportunidades!</div></div>'
-    :projetos.map(p=>`<div class="projeto-card"><div class="projeto-header"><div><div class="projeto-titulo">${p.titulo}</div><div class="projeto-empresa">${p.empresa}</div></div>${badgeStatus(p.status)}</div><div class="projeto-info"><span>📅 ${p.prazo||'—'}</span><span>💰 ${fmtM(p.valor)}</span></div><div class="projeto-actions"><button class="btn-sm btn-outline">Ver detalhes</button>${p.status==='concluido'?`<button class="btn-sm btn-outline" onclick="alertNF('${p.empresa}')">📄 Emitir NF</button>`:''}</div></div>`).join('');
+    :projetos.map(p=>`<div class="projeto-card"><div class="projeto-header"><div><div class="projeto-titulo">${p.titulo}</div><div class="projeto-empresa">${p.empresa}</div></div>${badgeStatus(p.status)}</div><div class="projeto-info"><span>📅 ${p.prazo||'—'}</span><span>💰 ${fmtM(p.valor)}</span></div><div class="projeto-actions"><button class="btn-sm btn-outline" onclick="abrirModalProjeto(${p.id},${JSON.stringify(p)})">Ver detalhes</button>${p.status==='concluido'?`<button class="btn-sm btn-outline" onclick="alertNF('${p.empresa}')">📄 Emitir NF</button>`:''}</div></div>`).join('');
   document.getElementById('listaProjetos').innerHTML=html;
   document.getElementById('dashProjetos').innerHTML=projetos.length===0
     ?'<div class="empty"><div class="empty-icon">📁</div><div class="empty-text">Nenhum projeto ainda.</div></div>'
@@ -421,7 +435,7 @@ function renderOportunidades(oports){
   document.getElementById('badgeOport').textContent=oports.length;
   const html=oports.length===0
     ?'<div class="empty"><div class="empty-icon">🎯</div><div class="empty-text">Nenhuma oportunidade no momento.</div></div>'
-    :oports.map(o=>`<div class="oport-card"><div class="oport-header"><div><div class="oport-titulo">${o.titulo}</div><span class="badge badge-blue">${o.area}</span></div><div style="text-align:right"><div style="font-size:1.1rem;font-weight:700;color:var(--green);font-family:'Cormorant Garamond',serif">${fmtM(o.valor)}</div><div style="font-size:.72rem;color:var(--muted)">valor do projeto</div></div></div><div class="oport-desc">${o.descricao}</div><div class="oport-meta"><span>🏢 ${o.empresa}</span><span>📅 ${o.prazo}</span></div><div style="display:flex;gap:8px"><button class="btn-sm btn-accent" onclick="abrirCandidatura(${o.id},'${o.titulo.replace(/'/g,"\\'")}')">✋ Candidatar-se</button><button class="btn-sm btn-outline">Ver detalhes</button></div></div>`).join('');
+    :oports.map(o=>`<div class="oport-card"><div class="oport-header"><div><div class="oport-titulo">${o.titulo}</div><span class="badge badge-blue">${o.area}</span></div><div style="text-align:right"><div style="font-size:1.1rem;font-weight:700;color:var(--green);font-family:'Cormorant Garamond',serif">${fmtM(o.valor)}</div><div style="font-size:.72rem;color:var(--muted)">valor do projeto</div></div></div><div class="oport-desc">${o.descricao}</div><div class="oport-meta"><span>🏢 ${o.empresa}</span><span>📅 ${o.prazo}</span></div><div style="display:flex;gap:8px"><button class="btn-sm btn-accent" onclick="abrirCandidatura(${o.id},'${o.titulo.replace(/'/g,"\\'")}')">✋ Candidatar-se</button><button class="btn-sm btn-outline" onclick="abrirModalProjeto(0)">Ver detalhes</button></div></div>`).join('');
   document.getElementById('listaOportunidades').innerHTML=html;
   document.getElementById('dashOport').innerHTML=oports.length===0
     ?'<div class="empty"><div class="empty-icon">🎯</div><div class="empty-text">Nenhuma oportunidade agora.</div></div>'
@@ -655,6 +669,154 @@ function renderNegociacoes(negs) {
   }).join('');
 }
 
+
+let _projetoAtual = null;
+let _etapaAtual = null;
+
+async function abrirModalProjeto(id, p) {
+  _projetoAtual = p;
+  document.getElementById('modalProjetoTitulo').textContent = p.titulo || 'Projeto #'+id;
+  document.getElementById('modalProjetoEmpresa').textContent = '🏢 ' + (p.empresa||'—');
+  document.getElementById('modalProjetoInfo').innerHTML =
+    '<span>💰 ' + fmtM(p.valor) + '</span>' +
+    '<span>📅 Prazo: ' + (p.prazo||'—') + '</span>' +
+    '<span>📊 Progresso: ' + (p.progresso||0) + '%</span>' +
+    '<span>' + badgeStatus(p.status) + '</span>';
+  document.getElementById('modalEtapaAcoes').innerHTML = '';
+  document.getElementById('modalEtapas').innerHTML = '<div style="color:var(--muted);font-size:.85rem">Carregando etapas...</div>';
+  document.getElementById('modalProjeto').classList.add('open');
+  try {
+    const r = await fetch('/api/projeto-etapas?projeto_id=' + id);
+    const d = await r.json();
+    renderEtapas(d.etapas || [], id);
+  } catch(e) {
+    document.getElementById('modalEtapas').innerHTML = '<div style="color:red;font-size:.85rem">Erro ao carregar etapas.</div>';
+  }
+}
+
+function fecharModalProjeto() {
+  document.getElementById('modalProjeto').classList.remove('open');
+  _projetoAtual = null;
+  _etapaAtual = null;
+}
+
+const etapaIcons = { pendente:'○', em_andamento:'●', concluida:'✓', revisao:'↺' };
+const etapaLabels = { pendente:'Pendente', em_andamento:'Em andamento', concluida:'Concluída', revisao:'Revisão' };
+
+function renderEtapas(etapas, projeto_id) {
+  if (!etapas.length) {
+    document.getElementById('modalEtapas').innerHTML = '<div style="color:var(--muted);font-size:.85rem">Nenhuma etapa encontrada.</div>';
+    return;
+  }
+  let html = '';
+  etapas.forEach((e, i) => {
+    html += `<div class="etapa-item">
+      <div class="etapa-icon ${e.status}">${etapaIcons[e.status]||'○'}</div>
+      <div class="etapa-body">
+        <div class="etapa-nome">${e.etapa}. ${e.nome} <span style="font-size:.75rem;font-weight:400;color:var(--muted)">${etapaLabels[e.status]||e.status}</span></div>
+        ${e.progresso > 0 ? `<div class="progresso-bar"><div class="progresso-fill" style="width:${e.progresso}%"></div></div>` : ''}
+        ${e.observacao ? `<div class="etapa-obs">💬 ${e.observacao}</div>` : ''}
+        ${e.status === 'em_andamento' || e.status === 'revisao' ? `<button class="btn-sm btn-outline" style="margin-top:8px;font-size:.75rem" onclick="abrirEtapaUpdate(${projeto_id},${e.etapa},'${e.nome}',${e.progresso||0})">✏️ Atualizar etapa</button>` : ''}
+      </div>
+    </div>`;
+    if (i < etapas.length - 1) html += '<div class="etapa-connector"></div>';
+  });
+  document.getElementById('modalEtapas').innerHTML = html;
+}
+
+function abrirEtapaUpdate(projeto_id, etapa, nome, progresso) {
+  _etapaAtual = { projeto_id, etapa };
+  document.getElementById('modalEtapaUpdateTitulo').textContent = 'Atualizar: ' + nome;
+  document.getElementById('etapaUpdateStatus').value = 'em_andamento';
+  document.getElementById('etapaUpdateProgresso').value = progresso;
+  document.getElementById('etapaUpdateObs').value = '';
+  document.getElementById('modalEtapaUpdate').classList.add('open');
+}
+
+function fecharModalEtapaUpdate() {
+  document.getElementById('modalEtapaUpdate').classList.remove('open');
+  _etapaAtual = null;
+}
+
+async function salvarEtapa() {
+  if (!_etapaAtual) return;
+  const status = document.getElementById('etapaUpdateStatus').value;
+  const progresso = parseInt(document.getElementById('etapaUpdateProgresso').value) || 0;
+  const observacao = document.getElementById('etapaUpdateObs').value.trim();
+  try {
+    const r = await fetch('/api/projeto-etapas', {
+      method: 'PATCH',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        projeto_id: _etapaAtual.projeto_id,
+        etapa: _etapaAtual.etapa,
+        status, progresso, observacao,
+        atualizado_por: 'especialista'
+      })
+    });
+    const d = await r.json();
+    if (d.ok) {
+      fecharModalEtapaUpdate();
+      // Recarrega etapas no modal
+      const r2 = await fetch('/api/projeto-etapas?projeto_id=' + _etapaAtual.projeto_id);
+      const d2 = await r2.json();
+      renderEtapas(d2.etapas || [], _etapaAtual.projeto_id);
+      carregarProjetos();
+    } else {
+      alert('Erro: ' + (d.erro || 'Tente novamente'));
+    }
+  } catch(e) { alert('Erro de conexão.'); }
+}
+
 </script>
+
+<div class="modal-overlay" id="modalProjeto" style="z-index:600">
+  <div class="modal" style="max-width:560px;max-height:85vh;overflow-y:auto">
+    <button class="modal-close" onclick="fecharModalProjeto()">&#x2715;</button>
+    <div class="modal-title" id="modalProjetoTitulo">Detalhes do Projeto</div>
+    <div id="modalProjetoEmpresa" style="font-size:.85rem;color:var(--muted);margin-bottom:20px"></div>
+
+    <!-- Infos do projeto -->
+    <div id="modalProjetoInfo" style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:24px;padding:14px;background:var(--bg);border-radius:10px;font-size:.82rem;color:var(--muted)"></div>
+
+    <!-- Timeline etapas -->
+    <div style="font-size:.8rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:12px">Etapas do Projeto</div>
+    <div id="modalEtapas"></div>
+
+    <!-- Ações -->
+    <div id="modalEtapaAcoes" style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border)"></div>
+  </div>
+</div>
+
+<!-- Modal de atualização de etapa -->
+<div class="modal-overlay" id="modalEtapaUpdate" style="z-index:700">
+  <div class="modal" style="max-width:420px">
+    <button class="modal-close" onclick="fecharModalEtapaUpdate()">&#x2715;</button>
+    <div class="modal-title" id="modalEtapaUpdateTitulo">Atualizar Etapa</div>
+    <div style="margin-bottom:12px">
+      <label style="font-size:.8rem;color:var(--muted);display:block;margin-bottom:6px">Status</label>
+      <select id="etapaUpdateStatus" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:.9rem">
+        <option value="em_andamento">Em andamento</option>
+        <option value="concluida">Concluída ✅</option>
+        <option value="revisao">Solicitar revisão 🔄</option>
+      </select>
+    </div>
+    <div style="margin-bottom:12px">
+      <label style="font-size:.8rem;color:var(--muted);display:block;margin-bottom:6px">Progresso (%)</label>
+      <input type="number" id="etapaUpdateProgresso" min="0" max="100" placeholder="0-100"
+        style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:.9rem">
+    </div>
+    <div style="margin-bottom:16px">
+      <label style="font-size:.8rem;color:var(--muted);display:block;margin-bottom:6px">Observação</label>
+      <textarea id="etapaUpdateObs" rows="3" placeholder="Descreva o que foi feito nesta etapa..."
+        style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:.9rem;resize:vertical"></textarea>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn-sm btn-outline" onclick="fecharModalEtapaUpdate()" style="flex:1">Cancelar</button>
+      <button class="btn-sm btn-accent" onclick="salvarEtapa()" style="flex:2">Salvar atualização</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
