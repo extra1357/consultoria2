@@ -771,11 +771,12 @@ async function salvarEtapa() {
     });
     const d = await r.json();
     if (d.ok) {
+      const pid = _etapaAtual.projeto_id;
       fecharModalEtapaUpdate();
       // Recarrega etapas no modal
-      const r2 = await fetch('/api/projeto-etapas?projeto_id=' + _etapaAtual.projeto_id);
+      const r2 = await fetch('/api/projeto-etapas?projeto_id=' + pid);
       const d2 = await r2.json();
-      renderEtapas(d2.etapas || [], _etapaAtual.projeto_id);
+      renderEtapas(d2.etapas || [], pid);
       carregarProjetos();
     } else {
       alert('Erro: ' + (d.erro || 'Tente novamente'));
