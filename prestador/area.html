@@ -446,11 +446,11 @@ function renderOportunidades(oports){
     :`<div class="oport-card"><div class="oport-header"><div><div class="oport-titulo">${oports[0].titulo}</div><span class="badge badge-blue">${oports[0].area}</span></div><div style="font-size:1.1rem;font-weight:700;color:var(--green);font-family:'Cormorant Garamond',serif">${fmtM(oports[0].valor)}</div></div><div class="oport-desc">${oports[0].descricao}</div><div style="display:flex;gap:8px"><button class="btn-sm btn-accent" onclick="showPage('oportunidades')">Ver todas →</button></div></div>`;
 }
 async function carregarFinanceiro(){
-  try{const res=await fetch('/api/financeiro-prestador?id='+prestador.id);const data=await res.json();renderFinanceiro(data.registros||[]);}
+  try{const res=await fetch('/api/financeiro-prestador?id='+prestador.id);const data=await res.json();renderFinanceiro(data.financeiro||[]);}
   catch(e){renderFinanceiro([]);}
 }
 function renderFinanceiro(registros){
-  const totalB=registros.reduce((s,r)=>s+(r.valor||0),0);
+  const totalB=registros.reduce((s,r)=>s+Number(r.valor||0),0);
   const com=totalB*0.15,liq=totalB-com;
   document.getElementById('statReceber').textContent=fmtM(liq);
   document.getElementById('totalReceber').textContent=fmtMF(liq);
