@@ -435,7 +435,11 @@ function renderOportunidades(oports){
   document.getElementById('badgeOport').textContent=oports.length;
   const html=oports.length===0
     ?'<div class="empty"><div class="empty-icon">🎯</div><div class="empty-text">Nenhuma oportunidade no momento.</div></div>'
-    :oports.map(o=>`<div class="oport-card"><div class="oport-header"><div><div class="oport-titulo">${o.titulo}</div><span class="badge badge-blue">${o.area}</span></div><div style="text-align:right"><div style="font-size:1.1rem;font-weight:700;color:var(--green);font-family:'Cormorant Garamond',serif">${fmtM(o.valor)}</div><div style="font-size:.72rem;color:var(--muted)">valor do projeto</div></div></div><div class="oport-desc">${o.descricao}</div><div class="oport-meta"><span>🏢 ${o.empresa}</span><span>📅 ${o.prazo}</span></div><div style="display:flex;gap:8px"><button class="btn-sm btn-accent" onclick="abrirCandidatura(${o.id},'${o.titulo.replace(/'/g,"\\'")}')">✋ Candidatar-se</button><button class="btn-sm btn-outline" onclick="abrirModalProjeto(0)">Ver detalhes</button></div></div>`).join('');
+    :oports.map(o=>{_oportsMap[o.id]=o;return`<div class="oport-card"><div class="oport-header"><div><div class="oport-titulo">${o.titulo}</div><span class="badge badge-blue">${o.area}</span></div><div style="text-align:right"><div style="font-size:1.1rem;font-weight:700;color:var(--green);font-family:'Cormorant Garamond',serif">${fmtM(o.valor)}</div><div style="font-size:.72rem;color:var(--muted)">valor do projeto</div></div></div><div class="oport-desc">${o.descricao}</div><div class="oport-meta"><span>🏢 ${o.empresa}</span><span>📅 ${o.prazo}</span></div><div style="display:flex;gap:8px"><button class="btn-sm btn-accent" onclick="abrirCandidatura(${o.id},'${o.titulo.replace(/'/g,"\\'")}')">✋ Candidatar-se</button><button class="btn-sm btn-outline" data-oid="${o.id}">Ver detalhes</button></div></div>`;}).join('');
+  // Listeners para Ver detalhes de oportunidades
+  document.querySelectorAll('#listaOportunidades button[data-oid]').forEach(btn => {
+    btn.addEventListener('click', () => abrirModalOport(parseInt(btn.dataset.oid)));
+  });
   document.getElementById('listaOportunidades').innerHTML=html;
   document.getElementById('dashOport').innerHTML=oports.length===0
     ?'<div class="empty"><div class="empty-icon">🎯</div><div class="empty-text">Nenhuma oportunidade agora.</div></div>'
@@ -802,6 +806,23 @@ async function marcarEntregue(id) {
     }
   } catch(e) { alert('Erro de conexão.'); }
 }
+
+let _oportsMap = {};
+
+function abrirModalOport(id) {
+  const o = _oportsMap[id];
+  if (!o) return;
+  document.getElementById('modalOportTitulo').textContent = o.servico || 'Oportunidade #'+id;
+  document.getElementById('modalOportEmpresa').textContent = '🏢 ' + (o.empresa||'—');
+  document.getElementById('modalOportServico').innerHTML = '<span class="badge badge-blue">' + (o.servico||'—') + '</span>';
+  document.getElementById('modalOportDesc').textContent = o.mensagem || 'Sem descrição.';
+  document.getElementById('modalOportCandidatar').onclick = () => {
+    document.getElementById('modalOport').classList.remove('open');
+    abrirCandidatura(o.id, o.servico || 'Oportunidade #'+id);
+  };
+  document.getElementById('modalOport').classList.add('open');
+}
+
 </script>
 
 <div class="modal-overlay" id="modalProjeto" style="z-index:600">
@@ -848,6 +869,22 @@ async function marcarEntregue(id) {
     <div style="display:flex;gap:8px">
       <button class="btn-sm btn-outline" onclick="fecharModalEtapaUpdate()" style="flex:1">Cancelar</button>
       <button class="btn-sm btn-accent" onclick="salvarEtapa()" style="flex:2">Salvar atualização</button>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal-overlay" id="modalOport" style="z-index:600">
+  <div class="modal" style="max-width:500px">
+    <button class="modal-close" onclick="document.getElementById('modalOport').classList.remove('open')">&#x2715;</button>
+    <div class="modal-title" id="modalOportTitulo">Detalhes da Oportunidade</div>
+    <div id="modalOportEmpresa" style="font-size:.85rem;color:var(--muted);margin-bottom:16px"></div>
+    <div id="modalOportServico" style="margin-bottom:12px"></div>
+    <div style="font-size:.8rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px">Descrição</div>
+    <div id="modalOportDesc" style="font-size:.88rem;line-height:1.6;color:var(--text);margin-bottom:20px;padding:12px;background:var(--bg);border-radius:8px"></div>
+    <div style="display:flex;gap:8px">
+      <button class="btn-sm btn-outline" onclick="document.getElementById('modalOport').classList.remove('open')" style="flex:1">Fechar</button>
+      <button class="btn-sm btn-accent" id="modalOportCandidatar" style="flex:2">✋ Candidatar-se</button>
     </div>
   </div>
 </div>
