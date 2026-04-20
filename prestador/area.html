@@ -458,7 +458,7 @@ function renderFinanceiro(registros){
   document.getElementById('nfAlert').style.display=registros.some(r=>!r.nf_emitida&&r.status==='finalizado')?'flex':'none';
   const tbody=document.getElementById('finTabela');
   if(!registros.length){tbody.innerHTML='<tr><td colspan="7" style="text-align:center;padding:30px;color:var(--muted)">Nenhum registro ainda</td></tr>';return;}
-  tbody.innerHTML=registros.map(r=>`<tr><td>${r.titulo}</td><td>${r.empresa}</td><td>${fmtMF(r.valor)}</td><td style="color:var(--muted)">${fmtMF(r.valor*.15)}</td><td style="color:var(--green);font-weight:600">${fmtMF(r.valor*.85)}</td><td>${r.nf_emitida?'<span class="badge badge-green">Emitida</span>':'<span class="badge badge-yellow">Pendente</span>'}</td><td>${badgeStatus(r.status)}</td></tr>`).join('');
+  tbody.innerHTML=registros.map(r=>{const v=Number(r.valor||0);return`<tr><td>${r.titulo}</td><td>${r.empresa}</td><td>${fmtMF(v)}</td><td style="color:var(--muted)">${fmtMF(v*.15)}</td><td style="color:var(--green);font-weight:600">${fmtMF(v*.85)}</td><td>${r.nf_emitida?'<span class="badge badge-green">Emitida</span>':'<span class="badge badge-yellow">Pendente</span>'}</td><td>${badgeStatus(r.status)}</td></tr>`;}).join('');
 }
 async function carregarPerfil(){
   try{const res=await fetch('/api/perfil-prestador?id='+prestador.id);const data=await res.json();preencherPerfil(data);}
