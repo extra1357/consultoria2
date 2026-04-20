@@ -183,7 +183,8 @@ async function carregarLeads() {
       headers: { 'x-admin-key': ADMIN_KEY }
     });
     if (!res.ok) throw new Error('Erro ' + res.status);
-    leads = await res.json();
+    const data = await res.json();
+    leads = data.leads || [];
     leads = leads.map(l => ({
       ...l,
       criadoEm: l.criado_em || l.criadoEm || new Date().toISOString(),
