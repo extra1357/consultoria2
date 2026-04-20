@@ -690,7 +690,7 @@ async function abrirProj(id){
       <div class="di"><div class="dl">Progresso</div><div class="dv">${p.progresso||0}%</div></div>
       <div class="di"><div class="dl">Status</div><div class="dv">${bPj(p.status)}</div></div>
     </div>`;
-  const mData=await fetch(`/api/projetos?type=msg?projeto_id=${id}`).then(r=>r.json());
+  const mData=await fetch(`/api/projetos?type=msg&projeto_id=${id}`).then(r=>r.json());
   const msgs=mData.mensagens||[];
   document.getElementById('projThread').innerHTML=msgs.length
     ?msgs.map(m=>`<div><div class="mb ${m.autor_tipo==='admin'?'admin':'esp'}">${m.mensagem}<div class="mbt">${m.autor} · ${fD(m.created_at)}</div></div></div>`).join('')
